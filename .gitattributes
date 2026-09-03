@@ -1,0 +1,5 @@
+# Copilot reads SKILL.md byte for byte, and CRLF line endings make a skill
+# fail silently once it reaches OneDrive. Keep every text file at LF.
+* text=auto eol=lf
+*.xlsx binary
+*.zip binary

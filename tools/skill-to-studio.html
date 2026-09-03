@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skill → Copilot Studio · ואלור</title>
+<meta name="description" content="ממיר SKILL.md לשלוש השכבות של סוכן declarative ב-Copilot: הוראות, מקורות ידע ו-actions.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  color-scheme:light;
+  --paper:#EEF1F5; --surface:#FFFFFF; --sunk:#E4E9F0; --sunk-2:#DBE2EB;
+  --ink:#141C2B; --ink-2:#3F4C63; --muted:#6B788D;
+  --rule:#CFD8E4; --rule-soft:#E1E7EF;
+  --c1:#1F4FA8; --c1-soft:#DCE6F8;
+  --c2:#0E6E63; --c2-soft:#D5EDE9;
+  --c3:#6A3FB5; --c3-soft:#E6DDF7;
+  --c4:#A8410F; --c4-soft:#F8E3D6;
+  --on-accent:#FFFFFF;
+  --focus:#1F4FA8;
+  --shadow:0 1px 2px rgba(20,28,43,.06), 0 14px 30px -24px rgba(20,28,43,.55);
+  --sans:"Assistant","Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono","Assistant",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#0E141D; --surface:#161E2A; --sunk:#1D2735; --sunk-2:#243043;
+    --ink:#E6ECF5; --ink-2:#BCC7D6; --muted:#8896A9;
+    --rule:#2A3648; --rule-soft:#212C3B;
+    --c1:#78A6F5; --c1-soft:#16294A;
+    --c2:#3FBFAE; --c2-soft:#0D3330;
+    --c3:#A98BEE; --c3-soft:#26193F;
+    --c4:#E08A54; --c4-soft:#3A2113;
+    --on-accent:#0E141D;
+    --focus:#78A6F5;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 16px 34px -26px rgba(0,0,0,.95);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#0E141D; --surface:#161E2A; --sunk:#1D2735; --sunk-2:#243043;
+  --ink:#E6ECF5; --ink-2:#BCC7D6; --muted:#8896A9;
+  --rule:#2A3648; --rule-soft:#212C3B;
+  --c1:#78A6F5; --c1-soft:#16294A;
+  --c2:#3FBFAE; --c2-soft:#0D3330;
+  --c3:#A98BEE; --c3-soft:#26193F;
+  --c4:#E08A54; --c4-soft:#3A2113;
+  --on-accent:#0E141D;
+  --focus:#78A6F5;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 16px 34px -26px rgba(0,0,0,.95);
+}
+
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  direction:rtl;text-align:right;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-weight:800;line-height:1.28;text-wrap:balance;letter-spacing:-.012em}
+p{margin:0}
+:focus-visible{outline:2.5px solid var(--focus);outline-offset:2px;border-radius:5px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.shell{max-width:1180px;margin:0 auto;padding:26px 18px 72px;display:flex;flex-direction:column;gap:20px}
+
+/* ---------- header ---------- */
+header{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:flex-end;justify-content:space-between;
+  padding-block-end:16px;border-block-end:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--c1)}
+h1{font-size:clamp(25px,3.2vw,32px);margin-block:5px 4px}
+.sub{color:var(--ink-2);font-size:15px;max-width:56ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:2px;display:block}
+
+/* ---------- control bar ---------- */
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;
+  background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow)}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld > span{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted)}
+input[type=text],select,textarea{
+  font:inherit;font-size:14.5px;background:var(--sunk);color:var(--ink);
+  border:1px solid var(--rule);border-radius:8px;padding:8px 11px;width:100%}
+select{cursor:pointer}
+.fld.grow{flex:1 1 190px}
+button{font-family:var(--sans);font-weight:700;font-size:14.5px;border:1px solid transparent;
+  border-radius:8px;padding:9px 17px;cursor:pointer;background:var(--c1);color:var(--on-accent)}
+button.ghost{background:var(--sunk);color:var(--ink);border-color:var(--rule)}
+button.ghost:hover{border-color:var(--c1);color:var(--c1)}
+button:disabled{opacity:.42;cursor:default}
+.bar .spacer{flex:1 1 0;min-width:0}
+
+/* ---------- panes ---------- */
+.panes{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:16px;align-items:start}
+@media (max-width:900px){.panes{grid-template-columns:minmax(0,1fr)}}
+.pane{background:var(--surface);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;overflow:hidden}
+.pane > h2{font-size:14px;font-weight:700;padding:12px 15px;border-block-end:1px solid var(--rule-soft);
+  display:flex;align-items:center;gap:10px}
+.pane > h2 .n{margin-inline-start:auto;font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--muted)}
+.pad{padding:14px 15px;display:flex;flex-direction:column;gap:12px}
+textarea{min-height:390px;font-family:var(--mono);font-size:12.5px;line-height:1.7;resize:vertical;
+  text-align:start}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:0;border-block-end:1px solid var(--rule-soft);overflow-x:auto}
+.tabs button{background:none;border:0;border-radius:0;padding:11px 14px;font-size:14px;font-weight:700;
+  color:var(--muted);white-space:nowrap;border-block-end:3px solid transparent;display:flex;align-items:center;gap:8px}
+.tabs button:hover{color:var(--ink)}
+.tabs button .n{font-family:var(--mono);font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;
+  background:var(--sunk-2);color:var(--muted)}
+.tabs button[aria-selected="true"]{color:var(--tc);border-block-end-color:var(--tc)}
+.tabs button[aria-selected="true"] .n{background:var(--tcs);color:var(--tc)}
+.t1{--tc:var(--c1);--tcs:var(--c1-soft)} .t2{--tc:var(--c2);--tcs:var(--c2-soft)}
+.t3{--tc:var(--c3);--tcs:var(--c3-soft)} .t4{--tc:var(--c4);--tcs:var(--c4-soft)}
+
+.slab{padding:14px 15px 18px;display:flex;flex-direction:column;gap:13px}
+.slab[hidden]{display:none}
+.slab .why{font-size:13.5px;color:var(--muted);line-height:1.55;max-width:64ch}
+.slab .why b{color:var(--ink-2);font-weight:700}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.acts .ok{font-size:13px;font-weight:700;color:var(--c2)}
+
+.body-out{background:var(--sunk);border:1px solid var(--rule-soft);border-radius:9px;padding:13px 14px;
+  font-family:var(--mono);font-size:12.5px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;
+  text-align:start;max-height:520px;overflow:auto}
+.body-out em{font-style:normal;color:var(--c2);font-weight:700}
+.body-out s{text-decoration:none;color:var(--c3);font-weight:700}
+
+/* ---------- meter ---------- */
+.meter{display:flex;flex-direction:column;gap:5px}
+.meter .row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.meter .track{height:6px;border-radius:99px;background:var(--sunk-2);overflow:hidden}
+.meter .fill{height:100%;background:var(--c1);border-radius:99px;transition:width .2s}
+.meter.over .fill{background:var(--c4)}
+.meter.over .row{color:var(--c4);font-weight:700}
+
+/* ---------- rows ---------- */
+.rows{display:flex;flex-direction:column;gap:9px}
+.row-card{background:var(--sunk);border:1px solid var(--rule-soft);border-radius:10px;padding:11px 13px;
+  display:flex;flex-direction:column;gap:7px}
+.row-card .top{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.row-card .nm{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--rc)}
+.row-card .kind{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--rc);background:var(--rcs);border-radius:99px;padding:2px 9px}
+.row-card dl{margin:0;display:grid;grid-template-columns:5.6rem minmax(0,1fr);gap:4px 12px;font-size:13.5px}
+.row-card dt{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);padding-block-start:4px}
+.row-card dd{margin:0;color:var(--ink-2);overflow-wrap:anywhere}
+.row-card .src{font-family:var(--mono);font-size:12px;color:var(--muted);border-inline-start:2px solid var(--rule);
+  padding-inline-start:9px;text-align:start;white-space:pre-wrap;overflow-wrap:anywhere}
+.k2{--rc:var(--c2);--rcs:var(--c2-soft)} .k3{--rc:var(--c3);--rcs:var(--c3-soft)}
+.k4{--rc:var(--c4);--rcs:var(--c4-soft)}
+
+.empty{padding:30px 16px;text-align:center;color:var(--muted);font-size:14px;
+  background:var(--sunk);border-radius:10px}
+
+/* ---------- flag ---------- */
+.flag{border:1px solid var(--c4);background:var(--c4-soft);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--ink)}
+.flag b{color:var(--c4)}
+.flag[hidden]{display:none}
+
+/* ---------- lower blocks ---------- */
+.map{background:var(--surface);border:1px solid var(--rule);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.map h2{font-size:15px;padding:13px 16px;border-block-end:1px solid var(--rule-soft)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:right;padding:11px 16px;border-block-end:1px solid var(--rule-soft);vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);background:var(--sunk)}
+td{color:var(--ink-2)}
+td:first-child{color:var(--ink);font-weight:700;white-space:nowrap}
+tr:last-child td{border-block-end:0}
+td .dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-inline-end:7px;vertical-align:middle}
+
+details.help{background:var(--surface);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+details.help > summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:14px;font-weight:700;
+  display:flex;align-items:center;gap:9px}
+details.help > summary::-webkit-details-marker{display:none}
+details.help > summary::before{content:"\25C2";font-size:10px;color:var(--muted)}
+details.help[open] > summary::before{content:"\25BE"}
+details.help > summary:hover{background:var(--sunk)}
+.help .in{padding:2px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.help .in p{font-size:14px;color:var(--ink-2);max-width:66ch}
+.rawlinks{display:flex;flex-direction:column;gap:3px}
+.rawlinks a{font-family:var(--mono);font-size:12px;color:var(--c1);text-align:start;direction:ltr;overflow-wrap:anywhere}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.rule-card{background:var(--sunk);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:5px}
+.rule-card .h{font-size:14.5px;font-weight:700}
+.rule-card p{font-size:13.5px;color:var(--ink-2);line-height:1.55}
+
+footer{color:var(--muted);font-size:12.5px;border-block-start:1px solid var(--rule);padding-block-start:14px;
+  display:flex;flex-direction:column;gap:5px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="shell">
+
+<header>
+  <div>
+    <p class="eyebrow">guy cohen · valor</p>
+    <h1>Skill → Copilot Studio</h1>
+    <p class="sub">מדביקים SKILL.md ומקבלים אותו מפורק לשלוש השכבות שסוכן declarative באמת מחזיק — הוראות, מקורות ידע ו-actions — ורשימה מפורשת של מה שלא עובר.</p>
+  </div>
+  <div class="legend" aria-hidden="true">
+    <span><i style="background:var(--c1)"></i> הוראות</span>
+    <span><i style="background:var(--c2)"></i> מקורות ידע</span>
+    <span><i style="background:var(--c3)"></i> Actions</span>
+    <span><i style="background:var(--c4)"></i> לא עובר</span>
+  </div>
+</header>
+
+<div class="bar">
+  <label class="fld"><span>יעד</span>
+    <select id="target">
+      <option value="builder">בונה הסוכנים · אפליקציית Copilot</option>
+      <option value="studio">Copilot Studio</option>
+    </select>
+  </label>
+  <label class="fld grow"><span>שם הסוכן</span>
+    <input type="text" id="agentName" placeholder="נלקח מה-frontmatter אם ריק">
+  </label>
+  <div class="spacer"></div>
+  <button id="go" type="button">המר</button>
+  <button class="ghost" id="sample" type="button">טען דוגמה</button>
+  <button class="ghost" id="clear" type="button">נקה</button>
+</div>
+
+<div class="panes">
+
+  <section class="pane">
+    <h2>קלט · SKILL.md <span class="n" id="inStat">ריק</span></h2>
+    <div class="pad">
+      <textarea id="in" dir="auto" spellcheck="false" placeholder="הדביקו כאן את תוכן ה-SKILL.md, כולל ה-frontmatter." aria-label="תוכן SKILL.md"></textarea>
+      <p class="flag" id="sampleNote" hidden><b>זו דוגמה סינתטית</b> שנכתבה כדי להפעיל את כל כללי ההמרה. השיעורים, התקרה והמועד שבה הם מספרי דמה ואינם מחירון — וזו בדיוק הסיבה שהם יוצאים מההוראות אל מקורות הידע.</p>
+    </div>
+  </section>
+
+  <section class="pane">
+    <div class="tabs" role="tablist" aria-label="שכבות הפלט">
+      <button class="t1" role="tab" id="tab-1" aria-controls="slab-1" aria-selected="true" type="button">הוראות <span class="n" id="n1">0</span></button>
+      <button class="t2" role="tab" id="tab-2" aria-controls="slab-2" aria-selected="false" type="button">מקורות ידע <span class="n" id="n2">0</span></button>
+      <button class="t3" role="tab" id="tab-3" aria-controls="slab-3" aria-selected="false" type="button">Actions <span class="n" id="n3">0</span></button>
+      <button class="t4" role="tab" id="tab-4" aria-controls="slab-4" aria-selected="false" type="button">לא עובר <span class="n" id="n4">0</span></button>
+    </div>
+
+    <div class="slab" id="slab-1" role="tabpanel" aria-labelledby="tab-1">
+      <p class="why">מה שמתאר <b>התנהגות</b>: הפרסונה, כללי העבודה, השלבים, פורמט התשובה וההבהרות המשפטיות. כל מספר שמשתנה הוחלף במצביע למקור הידע, וכל חישוב סומן כמעבר ל-action.</p>
+      <div class="meter" id="meter">
+        <div class="row"><span id="meterTxt">0 תווים</span><span>מגבלת שדה ההוראות · 8,000</span></div>
+        <div class="track"><div class="fill" id="meterFill" style="width:0%"></div></div>
+      </div>
+      <div class="acts"><button class="ghost" type="button" data-copy="1">העתק הוראות</button><span class="ok" id="ok1" hidden>הועתק</span></div>
+      <div class="body-out" id="out1" dir="auto">הפלט יופיע כאן אחרי המרה.</div>
+    </div>
+
+    <div class="slab" id="slab-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+      <p class="why">מספרים שמשתנים — שיעורים, ספים, תקרות ומועדים — <b>לא מקובעים בהוראות</b>. הם עולים לכאן, לקובץ או לאתר שמישהו מתחזק, וההוראות רק מפנות אליהם.</p>
+      <div class="acts"><button class="ghost" type="button" data-copy="2">העתק רשימה</button><span class="ok" id="ok2" hidden>הועתק</span></div>
+      <div class="rows" id="out2"></div>
+    </div>
+
+    <div class="slab" id="slab-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+      <p class="why">חישוב ודאי לא נשאר במודל. <b>המודל אוסף ומסביר, ה-action מחשב.</b> כאן גם החיבורים למערכות ול-API שהסקיל הניח שיהיו זמינים.</p>
+      <div class="flag" id="builderFlag" hidden><b>שימו לב:</b> ביעד "בונה הסוכנים" אין הגדרת action לחישוב. או שמעבירים את הסוכן ל-Copilot Studio, או שמשאירים את החישוב במודל ומוסיפים הוראת אימות — ואז זה כבר לא חישוב ודאי.</div>
+      <div class="acts"><button class="ghost" type="button" data-copy="3">העתק מפרט</button><span class="ok" id="ok3" hidden>הועתק</span></div>
+      <div class="rows" id="out3"></div>
+    </div>
+
+    <div class="slab" id="slab-4" role="tabpanel" aria-labelledby="tab-4" hidden>
+      <p class="why">כל שורה שהוסרה, עם הסיבה ועם הטקסט המקורי. עברו על הרשימה לפני שמדביקים — אם משהו נפסל בטעות, החזירו אותו ידנית.</p>
+      <div class="acts"><button class="ghost" type="button" data-copy="4">העתק רשימה</button><span class="ok" id="ok4" hidden>הועתק</span></div>
+      <div class="rows" id="out4"></div>
+    </div>
+  </section>
+
+</div>
+
+<section class="map">
+  <h2>לאן מדביקים כל שכבה</h2>
+  <div class="tw">
+    <table>
+      <thead><tr><th>שכבה</th><th>בונה הסוכנים · אפליקציית Copilot</th><th>Copilot Studio</th><th>המגבלה שנתקלים בה</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="dot" style="background:var(--c1)"></span>הוראות</td>
+          <td>שדה ההוראות בכרטיס הסוכן</td>
+          <td>Instructions</td>
+          <td>כ-8,000 תווים. מפרט אחד ארוך יבלע את השדה כולו</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:var(--c2)"></span>מקורות ידע</td>
+          <td>הוספת קבצים, תיקיות או אתרי SharePoint</td>
+          <td>Knowledge</td>
+          <td>עד כמאה קבצים, תיקיות או אתרים לסוכן</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:var(--c3)"></span>Actions</td>
+          <td>מוגבל למה שהטננט חושף. חישוב ייעודי בדרך כלל לא</td>
+          <td>Actions · זרימה, מחבר או API</td>
+          <td>פרסום דורש רישיון בתשלום והקצאת קרדיטים לסביבה</td>
+        </tr>
+        <tr>
+          <td><span class="dot" style="background:var(--c4)"></span>לא עובר</td>
+          <td colspan="2">אין לזה מקום בשתי הפלטפורמות. סוכן declarative רץ בסבב יחיד</td>
+          <td>סבבים אוטומטיים ותת-סוכנים נשארים בצד שממנו באו</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<details class="help">
+  <summary>שלושת הכללים שהכלי אוכף</summary>
+  <div class="in">
+    <div class="rules">
+      <div class="rule-card">
+        <span class="h">חישוב ודאי הופך ל-action</span>
+        <p>מודל שמחשב נכון בתשעים אחוז מהמקרים חסר ערך בתהליך פיננסי. המודל אוסף את הנתונים ומסביר את התוצאה, והחישוב עצמו רץ בקוד שמחזיר אותו דבר בכל הרצה.</p>
+      </div>
+      <div class="rule-card">
+        <span class="h">מספר שמשתנה אינו יושב בהוראות</span>
+        <p>שיעור, סף, תקרה ומועד מתעדכנים בלי שאף אחד ייגע בסוכן. ברגע שהם קבועים בהוראות, הסוכן ימשיך לענות לפי הערך הישן עוד חודשים אחרי שהשתנה.</p>
+      </div>
+      <div class="rule-card">
+        <span class="h">declarative הוא סבב יחיד</span>
+        <p>אין ריצה חוזרת אוטומטית ואין תת-סוכנים. סקיל שמסתמך על "חזור עד שאין פערים" נשבר בשקט, ולכן חסר מידע נאסף בבקשה אחת ולא בשרשרת שאלות.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="help">
+  <summary>הסקיל יושב ב-GitHub</summary>
+  <div class="in">
+    <p>הדף רץ בסנדבוקס בלי גישה לרשת ולכן אינו יכול למשוך את הקובץ בעצמו. הדביקו כתובת ריפו, פתחו את אחת הכתובות שיחושבו, והעתיקו משם את התוכן.</p>
+    <div class="bar" style="box-shadow:none;padding:0;border:0;background:none">
+      <label class="fld grow"><span>כתובת ריפו</span><input type="text" id="repo" dir="ltr" placeholder="https://github.com/owner/repo"></label>
+      <button class="ghost" id="rawBtn" type="button">חשב כתובות RAW</button>
+    </div>
+    <div class="rawlinks" id="rawlinks"></div>
+  </div>
+</details>
+
+<footer>
+  <span>הכל רץ בדפדפן. שום דבר לא נשלח לשרת, והדף אינו מפעיל מודל.</span>
+  <span>הניקוי היוריסטי ולא חכם, ולכן הפלט הוא טיוטה לעריכה. קראו את לשונית "לא עובר" לפני שמדביקים ב-Studio.</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+
+/* ============================================================
+   1 · תבניות זיהוי
+   ============================================================ */
+
+/* הבהרה משפטית — נעוצה תמיד בהוראות, לעולם לא מחולצת ולא נמחקת */
+var LEGAL=/(אינו מהווה|אינה מהווה|אין באמור|אין לראות ב|ייעוץ משפטי|ייעוץ מס\b|ייעוץ פיננסי|ייעוץ אישי|יש להתייעץ|רואה חשבון|רו"ח|יועץ מס|עורך דין|אינו תחליף|אינה תחליף|לא תחליף|האחריות על|באחריות המשתמש|הסתייגות|disclaimer|not\s+(?:\w+\s+){0,4}advice|no substitute for|does not (?:replace|constitute|substitute)|is not a substitute|licensed\s+(?:accountant|advisor|adviser|attorney|professional)|seek professional|informational purposes|consult\s+(?:a|an|your|with))/i;
+
+/* שורות שנפסלות, כל אחת עם הסיבה שתוצג למשתמש */
+var DROP=[
+ {re:/(\bAgent\s*\(|\bTask\s*\(|\bspawn\b|sub-?agent|subagent|תת-?סוכן|תת-?סוכנים)/i, why:"הרצת תת-סוכן"},
+ {re:/(in parallel|fan[- ]?out|panel of|במקביל|פיצול ל)/i, why:"הרצה מקבילה"},
+ {re:/(iterate until|loop until|repeat until|until no|multi-?round|another round|כמה סבבים|סבב נוסף|סבבים|חזור על השלבים|חזור עד|עד שלא נשאר)/i, why:"ריצת סבבים אוטומטית"},
+ {re:/((?:^|\s)model\s*[:=]|(?:^|\s)מודל\s*[:=]|\bopus\b|\bsonnet\b|\bhaiku\b|claude-[a-z0-9-]+)/i, why:"בחירת מודל"},
+ {re:/(^|\s)\/[a-z][a-z0-9:-]{2,}(\s|$|[.,;)])/, why:"פקודת סלאש", skipIf:/:\/\//},
+ {re:/\b(Bash|Grep|Glob|WebFetch|WebSearch|TodoWrite|NotebookEdit|ToolSearch|SlashCommand|StructuredOutput|MCP)\b/, why:"קריאה לכלי"},
+ {re:/(\bthe\s+\w+\s+tool\b|\buse the .+ tool\b|קרא(?:י)? בכלי|הפעל(?:י)? את הכלי|באמצעות הכלי)/i, why:"קריאה לכלי"},
+ {re:/(~\/|\.\.?\/[\w.-]|[A-Za-z]:\\|\/mnt\/|\/tmp\/|references\/|scripts\/|assets\/|\.claude\b|CLAUDE\.md|SKILL\.md|[\w-]+\.(?:md|py|sh|mjs|json|yaml|yml|txt|csv)\b)/i, why:"הפניה לקובץ או לנתיב"},
+ {re:/(Claude Code|Anthropic|allowed-tools|argument-hint|disable-model-invocation|frontmatter)/i, why:"ספציפי לקלוד קוד"}
+];
+
+/* כותרות שכל הבלוק שתחתן נפסל */
+var DROP_HEAD=/(how to run|how it works|integration|installation|setup|tooling|tools?$|files?$|references|scripts|sub-?agents|orchestration|התקנה|הגדרות הרצה|איך זה עובד|תת-?סוכנים|כלים$|קבצים$|נתיבים|מבנה התיקייה)/i;
+
+/* ערכים שמשתנים — מחולצים למקור ידע. הסדר קובע: מטבע, אחוז, תאריך, שנה */
+var VOL=[
+ {re:/(https?:\/\/\S+)/g, label:"מקור מקוון"},
+ {re:/((?:₪|\$|€)\s?\d[\d,.]*|\d[\d,.]*\s?(?:₪|ש["'׳]?ח|שקלים|שקל|NIS|USD|EUR|דולר|אירו))/g, label:"סכום"},
+ {re:/(\d+(?:[.,]\d+)?\s?(?:%|אחוז(?:ים)?))/g, label:"שיעור"},
+ {re:/\b(\d{4}-\d{2}-\d{2})\b/g, label:"מועד"},
+ {re:/(\d{1,2}[.\/]\d{1,2}[.\/]\d{2,4})/g, label:"מועד"},
+ {re:/\b(20\d{2})\b/g, label:"שנה"}
+];
+/* מילות סף — שורה עם מילה כזאת ועם ספרה נחשבת משתנה גם בלי תבנית מדויקת */
+var THRESH=/(סף|תקרה|תקרת|מדרג|שיעור|מכסה|מגבלה|לכל היותר|לא יעלה על|לא פחות מ|מעל|מתחת|מועד|מועדי|דדליין|תוקף|בתוקף|threshold|cap\b|limit|rate|deadline|due date|effective)/i;
+
+/* סימני חישוב ודאי.
+   מילה עברית נבדקת עם גבולות משלה, כי \b של JS מכיר רק אותיות לטיניות
+   ובלעדיו "החשבון" ו-"מסכום" היו נספרים כהוראת חישוב. */
+var HEB=/[א-ת]/;
+function heWord(text, words){
+  for(var i=0;i<words.length;i++){
+    var w=words[i], idx=-1;
+    while((idx=text.indexOf(w, idx+1))>=0){
+      var before = idx>0 ? text.charAt(idx-1) : "";
+      var after  = text.charAt(idx+w.length);
+      if(!HEB.test(before) && !HEB.test(after)) return true;
+    }
+  }
+  return false;
+}
+var CALC=[
+ {words:["חשב","לחשב","תחשב","חישוב","הכפל","חלק ב","חילוק","עגל","עיגול","סכום של","סה\"כ","סהכ","אחוז מ","ספרות אחרי הנקודה","אגורות"],
+  re:/(calculate|compute|multiply|divide|sum of|total of|\bround(?:ed|ing|s)?\b|decimal places?|percentage of)/i, kind:"חישוב", nm:"calc"},
+ {re:/[\d)]\s*[×*\/+]\s*[\d(]|=\s*\d/, kind:"חישוב", nm:"calc"},
+ {words:["הפרש ימים","הפרש בין","מספר ימים","ימי עסקים","תאריך יעד","תקופת דיווח"],
+  re:/(days between|business days)/i, kind:"חישוב תאריכים", nm:"dates"},
+ {words:["שלוף","אחזר","בדוק מול","תשאל את"],
+  re:/(fetch|lookup|query|retrieve)/i, kind:"שליפה", nm:"lookup"},
+ {words:["שער חליפין","בנק ישראל","רשות המסים","המערכת של","מתוך המערכת"],
+  re:/\b(API|endpoint|SQL|Dataverse|SharePoint|ERP|CRM|SAP|Priority|Salesforce)\b/i, kind:"חיבור למערכת", nm:"connect"}
+];
+
+/* ============================================================
+   2 · המנוע
+   ============================================================ */
+
+/* מסירה רק מרכאות שעוטפות את הערך כולו, כדי לא להרוס גרשיים בתוך מילה עברית */
+function unquote(s){
+  s=s.trim();
+  var m=s.match(/^"(.*)"$/) || s.match(/^'(.*)'$/);
+  return m ? m[1] : s;
+}
+
+function stripFrontmatter(txt){
+  var name="", desc="", m=txt.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
+  if(m){
+    var n=m[1].match(/^\s*name\s*:\s*(.+)$/mi); if(n) name=unquote(n[1]);
+    var d=m[1].match(/^\s*description\s*:\s*(.+)$/mi); if(d) desc=unquote(d[1]);
+    txt=txt.slice(m[0].length);
+  }
+  return {txt:txt, name:name, desc:desc};
+}
+
+function dropReason(line){
+  for(var i=0;i<DROP.length;i++){
+    var r=DROP[i];
+    if(r.skipIf && r.skipIf.test(line)) continue;
+    if(r.re.test(line)) return r.why;
+  }
+  return null;
+}
+
+function calcHit(line){
+  for(var i=0;i<CALC.length;i++){
+    var c=CALC[i];
+    if(c.re && c.re.test(line)) return c;
+    if(c.words && heWord(line, c.words)) return c;
+  }
+  return null;
+}
+
+/* כותרת שכל מה שתחתיה נפסל נשארת ריקה ומטעה, ולכן יורדת גם היא */
+function pruneEmptyHeadings(arr){
+  var res=[], i, j;
+  for(i=0;i<arr.length;i++){
+    if(/^#{1,6}\s/.test(arr[i])){
+      var hasContent=false;
+      for(j=i+1;j<arr.length;j++){
+        if(/^#{1,6}\s/.test(arr[j])) break;
+        if(arr[j].trim()){ hasContent=true; break; }
+      }
+      if(!hasContent) continue;
+    }
+    res.push(arr[i]);
+  }
+  return res;
+}
+
+function suggestSource(label){
+  if(label==="שיעור") return "טבלת שיעורים עם עמודת תוקף מתאריך";
+  if(label==="סכום")  return "טבלת ספים ותקרות עם עמודת תוקף מתאריך";
+  if(label==="מועד")  return "לוח מועדים מעודכן";
+  if(label==="שנה")   return "מסמך שנתי, לוודא שהשנה עדיין רלוונטית";
+  if(label==="מקור מקוון") return "האתר או הדף שבשורה. חברו אותו כמקור ידע במקום להשאיר קישור בהוראות";
+  return "קובץ מקור שמישהו מתחזק";
+}
+
+function convert(src, opts){
+  var out={name:"", desc:"", instr:[], know:[], acts:[], drop:[]};
+  var fm=stripFrontmatter(src);
+  out.name = opts.name || fm.name || "הסוכן";
+  out.desc = fm.desc;
+  if(!fm.name && !fm.desc && /^---/.test(src)) out.drop.push({why:"frontmatter", line:"בלוק ה-frontmatter"});
+  else if(/^---/.test(src)) out.drop.push({why:"frontmatter", line:"בלוק ה-frontmatter · השם והתיאור נשמרו לפתיח"});
+
+  var body=fm.txt;
+
+  /* בלוקי קוד. התבנית בולעת גם שורת פתיח שמסתיימת בנקודתיים,
+     כדי שלא תישאר "הנוסחה:" תלויה באוויר אחרי שהבלוק עצמו ירד. */
+  var kCount=0, aCount=0;
+  body=body.replace(/(^|\n)([^\n]*:[ \t]*\n+)?(```[\s\S]*?```)/g, function(all, lead, intro, block){
+    intro=intro||"";
+    var first=block.split("\n")[0];
+    if(/json|schema/i.test(first) && !dropReason(block)) return lead+intro+block;  /* סכימת פלט — נשארת */
+    var why=dropReason(block);
+    if(why){ out.drop.push({why:"בלוק קוד · "+why, line:first+" …"}); return lead; }
+    var c=calcHit(block);
+    if(c){
+      aCount++;
+      out.acts.push({kind:c.kind, nm:c.nm+"-"+String(aCount).padStart(2,"0"),
+                     src:block.replace(/^```[^\n]*\n?/,"").replace(/```\s*$/,"").trim().slice(0,220)});
+      out.drop.push({why:"בלוק קוד · הועבר ל-action", line:first+" …"});
+      return lead;
+    }
+    return lead+intro+block;
+  });
+
+  var lines=body.split("\n"), skipLvl=0;
+
+  for(var i=0;i<lines.length;i++){
+    var raw=lines[i], line=raw.replace(/\s+$/,"");
+    if(!line.trim()){ if(!skipLvl) out.instr.push(""); continue; }
+
+    /* א. הבהרה משפטית — קודמת לכל כלל אחר, גם בתוך מקטע שנפסל.
+       אם היא מפנה גם לקובץ, הנתיב יורד אבל המשפט עצמו נשאר שלם. */
+    if(LEGAL.test(line)){
+      var legal=line, pth=line.match(/([\w./-]+\.(?:md|json|csv|yaml|yml|txt|xlsx))/i);
+      if(pth){
+        kCount++;
+        out.know.push({label:"קובץ מקור", value:pth[1], src:line.trim(),
+          suggest:"נוסח שההבהרה המשפטית מפנה אליו. חברו אותו כמקור ידע במקום להשאיר נתיב"});
+        legal=legal.replace(pth[1], "⟨מקור ידע: קובץ מקור⟩");
+      }
+      out.instr.push(legal); continue;
+    }
+
+    /* ב. כותרות */
+    var h=line.match(/^(#{1,6})\s+(.*)$/);
+    if(h){
+      var lvl=h[1].length, title=h[2].trim();
+      if(skipLvl && lvl>skipLvl){ out.drop.push({why:"בתוך מקטע שנפסל", line:line}); continue; }
+      skipLvl=0;
+      if(DROP_HEAD.test(title)){ skipLvl=lvl; out.drop.push({why:"מקטע על אופן ההרצה", line:line}); continue; }
+      out.instr.push(line); continue;
+    }
+    if(skipLvl){ out.drop.push({why:"בתוך מקטע שנפסל", line:line}); continue; }
+
+    /* ג. שורות שנפסלות. הניסוח נפסל, אבל הכוונה שמאחוריו לרוב כן שייכת לשכבה אחרת:
+       "הרץ Bash כדי לשלוף שער חליפין" הוא action, ו"קרא את rates.md" הוא מקור ידע. */
+    var why=dropReason(line);
+    if(why){
+      var salv="";
+      /* כתובת אינטרנט אינה חיבור למערכת אלא מקור ידע, ולכן יורדת לפני הבדיקה */
+      var cs=calcHit(line.replace(/https?:\/\/\S+/g," "));
+      if(cs && (cs.kind==="חיבור למערכת" || cs.kind==="שליפה" || cs.kind==="חישוב")){
+        aCount++;
+        out.acts.push({kind:cs.kind, nm:cs.nm+"-"+String(aCount).padStart(2,"0"),
+                       src:line.trim(), salvaged:true});
+        salv=" · הכוונה עברה ל-action";
+      }
+      if(why==="הפניה לקובץ או לנתיב" && (THRESH.test(line) || heWord(line,["קרא","ראה","לפי","עיין"]) || /\b(read|see|per)\b/i.test(line))){
+        var pm=line.match(/([\w./-]+\.(?:md|json|csv|yaml|yml|txt|xlsx))/i);
+        kCount++;
+        out.know.push({label:"קובץ מקור", value:pm?pm[1]:line.trim(), src:line.trim(),
+          suggest:"העלו את הקובץ כמקור ידע, או החליפו אותו בקובץ שמתוחזק ב-SharePoint"});
+        salv=salv?salv+" ולמקור ידע":" · הכוונה עברה למקור ידע";
+      }
+      out.drop.push({why:why+salv, line:line.trim()});
+      continue;
+    }
+
+    /* ד. חילוץ ערכים משתנים, והשארת מצביע במקומם */
+    var pre=(line.match(/^(\s*(?:[-*+•]|\d+[.)])\s*)/)||["",""])[1];
+    var rest=line.slice(pre.length), touched=false;
+
+    for(var v=0; v<VOL.length; v++){
+      (function(spec){
+        rest=rest.replace(spec.re, function(hit){
+          kCount++; touched=true;
+          out.know.push({label:spec.label, value:hit.trim(), src:line.trim(), suggest:suggestSource(spec.label)});
+          return "⟨מקור ידע: "+spec.label+"⟩";
+        });
+      })(VOL[v]);
+    }
+    if(!touched && THRESH.test(rest) && /\d/.test(rest)){
+      kCount++; touched=true;
+      out.know.push({label:"ערך משתנה", value:rest.trim(), src:line.trim(), suggest:suggestSource("")});
+    }
+
+    /* ה. חישוב ודאי — נשלח ל-action, ובהוראות נשאר מצביע */
+    var c=calcHit(rest);
+    if(c){
+      aCount++;
+      var nm=c.nm+"-"+String(aCount).padStart(2,"0");
+      out.acts.push({kind:c.kind, nm:nm, src:line.trim()});
+      rest=rest+"  ⟵ החישוב עובר ל-action «"+nm+"»";
+    }
+
+    out.instr.push(pre+rest);
+  }
+
+  out.instr=pruneEmptyHeadings(out.instr);
+  return out;
+}
+
+/* ============================================================
+   3 · רינדור
+   ============================================================ */
+
+function buildInstructions(r, target){
+  var head='אתה "'+r.name+'", סוכן בתוך '+(target==="studio"?"Microsoft Copilot Studio":"Microsoft 365 Copilot")+".";
+  if(r.desc) head+="\nהתפקיד: "+r.desc+".";
+  head+="\n\nפעל לפי ההוראות האלה בדיוק:\n";
+
+  var body=r.instr.join("\n").replace(/\n{3,}/g,"\n\n").trim();
+
+  var tail="\n\n---\nכללי הפעלה\n";
+  tail+="• סבב יחיד. אם חסר לך מידע, בקש את כל מה שחסר בבקשה אחת ובבת אחת, ואל תתחיל תהליך שדורש מענה ביניים.\n";
+  if(r.know.length){
+    tail+="• כל ערך שמסומן ⟨מקור ידע⟩ נקרא ממקורות הידע המחוברים ולא מהזיכרון שלך. אם הערך לא נמצא שם, אמור שהוא חסר במקום לנחש.\n";
+  }
+  if(r.acts.length){
+    tail+="• אל תחשב בעצמך. אסוף את הנתונים, הפעל את ה-action המתאים, והסבר את התוצאה שהוא החזיר.\n";
+  }
+  tail+="• ענה ישירות. אל תתאר את תהליך העבודה שלך, ואל תשלים מידע חסר בהשערה.";
+  return head+"\n"+body+tail;
+}
+
+function serializeKnow(r){
+  if(!r.know.length) return "לא נמצאו ערכים משתנים.";
+  return r.know.map(function(k,i){
+    return (i+1)+". ["+k.label+"] "+k.value+
+      "\n   מקור מוצע: "+k.suggest+
+      "\n   מהשורה: "+k.src;
+  }).join("\n\n");
+}
+function actIO(kind){
+  if(kind==="חיבור למערכת") return ["הפרמטרים שהמודל אסף בשיחה", "התשובה מהמערכת, שהמודל רק מציג ומסביר"];
+  if(kind==="שליפה")        return ["מזהה או מונחי חיפוש מהשיחה", "הרשומות שנמצאו, בלי שהמודל ישלים מהן חסרים"];
+  return ["מה שהמודל אסף בשיחה, ובתוספת ערכים ממקורות הידע", "התוצאה המחושבת, שהמודל רק מציג ומסביר"];
+}
+function serializeActs(r){
+  if(!r.acts.length) return "לא זוהה חישוב ודאי ולא חיבור למערכת.";
+  return r.acts.map(function(a){
+    var io=actIO(a.kind);
+    return a.nm+"\n   סוג: "+a.kind+
+      "\n   קלט: "+io[0]+"\n   פלט: "+io[1]+
+      "\n   מהשורה: "+a.src;
+  }).join("\n\n");
+}
+function serializeDrop(r){
+  var fixed="לא עובר מעצם הפלטפורמה:\n• ריצת סבבים אוטומטית\n• הרצת תת-סוכנים\n• קריאה לפקודות סלאש אחרות\nסוכן declarative רץ בסבב יחיד.\n";
+  if(!r.drop.length) return fixed+"\nלא נמצאו שורות נוספות להסרה.";
+  return fixed+"\nשורות שהוסרו:\n"+r.drop.map(function(d){return "• ["+d.why+"] "+d.line;}).join("\n");
+}
+
+function card(cls, nm, kind, rows, srcLine){
+  var d=document.createElement("div");
+  d.className="row-card "+cls;
+  var top=document.createElement("div"); top.className="top";
+  var a=document.createElement("span"); a.className="nm"; a.textContent=nm; top.appendChild(a);
+  var b=document.createElement("span"); b.className="kind"; b.textContent=kind; top.appendChild(b);
+  d.appendChild(top);
+  if(rows.length){
+    var dl=document.createElement("dl");
+    rows.forEach(function(p){
+      var dt=document.createElement("dt"); dt.textContent=p[0];
+      var dd=document.createElement("dd"); dd.textContent=p[1];
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+    d.appendChild(dl);
+  }
+  if(srcLine){
+    var s=document.createElement("div"); s.className="src"; s.dir="auto"; s.textContent=srcLine;
+    d.appendChild(s);
+  }
+  return d;
+}
+
+function empty(msg){
+  var d=document.createElement("div"); d.className="empty"; d.textContent=msg; return d;
+}
+
+var LAST={1:"",2:"",3:"",4:""};
+
+function render(r, target){
+  /* שכבה 1 */
+  var text=buildInstructions(r, target);
+  LAST[1]=text;
+  $("out1").textContent=text;
+  var len=text.length, pct=Math.min(100, Math.round(len/8000*100));
+  $("meterFill").style.width=pct+"%";
+  $("meterTxt").textContent=len.toLocaleString("en-US")+" תווים";
+  $("meter").classList.toggle("over", len>8000);
+  if(len>8000) $("meterTxt").textContent=len.toLocaleString("en-US")+" תווים · חורג, קצרו או פצלו לשני סוכנים";
+
+  /* שכבה 2 */
+  LAST[2]=serializeKnow(r);
+  var w2=$("out2"); w2.textContent="";
+  if(!r.know.length) w2.appendChild(empty("לא נמצאו ערכים משתנים. אם יש בסקיל מספר שמתעדכן, הוסיפו אותו ידנית."));
+  else r.know.forEach(function(k,i){
+    w2.appendChild(card("k2", k.value, k.label, [["מקור מוצע", k.suggest]], k.src));
+  });
+
+  /* שכבה 3 */
+  LAST[3]=serializeActs(r);
+  var w3=$("out3"); w3.textContent="";
+  if(!r.acts.length) w3.appendChild(empty("לא זוהה חישוב ודאי. אם הסקיל כן מחשב, סמנו את השורה ידנית."));
+  else r.acts.forEach(function(a){
+    var io=actIO(a.kind);
+    w3.appendChild(card("k3", a.nm, a.kind, [["קלט",io[0]],["פלט",io[1]]], a.src));
+  });
+  $("builderFlag").hidden = !(target==="builder" && r.acts.length>0);
+
+  /* שכבה 4 */
+  LAST[4]=serializeDrop(r);
+  var w4=$("out4"); w4.textContent="";
+  w4.appendChild(card("k4","סבב יחיד","מגבלת פלטפורמה",[
+    ["לא עובר","ריצת סבבים אוטומטית, הרצת תת-סוכנים, קריאה לפקודות סלאש"]
+  ], "סוכן declarative רץ בסבב יחיד. סקיל שמסתמך על חזרה אוטומטית ייעצר אחרי הסבב הראשון בלי להודיע."));
+  r.drop.forEach(function(d){ w4.appendChild(card("k4", d.why, "הוסר", [], d.line)); });
+
+  /* מונים */
+  $("n1").textContent=String(r.instr.filter(function(x){return x.trim();}).length);
+  $("n2").textContent=String(r.know.length);
+  $("n3").textContent=String(r.acts.length);
+  $("n4").textContent=String(r.drop.length+1);
+}
+
+/* ============================================================
+   4 · חיווט
+   ============================================================ */
+
+var inEl=$("in");
+function stat(){
+  var v=inEl.value;
+  $("inStat").textContent = v ? v.length.toLocaleString("en-US")+" תווים" : "ריק";
+}
+inEl.addEventListener("input", stat);
+
+$("go").addEventListener("click", function(){
+  var src=inEl.value;
+  if(!src.trim()){ $("out1").textContent="אין קלט. הדביקו SKILL.md, או טענו את הדוגמה."; return; }
+  var target=$("target").value;
+  render(convert(src,{name:$("agentName").value.trim()}), target);
+});
+
+$("target").addEventListener("change", function(){
+  if(inEl.value.trim()) $("go").click();
+});
+
+$("clear").addEventListener("click", function(){
+  inEl.value=""; stat(); $("sampleNote").hidden=true;
+  $("out1").textContent="הפלט יופיע כאן אחרי המרה.";
+  ["out2","out3","out4"].forEach(function(id){ $(id).textContent=""; });
+  ["n1","n2","n3","n4"].forEach(function(id){ $(id).textContent="0"; });
+  $("meterFill").style.width="0%"; $("meterTxt").textContent="0 תווים";
+  $("meter").classList.remove("over"); $("builderFlag").hidden=true;
+  LAST={1:"",2:"",3:"",4:""};
+});
+
+/* לשוניות */
+var tabs=[].slice.call(document.querySelectorAll('[role="tab"]'));
+tabs.forEach(function(t){
+  t.addEventListener("click", function(){
+    tabs.forEach(function(o){
+      var on=(o===t);
+      o.setAttribute("aria-selected", on?"true":"false");
+      $(o.getAttribute("aria-controls")).hidden=!on;
+    });
+  });
+  t.addEventListener("keydown", function(e){
+    var i=tabs.indexOf(t), n=null;
+    if(e.key==="ArrowLeft") n=tabs[(i+1)%tabs.length];
+    if(e.key==="ArrowRight") n=tabs[(i-1+tabs.length)%tabs.length];
+    if(n){ e.preventDefault(); n.focus(); n.click(); }
+  });
+});
+
+/* העתקה */
+[].slice.call(document.querySelectorAll("[data-copy]")).forEach(function(b){
+  b.addEventListener("click", function(){
+    var k=b.getAttribute("data-copy"), txt=LAST[k]||"";
+    if(!txt) return;
+    var done=function(){
+      var ok=$("ok"+k); ok.hidden=false; setTimeout(function(){ok.hidden=true;},1500);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done, function(){ fallback(txt); });
+    } else fallback(txt);
+  });
+});
+function fallback(txt){
+  var ta=document.createElement("textarea");
+  ta.value=txt; ta.setAttribute("readonly","");
+  ta.style.position="fixed"; ta.style.top="-1000px";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* כתובות RAW */
+$("rawBtn").addEventListener("click", function(){
+  var u=$("repo").value.trim(), box=$("rawlinks");
+  box.textContent="";
+  var m=u.match(/github\.com\/([^\/\s]+)\/([^\/\s#?]+)/i);
+  if(!m){ box.appendChild(empty("לא זוהתה כתובת GitHub תקינה.")); return; }
+  var owner=m[1], name=m[2].replace(/\.git$/,"");
+  ["main","master"].forEach(function(br){
+    ["SKILL.md","skill.md","skills/SKILL.md"].forEach(function(p){
+      var a=document.createElement("a");
+      a.href="https://raw.githubusercontent.com/"+owner+"/"+name+"/"+br+"/"+p;
+      a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=a.href;
+      box.appendChild(a);
+    });
+  });
+});
+
+/* דוגמה */
+var SAMPLE=[
+"---",
+"name: vat-advisor",
+"description: עונה לבעלי עסקים קטנים על שאלות מע\"מ",
+"allowed-tools: Read, Bash, WebFetch",
+"model: opus",
+"---",
+"",
+"# יועץ מע\"מ",
+"",
+"אתה יועץ מע\"מ מנוסה שעונה לבעלי עסקים קטנים בישראל. ענה בעברית, בגובה העיניים, בלי ז'רגון מיותר.",
+"",
+"## כללי עבודה",
+"- אל תניח שמדובר בעוסק מורשה. שאל תמיד מה סוג העוסק.",
+"- הפרד בין עסקה חייבת, עסקה פטורה ועסקה בשיעור אפס.",
+"- אם ניתן סכום, ברר אם הוא לפני מע\"מ או כולל מע\"מ.",
+"",
+"## שלבים",
+"1. סווג את סוג העוסק ואת סוג העסקה.",
+"2. חשב את המע\"מ לפי 18% מסכום העסקה לפני מע\"מ.",
+"3. בדוק אם המחזור חוצה את תקרת העוסק הפטור, 120,000 ש\"ח לשנה.",
+"4. קבע את מועד הדיווח. הדיווח הדו-חודשי מוגש עד 15.3.2026 עבור התקופה הקודמת.",
+"5. הרץ את /validate על התשובה, ואם נמצאו פערים חזור על השלבים.",
+"",
+"## מקורות",
+"קרא את references/vat-rates.md לשיעורים המעודכנים.",
+"הרץ Bash כדי לשלוף שער חליפין מבנק ישראל.",
+"פצל את הבדיקה לשלושה תת-סוכנים במקביל, אחד לכל סוג עסקה.",
+"",
+"## פורמט התשובה",
+"- שורת סיכום אחת בראש",
+"- טבלה בשלוש עמודות: רכיב, סכום, הסבר",
+"- שורת \"מה לבדוק מול רואה החשבון\" בסוף",
+"",
+"## הבהרה משפטית",
+"האמור אינו מהווה ייעוץ מס ואינו תחליף לייעוץ אישי מרואה חשבון או מיועץ מס מוסמך."
+].join("\n");
+
+$("sample").addEventListener("click", function(){
+  inEl.value=SAMPLE; stat(); $("sampleNote").hidden=false;
+  $("agentName").value="";
+  $("go").click();
+});
+
+stat();
+})();
+</script>
+
+</body>
+</html>

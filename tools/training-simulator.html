@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valor Copilot Training Simulator</title>
+    <style>
+        :root {
+            --bg-main: #0B1120;
+            --bg-panel: #111827;
+            --bg-chat: #1F2937;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --accent-cyan: #00ADB5;
+            --accent-teal: #00FFF5;
+            --accent-emerald: #10B981;
+            --accent-red: #EF4444;
+            --border: #374151;
+            --border-light: #4B5563;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--bg-panel);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .branding {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .branding h1 {
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+        
+        .branding h2 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .category-title {
+            font-size: 0.9rem;
+            color: var(--accent-teal);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .scenario-list {
+            list-style: none;
+        }
+
+        .scenario-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--bg-chat);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            border-right: 3px solid transparent;
+        }
+
+        .scenario-item:hover, .scenario-item.active {
+            background-color: #374151;
+            border-right-color: var(--accent-cyan);
+        }
+
+        /* Gamification */
+        .gamification {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-emerald);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background-color: var(--bg-chat);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-teal);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            opacity: 0.5;
+        }
+
+        .badge.earned {
+            background-color: var(--accent-cyan);
+            color: var(--bg-main);
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .scenario-header {
+            background-color: var(--bg-panel);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .scenario-header h2 {
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Chat Area */
+        .chat-container {
+            flex: 1;
+            background-color: var(--bg-panel);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            align-self: flex-start;
+            background-color: var(--bg-chat);
+            border: 1px solid var(--border-light);
+        }
+
+        .message.bot {
+            align-self: flex-end;
+            background-color: rgba(0, 173, 181, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--text-main);
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background-color: var(--bg-chat);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .prompt-input {
+            flex: 1;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-light);
+            color: var(--text-main);
+            padding: 1rem;
+            border-radius: 8px;
+            resize: none;
+            height: 80px;
+            font-size: 1rem;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-submit {
+            background-color: var(--accent-cyan);
+            color: var(--bg-main);
+            border: none;
+            border-radius: 8px;
+            padding: 0 2rem;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-teal);
+        }
+
+        /* Feedback Panel */
+        .feedback-panel {
+            width: 350px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border);
+            padding: 1rem;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+        }
+
+        .feedback-panel.visible {
+            display: flex;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 8px solid var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem auto;
+            color: var(--accent-teal);
+        }
+
+        .score-dimension {
+            margin-bottom: 1rem;
+        }
+
+        .score-dimension h4 {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .dimension-bar-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .dimension-bar {
+            height: 100%;
+            background-color: var(--accent-cyan);
+        }
+
+        .feedback-text {
+            background-color: var(--bg-chat);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-right: 3px solid var(--accent-emerald);
+        }
+        
+        .certificate-btn {
+            background-color: var(--accent-emerald);
+            color: var(--bg-main);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="branding">
+            <h1>ואלור פתרונות אוטומציה בע"מ</h1>
+            <h2>סימולטור אימון Copilot</h2>
+        </div>
+
+        <div id="scenarios-container">
+            <!-- Scenarios will be injected here via JS -->
+        </div>
+
+        <div class="gamification">
+            <h3>התקדמות ההכשרה</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="overall-progress"></div>
+            </div>
+            <div style="font-size: 0.8rem; text-align: left; margin-top: 0.2rem;" id="progress-text">0/15 הושלמו</div>
+            
+            <div class="badges-container">
+                <div class="badge" id="badge-proc">מומחה רכש</div>
+                <div class="badge" id="badge-fin">בלש פיננסי</div>
+                <div class="badge" id="badge-log">שומר הסף (SLA)</div>
+                <div class="badge" id="badge-hr">גורו משאבי אנוש</div>
+                <div class="badge" id="badge-prod">אלוף הפרודוקטיביות</div>
+                <div class="badge" id="badge-master">Master Prompter</div>
+            </div>
+            
+            <button class="certificate-btn" id="cert-btn" onclick="generateCertificate()">הורד תעודת סיום</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="scenario-header">
+            <h2 id="scenario-title">בחר תרחיש להתחלה</h2>
+            <p id="scenario-desc">יש לבחור תרחיש מתוך התפריט בימין כדי להתחיל את האימון.</p>
+            <div style="margin-top: 10px; display: inline-block; padding: 4px 8px; background: var(--bg-chat); border-radius: 4px; font-size: 0.8rem; color: var(--accent-cyan);" id="app-mode">
+                אפליקציה: -
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-history" id="chat-history">
+                <div class="message bot">
+                    שלום! אני העוזר החכם שלך מבית ואלור פתרונות אוטומציה בע"מ.<br>
+                    בחר תרחיש והזן פרומפט (Prompt) מדויק כדי לתרגל את מיומנויות ה-Copilot שלך.
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <textarea class="prompt-input" id="prompt-input" placeholder="הקלד את הפרומפט שלך כאן... (זכור: מטרה, הקשר, מגבלות, מקור)" disabled></textarea>
+                <button class="btn-submit" id="btn-submit" onclick="evaluatePrompt()" disabled>שלח ניתוח</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Panel -->
+    <div class="feedback-panel" id="feedback-panel">
+        <h3 style="text-align: center; color: var(--accent-cyan);">משוב על הפרומפט</h3>
+        
+        <div class="score-circle">
+            <span id="total-score">0</span>%
+        </div>
+
+        <div class="score-dimension">
+            <h4><span>בהירות המטרה</span><span id="score-goal">0/25</span></h4>
+            <div class="dimension-bar-container"><div class="dimension-bar" id="bar-goal" style="width: 0%"></div></div>
+        </div>
+        
+        <div class="score-dimension">
+            <h4><span>הקשר ארגוני</span><span id="score-context">0/25</span></h4>
+            <div class="dimension-bar-container"><div class="dimension-bar" id="bar-context" style="width: 0%"></div></div>
+        </div>
+        
+        <div class="score-dimension">
+            <h4><span>הגבלות ופורמט</span><span id="score-scope">0/25</span></h4>
+            <div class="dimension-bar-container"><div class="dimension-bar" id="bar-scope" style="width: 0%"></div></div>
+        </div>
+        
+        <div class="score-dimension">
+            <h4><span>הפניה למקור</span><span id="score-source">0/25</span></h4>
+            <div class="dimension-bar-container"><div class="dimension-bar" id="bar-source" style="width: 0%"></div></div>
+        </div>
+
+        <div class="feedback-text" id="feedback-text">
+            המשוב יופיע כאן לאחר שליחת הפרומפט.
+        </div>
+        
+        <div style="margin-top: 1rem; padding: 1rem; border: 1px solid var(--accent-emerald); border-radius: 8px; background-color: rgba(16, 185, 129, 0.1);">
+            <strong style="color: var(--accent-emerald);">עקרון ברזל:</strong>
+            <br>"הכלי מכין, אדם שולח" (Human-in-the-Loop) - תמיד בדוק את תוצרי ה-AI לפני שימוש.
+        </div>
+    </div>
+
+    <script>
+        // Data Structure
+        const scenarios = [
+            // Procurement
+            { id: 'proc1', category: 'רכש', app: 'Word', title: 'הפרת חוזה (Contract Breach)', desc: 'נסח מכתב לספק שירותי ניקיון המפר את סעיף 4 בחוזה ההתקשרות (איחור בהגעה).', keywords: { goal: ['מכתב', 'נסח', 'כתוב'], context: ['ספק', 'ניקיון', 'הפרה', 'איחור'], scope: ['רשמי', 'קצר', 'טון'], source: ['חוזה', 'סעיף 4', 'מסמך התקשרות'] } },
+            { id: 'proc2', category: 'רכש', app: 'Excel', title: 'השוואת מחירים (Vendor Price)', desc: 'צור טבלת השוואת מחירים בין 3 ספקים עבור רכישת 100 מחשבים ניידים.', keywords: { goal: ['טבלה', 'השוואה', 'נתח'], context: ['ספקים', 'מחשבים', 'רכישה'], scope: ['עמודות', 'שורות', 'הדגש'], source: ['קובץ', 'הצעות מחיר', 'נתונים'] } },
+            { id: 'proc3', category: 'רכש', app: 'Copilot Studio', title: 'בדיקת חשבונית (Invoice Audit)', desc: 'בדוק האם חשבונית מס\' 8849 תואמת להזמנת הרכש (PO) המקורית.', keywords: { goal: ['בדוק', 'השווה', 'אמת'], context: ['חשבונית', 'הזמנת רכש', 'PO'], scope: ['פערים', 'חריגות', 'דו"ח'], source: ['חשבונית 8849', 'מערכת ERP'] } },
+            
+            // Finance
+            { id: 'fin1', category: 'כספים', app: 'Excel', title: 'חריגת תזרים (Cashflow Variance)', desc: 'נתח את דו"ח תזרים המזומנים של הרבעון הקודם ומצא חריגות של מעל 10%.', keywords: { goal: ['נתח', 'מצא', 'זהה'], context: ['תזרים מזומנים', 'חריגה', 'רבעון'], scope: ['10%', 'מעל', 'טבלה'], source: ['דו"ח תזרים', 'אקסל'] } },
+            { id: 'fin2', category: 'כספים', app: 'Copilot Studio', title: 'תשלום כפול (Double Payment)', desc: 'אתר תשלומים כפולים לאותו ספק בחודש אוקטובר.', keywords: { goal: ['אתר', 'מצא', 'סנן'], context: ['תשלום כפול', 'ספק', 'אוקטובר'], scope: ['רשימה', 'הדגש'], source: ['כרטסת ספקים', 'מערכת הנהלת חשבונות'] } },
+            { id: 'fin3', category: 'כספים', app: 'Teams', title: 'הקצאת תקציב (Budget)', desc: 'בקש מצוות הנהלת חשבונות לעדכן את הקצאות התקציב לשנה הבאה בהתבסס על ישיבת ההנהלה.', keywords: { goal: ['בקש', 'עדכן', 'הודעה'], context: ['הקצאת תקציב', 'הנהלה', 'צוות'], scope: ['דחוף', 'תמציתי', 'פעולה'], source: ['סיכום ישיבה', 'מסמך תקציב'] } },
+
+            // Logistics
+            { id: 'log1', category: 'לוגיסטיקה', app: 'Excel', title: 'מעקב SLA (SLA Delivery)', desc: 'הפק דו"ח של כל המשלוחים שלא עמדו ב-SLA של 48 שעות.', keywords: { goal: ['דו"ח', 'הפק', 'סנן'], context: ['משלוחים', 'SLA', 'חריגה'], scope: ['48 שעות', 'רשימה', 'אדום'], source: ['קובץ מעקב', 'לוגיסטיקה'] } },
+            { id: 'log2', category: 'לוגיסטיקה', app: 'Outlook', title: 'תביעת עיכוב מכס (Customs Claim)', desc: 'כתוב דוא"ל לעמיל המכס בבקשה לשחרר את מכולה MSK123 שעוכבה בנמל.', keywords: { goal: ['דוא"ל', 'מייל', 'כתוב'], context: ['עמיל מכס', 'שחרור', 'מכולה MSK123', 'עיכוב'], scope: ['רשמי', 'דחוף'], source: ['מסמכי שילוח', 'רשימון'] } },
+            { id: 'log3', category: 'לוגיסטיקה', app: 'Copilot Studio', title: 'אופטימיזציית שילוח (Freight)', desc: 'הצע מסלול שילוח חלופי וזול יותר להובלה מסין לישראל.', keywords: { goal: ['הצע', 'מסלול', 'חלופה'], context: ['שילוח', 'סין', 'ישראל', 'עלות'], scope: ['זול', 'מהיר', 'השוואה'], source: ['מחירון חברות ספנות'] } },
+
+            // HR
+            { id: 'hr1', category: 'משאבי אנוש', app: 'Word', title: 'מדיניות חברה (Policy Lookup)', desc: 'סכם את מדיניות העבודה מהבית (מודל היברידי) עבור עובד חדש.', keywords: { goal: ['סכם', 'תמצת', 'כתוב'], context: ['מדיניות', 'עבודה מהבית', 'היברידי', 'עובד חדש'], scope: ['נקודות', 'קצר', 'ברור'], source: ['ספר נהלים', 'פורטל ארגוני'] } },
+            { id: 'hr2', category: 'משאבי אנוש', app: 'Copilot Studio', title: 'סינון קורות חיים (Shortlisting)', desc: 'סנן קורות חיים וזהה מועמדים עם לפחות 3 שנות ניסיון ב-Python.', keywords: { goal: ['סנן', 'זהה', 'רשימה'], context: ['קורות חיים', 'מועמדים', 'ניסיון', 'Python'], scope: ['3 שנים', 'טבלה'], source: ['תיקיית מועמדים', 'CVs'] } },
+            { id: 'hr3', category: 'משאבי אנוש', app: 'Outlook', title: 'תביעת הטבות (Benefits Claim)', desc: 'נסח תשובה מנומסת לעובד שבקשת החזר ההוצאות שלו נדחתה.', keywords: { goal: ['נסח', 'תשובה', 'מייל'], context: ['עובד', 'החזר הוצאות', 'דחייה'], scope: ['מנומס', 'אמפתי', 'סיבה'], source: ['נהלי החזר', 'פניית העובד'] } },
+
+            // General Productivity
+            { id: 'gen1', category: 'פרודוקטיביות כללית', app: 'Teams', title: 'סיכום ישיבה (Action Items)', desc: 'הפוך את התמלול של ישיבת ההנהלה לרשימת משימות לביצוע (Action Items).', keywords: { goal: ['הפוך', 'רשימה', 'חלץ'], context: ['ישיבה', 'הנהלה', 'משימות', 'לביצוע'], scope: ['Bullet points', 'טבלה', 'שיוך לאדם'], source: ['תמלול', 'Transcript'] } },
+            { id: 'gen2', category: 'פרודוקטיביות כללית', app: 'Outlook', title: 'ניסוח דוא"ל (Email Drafting)', desc: 'כתוב דוא"ל עדכון שבועי לצוות על התקדמות פרויקט X.', keywords: { goal: ['כתוב', 'דוא"ל', 'נסח'], context: ['עדכון שבועי', 'צוות', 'פרויקט X'], scope: ['קצר', 'מעודד', 'נקודות עיקריות'], source: ['תוכנית עבודה', 'Gantt'] } },
+            { id: 'gen3', category: 'פרודוקטיביות כללית', app: 'Word', title: 'מתווה מצגת (Presentation Outline)', desc: 'הכן ראשי פרקים למצגת סוף שנה להנהלה הבכירה בנושא חסכון בעלויות.', keywords: { goal: ['הכן', 'מתווה', 'ראשי פרקים'], context: ['מצגת', 'סוף שנה', 'הנהלה', 'חסכון בעלויות'], scope: ['שקפים', '5-7 שקפים', 'מבנה'], source: ['דו"ח כספי', 'סיכומי שנה'] } }
+        ];
+
+        let currentScenario = null;
+        let completedScenarios = new Set();
+        let currentScore = 0;
+
+        // Initialization
+        function init() {
+            const container = document.getElementById('scenarios-container');
+            const categories = [...new Set(scenarios.map(s => s.category))];
+
+            categories.forEach(category => {
+                const catTitle = document.createElement('h3');
+                catTitle.className = 'category-title';
+                catTitle.textContent = category;
+                container.appendChild(catTitle);
+
+                const list = document.createElement('ul');
+                list.className = 'scenario-list';
+
+                scenarios.filter(s => s.category === category).forEach(scenario => {
+                    const li = document.createElement('li');
+                    li.className = 'scenario-item';
+                    li.id = `item-${scenario.id}`;
+                    li.textContent = scenario.title;
+                    li.onclick = () => selectScenario(scenario.id);
+                    list.appendChild(li);
+                });
+
+                container.appendChild(list);
+            });
+        }
+
+        function selectScenario(id) {
+            // Remove active class
+            document.querySelectorAll('.scenario-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`item-${id}`).classList.add('active');
+
+            currentScenario = scenarios.find(s => s.id === id);
+            
+            // Update UI
+            document.getElementById('scenario-title').textContent = currentScenario.title;
+            document.getElementById('scenario-desc').textContent = currentScenario.desc;
+            document.getElementById('app-mode').textContent = `אפליקציה: ${currentScenario.app}`;
+            
+            document.getElementById('prompt-input').disabled = false;
+            document.getElementById('btn-submit').disabled = false;
+            document.getElementById('prompt-input').value = '';
+            
+            // Reset feedback
+            document.getElementById('feedback-panel').classList.remove('visible');
+            
+            // Clear chat
+            document.getElementById('chat-history').innerHTML = `
+                <div class="message bot">
+                    תרחיש נבחר: <strong>${currentScenario.title}</strong><br>
+                    הזן את הפרומפט שלך למטה כדי לקבל משוב מבוסס AI.
+                </div>
+            `;
+        }
+
+        function evaluatePrompt() {
+            if (!currentScenario) return;
+            
+            const promptText = document.getElementById('prompt-input').value;
+            if (!promptText.trim()) return;
+
+            // Add user message to chat
+            const chatHistory = document.getElementById('chat-history');
+            chatHistory.innerHTML += `<div class="message user">${promptText}</div>`;
+
+            // Calculate Scores (Mock AI Logic)
+            const scores = {
+                goal: calculateDimensionScore(promptText, currentScenario.keywords.goal),
+                context: calculateDimensionScore(promptText, currentScenario.keywords.context),
+                scope: calculateDimensionScore(promptText, currentScenario.keywords.scope),
+                source: calculateDimensionScore(promptText, currentScenario.keywords.source)
+            };
+
+            const totalScore = scores.goal + scores.context + scores.scope + scores.source;
+            
+            // Update Feedback Panel
+            updateFeedbackUI(scores, totalScore);
+            
+            // Generate Simulated Response
+            generateSimulatedResponse(totalScore);
+
+            // Update Progress
+            if (totalScore >= 70) {
+                if (!completedScenarios.has(currentScenario.id)) {
+                    completedScenarios.add(currentScenario.id);
+                    updateGamification();
+                }
+            }
+
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function calculateDimensionScore(text, keywords) {
+            if (!keywords || keywords.length === 0) return 10; // default if no keywords
+            let matches = 0;
+            const lowerText = text.toLowerCase();
+            keywords.forEach(kw => {
+                if (lowerText.includes(kw.toLowerCase())) matches++;
+            });
+            
+            const ratio = matches / Math.min(keywords.length, 2); // Expecting at least 1-2 keywords per dimension
+            return Math.min(25, Math.floor(ratio * 25));
+        }
+
+        function updateFeedbackUI(scores, total) {
+            document.getElementById('feedback-panel').classList.add('visible');
+            
+            // Animate total score
+            document.getElementById('total-score').textContent = total;
+            document.querySelector('.score-circle').style.borderColor = getScoreColor(total);
+            document.getElementById('total-score').style.color = getScoreColor(total);
+
+            // Update bars
+            updateBar('goal', scores.goal);
+            updateBar('context', scores.context);
+            updateBar('scope', scores.scope);
+            updateBar('source', scores.source);
+
+            // Construct Feedback Text
+            let feedback = '';
+            if (total >= 90) {
+                feedback = "<strong>מצוין!</strong> הפרומפט שלך מנוסח בצורה אידיאלית. הוא ברור, מכיל הקשר מדויק, מגדיר גבולות ומפנה למקורות מידע. ה-Copilot יפיק תוצר מדויק.";
+            } else if (total >= 70) {
+                feedback = "<strong>טוב מאוד.</strong> הפרומפט מספיק ברור כדי לעבוד, אך ניתן לשפר אותו. שימו לב למדדים הנמוכים והוסיפו פרטים רלוונטיים (כמו הגדרת פורמט פלט או הפניה מדויקת למסמך).";
+            } else {
+                feedback = "<strong>נדרש שיפור.</strong> פרומפט זה עלול להניב תוצאה כללית או שגויה מ-Copilot (הזיה/Hallucination). נסו להשתמש בנוסחת: מטרה + הקשר + מגבלות + מקור מידע.";
+            }
+            
+            document.getElementById('feedback-text').innerHTML = feedback;
+        }
+
+        function updateBar(id, score) {
+            document.getElementById(`score-${id}`).textContent = `${score}/25`;
+            const bar = document.getElementById(`bar-${id}`);
+            bar.style.width = `${(score/25)*100}%`;
+            bar.style.backgroundColor = getScoreColor(score * 4); // convert to 100% scale for color
+        }
+
+        function getScoreColor(score) {
+            if (score >= 80) return 'var(--accent-emerald)';
+            if (score >= 60) return 'var(--accent-cyan)';
+            if (score >= 40) return '#F59E0B'; // yellow
+            return 'var(--accent-red)';
+        }
+
+        function generateSimulatedResponse(score) {
+            const chatHistory = document.getElementById('chat-history');
+            let responseText = "";
+
+            if (score >= 80) {
+                responseText = "✅ <strong>הדמיית תוצר מוצלח:</strong><br><br>בהתבסס על ההנחיות המדויקות שלך והמסמכים המקושרים, יצרתי עבורך את התוצר המבוקש. הפורמט תואם להגדרות, והנתונים נשאבו מהמקורות שהגדרת.<br><br><em>[זכור: הכלי מכין, אדם שולח - אנא עבור על התוצר לפני אישור]</em>";
+            } else if (score >= 50) {
+                responseText = "⚠️ <strong>הדמיית תוצר חלקי:</strong><br><br>הצלחתי להבין את הבקשה הכללית, אך חסרים לי פרטים (כמו פורמט רצוי או מקור מידע ספציפי). התוצר שהופק הוא כללי ועשוי לדרוש עריכה ידנית רבה מצדך. אנא דייק את הפרומפט.";
+            } else {
+                responseText = "❌ <strong>הדמיית תוצר שגוי/הזיה:</strong><br><br>הפרומפט קצר וכללי מדי. אני עלול להמציא נתונים (Hallucinate) או להשתמש במידע לא מעודכן מהרשת, כיוון שלא הופניתי למסמך ארגוני ספציפי או שלא סופק לי הקשר מספק.";
+            }
+
+            chatHistory.innerHTML += `<div class="message bot">${responseText}</div>`;
+        }
+
+        function updateGamification() {
+            const total = 15;
+            const completed = completedScenarios.size;
+            
+            document.getElementById('progress-text').textContent = `${completed}/${total} הושלמו`;
+            document.getElementById('overall-progress').style.width = `${(completed/total)*100}%`;
+
+            // Badge logic
+            let categoriesCompleted = { 'רכש': 0, 'כספים': 0, 'לוגיסטיקה': 0, 'משאבי אנוש': 0, 'פרודוקטיביות כללית': 0 };
+            
+            completedScenarios.forEach(id => {
+                const s = scenarios.find(x => x.id === id);
+                categoriesCompleted[s.category]++;
+            });
+
+            if (categoriesCompleted['רכש'] === 3) document.getElementById('badge-proc').classList.add('earned');
+            if (categoriesCompleted['כספים'] === 3) document.getElementById('badge-fin').classList.add('earned');
+            if (categoriesCompleted['לוגיסטיקה'] === 3) document.getElementById('badge-log').classList.add('earned');
+            if (categoriesCompleted['משאבי אנוש'] === 3) document.getElementById('badge-hr').classList.add('earned');
+            if (categoriesCompleted['פרודוקטיביות כללית'] === 3) document.getElementById('badge-prod').classList.add('earned');
+            
+            if (completed === total) {
+                document.getElementById('badge-master').classList.add('earned');
+                document.getElementById('cert-btn').style.display = 'block';
+            }
+        }
+        
+        function generateCertificate() {
+            alert("מזל טוב! השלמת בהצלחה את כל מסלול ההכשרה של Valor.\n(בסביבת ייצור, כאן תופק תעודת PDF להורדה).");
+        }
+
+        // Run on load
+        window.onload = init;
+    </script>
+</body>
+</html>

@@ -1,0 +1,1181 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>נווט רישוי Copilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@300;400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ============================================================================
+   A decision tool, not a product page. One accent (indigo), semantic colour
+   reserved for included / partial / blocked, an 8px spacing scale, and a single
+   type family. Tier tokens t1..t6 survive because the JS injects them by name,
+   but they all resolve to the accent: tiers are told apart by heading and rule,
+   not by a rainbow.
+   ========================================================================== */
+:root{
+  --bg:#F6F7FB; --surface:#FFFFFF; --card-2:#FBFCFE; --sunk:#F1F3F9;
+  --ink:#171A2B; --ink-2:#59606F; --muted:#59606F;
+  --line:#E2E6EF; --line-2:#CFD5E4;
+  --brand:#5B4FD6; --brand-ink:#FFFFFF; --brand-wash:#F0EEFF;
+  --ok:#0E7350; --ok-w:#E7F4EF; --warn:#A15C00; --warn-w:#FBF1E3;
+  --bad:#B42318; --bad-w:#FDECEA;
+  --no:#5F6879;
+  --acc:#5B4FD6;
+  --sh:none;
+  /* every tier resolves to the accent; differentiation is typographic */
+  --panel:#3B3190; --t1:#8E87EA; --t2:#7A72E1; --t3:#675DD9; --t4:#5B4FD6; --t5:#4B40B4; --t6:#3B3190;
+  --grad:#5B4FD6;
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]):not([data-ui="light"]){
+    --bg:#0E1120; --surface:#171B2C; --card-2:#1B2033; --sunk:#12162492;
+    --ink:#EAECF5; --ink-2:#B9C0D2; --muted:#B9C0D2;
+    --line:#2A3048; --line-2:#3A4260;
+    --brand:#9A8FF5; --brand-ink:#0E1120; --brand-wash:#211E3F;
+    --ok:#63D3A8; --ok-w:#11291F; --warn:#E0A153; --warn-w:#2C2113;
+    --bad:#F08078; --bad-w:#2E1614;
+    --no:#98A2B8;
+    --acc:#9A8FF5;
+    --panel:#241F5E; --t1:#6C63C6; --t2:#7B72D6; --t3:#8A81E6; --t4:#9A8FF5; --t5:#AFA6F9; --t6:#C6BFFC;
+    --grad:#9A8FF5;
+  }
+}
+:root[data-theme="dark"],:root[data-ui="dark"]{
+  --bg:#0E1120; --surface:#171B2C; --card-2:#1B2033; --sunk:#121624;
+  --ink:#EAECF5; --ink-2:#B9C0D2; --muted:#B9C0D2;
+  --line:#2A3048; --line-2:#3A4260;
+  --brand:#9A8FF5; --brand-ink:#0E1120; --brand-wash:#211E3F;
+  --ok:#63D3A8; --ok-w:#11291F; --warn:#E0A153; --warn-w:#2C2113;
+  --bad:#F08078; --bad-w:#2E1614;
+  --no:#98A2B8;
+  --acc:#9A8FF5;
+  --panel:#241F5E; --t1:#6C63C6; --t2:#7B72D6; --t3:#8A81E6; --t4:#9A8FF5; --t5:#AFA6F9; --t6:#C6BFFC;
+  --grad:#9A8FF5;
+}
+:root[data-ui="light"]{
+  --bg:#F6F7FB; --surface:#FFFFFF; --card-2:#FBFCFE; --sunk:#F1F3F9;
+  --ink:#171A2B; --ink-2:#59606F; --muted:#59606F;
+  --line:#E2E6EF; --line-2:#CFD5E4;
+  --brand:#5B4FD6; --brand-ink:#FFFFFF; --brand-wash:#F0EEFF;
+  --ok:#0E7350; --ok-w:#E7F4EF; --warn:#A15C00; --warn-w:#FBF1E3;
+  --bad:#B42318; --bad-w:#FDECEA;
+  --no:#5F6879; --acc:#5B4FD6;
+  --panel:#3B3190; --t1:#8E87EA; --t2:#7A72E1; --t3:#675DD9; --t4:#5B4FD6; --t5:#4B40B4; --t6:#3B3190;
+  --grad:#5B4FD6;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Assistant","Segoe UI",-apple-system,sans-serif;font-size:16px;line-height:1.62;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.app{direction:rtl;text-align:right;min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer;border-radius:8px}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+/* figures and identifiers read left to right even inside Hebrew */
+.mono,.res-price,.step-p,.cell .v,.band .bv,.brk.n span:not(:first-child){
+  direction:ltr;unicode-bidi:isolate;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ---------- header: shorter, no gradient, a neutral mark ---------- */
+.hero{background:var(--surface);border-bottom:1px solid var(--line)}
+.hero-in{max-width:1440px;margin:0 auto;padding:var(--s2) clamp(var(--s3),3vw,var(--s4));
+  display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.logo{width:30px;height:30px;border-radius:7px;background:var(--brand);flex:none;
+  display:grid;place-items:center;color:var(--brand-ink);font-weight:800;font-size:.9rem;letter-spacing:.02em}
+.htxt h1{font-size:clamp(24px,2.6vw,30px);line-height:1.2;margin:0;font-weight:800;letter-spacing:-.01em}
+.htxt p{margin:2px 0 0;font-size:.85rem;color:var(--ink-2);max-width:750px}
+.asof{margin-inline-start:auto;font-size:.72rem;color:var(--ink-2);
+  background:var(--sunk);border:1px solid var(--line);padding:5px 10px;border-radius:6px;
+  direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+
+.themetog{display:flex;gap:2px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:2px}
+.themetog button{border:0;background:none;padding:5px 10px;font-size:.72rem;font-weight:700;
+  color:var(--ink-2);border-radius:6px;line-height:1.2}
+.themetog button:hover{color:var(--ink)}
+.themetog button[aria-pressed="true"]{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+
+/* ---------- nav: compact tabs, underline for active ---------- */
+nav.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;overflow-x:auto}
+nav.tabs::-webkit-scrollbar{height:3px}
+nav.tabs::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:3px}
+.tabs-in{max-width:1440px;margin:0 auto;padding:0 clamp(var(--s3),3vw,var(--s4));display:flex;gap:var(--s3);min-height:56px;align-items:stretch}
+.tab{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:0 2px;
+  font-size:.92rem;font-weight:600;color:var(--ink-2);white-space:nowrap;transition:color .14s}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--brand);border-bottom-color:var(--brand);background:none}
+
+main{flex:1;max-width:1440px;width:100%;margin:0 auto;padding:var(--s3) clamp(var(--s3),3vw,var(--s4)) var(--s5)}
+.screen{display:none}
+.screen.on{display:block;animation:fi .15s ease-out}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}*{transition:none!important}}
+
+h2.sh{font-size:clamp(22px,2.4vw,28px);line-height:1.28;margin:0 0 var(--s1);font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+p.sub{color:var(--ink-2);margin:0 0 var(--s3);max-width:750px;font-size:.98rem}
+
+/* ---------- a card is a section, not a floating box ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:var(--s3);margin-bottom:var(--s2)}
+.card h3{margin:0 0 var(--s2);font-size:20px;line-height:1.4;color:var(--brand);font-weight:700;
+  letter-spacing:normal;text-transform:none;padding-bottom:var(--s1);border-bottom:2px solid var(--brand-wash)}
+
+/* ---------- choice controls ---------- */
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(238px,100%),1fr));gap:var(--s1);min-width:0}
+.pick{background:var(--surface);border:1px solid var(--line);padding:12px 14px;text-align:right;
+  font-size:.93rem;line-height:1.4;transition:border-color .14s,background .14s;width:100%;
+  display:flex;align-items:center;gap:10px;border-radius:8px}
+.pick:hover{border-color:var(--brand);background:var(--card-2)}
+.pick[aria-pressed="true"]{background:var(--brand-wash);color:var(--ink);border-color:var(--brand);font-weight:600}
+.pick .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--line-2)}
+.pick[aria-pressed="true"] .dot{background:var(--brand)}
+
+.res{border:1px solid var(--line);background:var(--surface);border-radius:10px;overflow:hidden;margin-top:var(--s2)}
+.res-top{padding:var(--s3);color:#fff;background:var(--panel);border-top:5px solid var(--tc,var(--brand));border-bottom:0}
+.res-lbl{font-size:.72rem;color:#fff;opacity:.85;display:block;margin-bottom:4px;font-weight:700}
+.res-tier{font-size:clamp(20px,2.2vw,26px);line-height:1.25;font-weight:800}
+.res-price{font-weight:700;font-size:1.02rem;margin-top:6px;display:inline-block}
+.res-body{padding:var(--s3);display:grid;gap:var(--s2)}
+.res-row{display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:start}
+.res-k{font-size:.75rem;color:var(--ink-2);padding-top:3px;font-weight:700}
+.res-v{font-size:.96rem}
+
+.ladder{display:flex;flex-direction:column;gap:var(--s1);margin-bottom:var(--s3)}
+.step{display:flex;align-items:center;gap:14px;width:100%;background:var(--surface);
+  border:1px solid var(--line);padding:12px 14px;text-align:right;transition:border-color .14s,background .14s;border-radius:8px}
+.step:hover{border-color:var(--brand);background:var(--card-2)}
+.step .bar{width:4px;align-self:stretch;border-radius:2px;background:var(--tc,var(--line-2));flex:none;min-height:32px}
+.step .txt{flex:1}
+.step-n{font-weight:700;font-size:1rem;display:block}
+.step-sub{font-size:.8rem;color:var(--ink-2);display:block}
+.step-p{font-weight:700;font-size:.95rem;color:var(--ink)}
+.step[aria-pressed="true"]{background:var(--brand-wash);border-color:var(--brand)}
+.step[aria-pressed="true"] .step-sub{color:var(--ink-2)}
+.step[aria-pressed="true"] .step-p{color:var(--ink)}
+.step[aria-pressed="true"] .bar{background:var(--brand)}
+
+/* ---------- capability matrix: sticky frame, zebra, one accent ---------- */
+.mwrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table.mx{border-collapse:separate;border-spacing:0;width:100%;font-size:.88rem;min-width:820px}
+table.mx th{padding:12px 10px;text-align:center;font-size:.76rem;font-weight:700;line-height:1.3;
+  color:var(--ink);background:var(--sunk);border-bottom:1px solid var(--line-2);
+  position:sticky;top:0;z-index:3}
+table.mx th:first-child{text-align:right;min-width:230px;inset-inline-start:0;z-index:4}
+table.mx td{padding:0 10px;height:50px;text-align:center;border-bottom:1px solid var(--line);vertical-align:middle}
+table.mx td:first-child{text-align:right;font-weight:600;position:sticky;inset-inline-start:0;
+  background:var(--surface);z-index:2;font-size:.88rem;line-height:1.35;padding-block:8px}
+table.mx tbody tr:nth-child(even) td{background:var(--card-2)}
+table.mx tbody tr:nth-child(even) td:first-child{background:var(--card-2)}
+table.mx tbody tr{cursor:pointer;transition:background .12s}
+table.mx tbody tr:hover td,table.mx tbody tr:hover td:first-child{background:var(--brand-wash)}
+
+/* status marks: semantic colour only, no pill soup */
+.c{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:600;white-space:nowrap}
+.c::before{content:"";width:9px;height:9px;border-radius:2px;flex:none}
+.c-y{color:var(--ok)} .c-y::before{background:var(--ok)}
+.c-p{color:var(--warn)} .c-p::before{background:var(--warn)}
+.c-d{color:var(--brand)} .c-d::before{background:var(--brand)}
+.c-f{color:var(--brand)} .c-f::before{background:none;border:1.5px solid var(--brand)}
+.c-u{color:var(--ink-2)} .c-u::before{background:none;border:1.5px dashed var(--line-2)}
+.c-n{color:var(--no)} .c-n::before{background:none;border:1.5px solid var(--line-2);opacity:.7}
+tr.ghead th{background:var(--sunk);color:var(--ink);text-align:right;cursor:pointer;
+  padding:10px 12px;font-size:.82rem;font-weight:700;border-bottom:1px solid var(--line-2);
+  border-top:1px solid var(--line-2);position:sticky;top:44px;z-index:2}
+tr.ghead th:hover{background:var(--brand-wash)}
+tr.ghead .gt::before{content:"▾";display:inline-block;margin-inline-end:8px;color:var(--ink-2);font-size:.7em}
+tbody.shut tr.ghead .gt::before{content:"▸"}
+tr.ghead .gc{margin-inline-start:8px;color:var(--ink-2);font-weight:600;font-size:.76rem}
+tbody.shut tr:not(.ghead){display:none}
+.more{margin:var(--s2) 0 0;border-top:1px solid var(--line);padding-top:10px}
+.more>summary{cursor:pointer;list-style:none;font-size:.84rem;font-weight:700;color:var(--brand);
+  display:inline-flex;align-items:center;gap:8px;padding:2px 0}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::before{content:"▸";font-size:.8em;color:var(--ink-2)}
+.more[open]>summary::before{content:"▾"}
+.more>summary:hover{text-decoration:underline;text-underline-offset:3px}
+.more-in>.note:first-child{margin-top:10px}
+.legend{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);margin:0 0 var(--s2);
+  padding:10px 14px;background:var(--sunk);border:1px solid var(--line);border-radius:8px;font-size:.8rem}
+
+/* ---------- cost calculator ---------- */
+.grid2{display:grid;grid-template-columns:1fr;gap:var(--s2);min-width:0}
+.grid2>*{min-width:0}
+.card{min-width:0}
+.band{min-width:0}
+@media(min-width:1000px){
+  .grid2{grid-template-columns:340px minmax(0,1fr);align-items:start}
+  .grid2>*:first-child{position:sticky;top:72px}
+}
+.field{margin-bottom:var(--s2)}
+.field label{font-size:.88rem;font-weight:700;display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+.field label b{color:var(--brand);font-weight:700;direction:ltr;unicode-bidi:isolate}
+.field .hint{font-size:.8rem;color:var(--ink-2);margin-top:5px;display:block}
+.hlink{color:var(--brand);text-decoration:underline;text-underline-offset:2px;font-weight:600}
+/* quality badge: is a cost line an official price list, a partial official mapping, or a directional estimate */
+.qbadge{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:5px;margin-inline-start:8px;vertical-align:middle;white-space:nowrap}
+.qb-official{background:var(--ok-w);color:var(--ok)}
+.qb-partial{background:var(--warn-w);color:var(--warn)}
+.qb-estimate{background:var(--warn-w);color:var(--warn)}
+select{background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:9px 10px;
+  font-size:.92rem;width:100%;border-radius:8px}
+select:disabled{opacity:.55}
+
+/* one slider handle, identical in every engine */
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:22px}
+input[type=range]:focus{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:3px;background:var(--line-2)}
+input[type=range]::-moz-range-track{height:4px;border-radius:3px;background:var(--line-2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;
+  border-radius:50%;background:var(--brand);border:2px solid var(--surface);margin-top:-7px;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--brand);
+  border:2px solid var(--surface);cursor:pointer}
+
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:var(--s1);margin-bottom:var(--s2);min-width:0}
+.cell{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+.cell .k{font-size:.72rem;color:var(--ink-2);display:block;margin-bottom:4px;font-weight:700}
+.cell .v{font-size:1.35rem;line-height:1.15;display:block;font-weight:800}
+/* the one figure that matters gets weight, not a gradient */
+.cell.hi{background:var(--brand);border:1px solid var(--brand)}
+.cell.hi .k{color:var(--brand-ink);opacity:.85}
+.cell.hi .v{color:var(--brand-ink)}
+
+.band{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s1);margin-bottom:var(--s2)}
+.band>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;text-align:center}
+.band .bk{font-size:.7rem;color:var(--ink-2);display:block;font-weight:700}
+.band .bv{font-weight:700;font-size:1.02rem;display:block;margin-top:2px}
+.band .mid{border-color:var(--brand);background:var(--brand-wash)}
+
+/* ---------- data rows ---------- */
+.brk,.brkhead{display:grid;gap:8px var(--s2)}
+.brk{align-items:baseline;padding:10px 0;font-size:.88rem;border-bottom:1px solid var(--line)}
+.brk:last-of-type{border-bottom:0}
+.brkhead{padding-bottom:6px;font-size:.72rem;color:var(--ink-2);font-weight:700;border-bottom:1px solid var(--line-2)}
+.brk>span,.brkhead>span{min-width:0;overflow-wrap:break-word}
+.brk:not(.n),.brkhead:not(.n){grid-template-columns:minmax(5.5rem,.8fr) minmax(0,.72fr) minmax(0,.9fr) minmax(0,1.15fr)}
+.brk:not(.n)>span:nth-child(2):last-child,.brkhead:not(.n)>span:nth-child(2):last-child{grid-column:2/-1}
+.brk:not(.n)>span:nth-child(3):last-child,.brkhead:not(.n)>span:nth-child(3):last-child{grid-column:3/-1}
+.brk .m{font-weight:700;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.brk .s{color:var(--ink-2);font-size:.83rem}
+.brk.n,.brkhead.n{grid-template-columns:minmax(0,1fr) repeat(3,84px)}
+.brk.n span:not(:first-child),.brkhead.n span:not(:first-child){text-align:left}
+@media (max-width:640px){
+  .brk:not(.n),.brkhead:not(.n){grid-template-columns:minmax(0,1fr)!important;row-gap:4px}
+  .brk:not(.n)>span,.brkhead:not(.n)>span{grid-column:1/-1!important;text-align:right}
+  .brk:not(.n){padding:14px 0}
+  .brk:not(.n)>span:first-child{font-weight:700;color:var(--ink)}
+  .brkhead:not(.n){display:none}
+  .brk.n,.brkhead.n{grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr))!important;gap:6px 8px;font-size:.82rem}
+  .brk.n span[style*="grid-column"]{grid-column:2/-1!important}
+  .grid2>*:first-child{position:static}
+  /* three nowrap money ranges cannot share 342px, so they stack */
+  .band{grid-template-columns:1fr}
+  .out{grid-template-columns:1fr}
+}
+
+ul.tight{margin:6px 0 0;padding-inline-start:1.1rem}
+ul.tight li{margin-bottom:5px;font-size:.93rem}
+.note{font-size:.86rem;color:var(--ink-2);margin:var(--s2) 0 0;max-width:90ch}
+.card p,.card li,.card dd{max-width:90ch}
+/* a caution is a margin note, not a second box */
+.flag{border-inline-start:3px solid var(--warn);padding-inline-start:14px;
+  font-size:.88rem;margin:var(--s2) 0 4px;color:var(--ink-2);max-width:90ch}
+.flag b{color:var(--warn)}
+/* every claim tagged verified can be checked */
+.srcs{margin:var(--s2) 0 0;padding-block-start:10px;border-block-start:1px solid var(--line);
+  font-size:.8rem;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px var(--s2)}
+.srcs b{font-weight:700;color:var(--ink-2);font-size:.72rem;align-self:center;margin-inline-end:4px}
+.srcs a{color:var(--brand);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.srcs a:hover{text-decoration-thickness:2px}
+/* secondary action: bordered, tinted, never a bare underlined link */
+.cta{border:1px solid var(--line);background:var(--surface);border-radius:8px;
+  padding:14px 16px;margin-bottom:var(--s2);font-size:.92rem;color:var(--ink);max-width:90ch}
+.cta b{color:var(--ink)}
+.cta a{display:inline-block;margin-top:8px;background:var(--brand-wash);color:var(--brand);
+  border:1px solid var(--brand);border-radius:8px;padding:7px 14px;font-weight:700;text-decoration:none}
+.cta a:hover{background:var(--brand);color:var(--brand-ink)}
+
+</style>
+
+<div class="app">
+  <div class="hero"><div class="hero-in">
+    <div class="logo">V</div>
+    <div class="htxt"><h1>נווט רישוי Copilot</h1><p>מה כל רמה נותנת, מה היא עולה, ומתי כדאי לעלות</p></div>
+    <div class="asof">נכון ל־31.08.2026 · USD list · ללא מע״מ</div>
+    <div class="themetog" role="group" aria-label="ערכת צבעים">
+      <button type="button" data-ui-set="auto">אוטומטי</button>
+      <button type="button" data-ui-set="light">בהיר</button>
+      <button type="button" data-ui-set="dark">כהה</button>
+    </div>
+  </div></div>
+  <nav class="tabs" aria-label="מסכים"><div class="tabs-in" id="tabs"></div></nav>
+  <main>
+    <section class="screen on" id="s-where"></section>
+    <section class="screen" id="s-need"></section>
+    <section class="screen" id="s-tiers"></section>
+    <section class="screen" id="s-matrix"></section>
+    <section class="screen" id="s-cost"></section>
+    <section class="screen" id="s-ready"></section>
+    <section class="screen" id="s-intake"></section>
+    <section class="screen" id="s-oversharing"></section>
+    <section class="screen" id="s-pilot"></section>
+    <section class="screen" id="s-value"></section>
+    <section class="screen" id="s-lab"></section>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var el=function(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+var fmt=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+var num=function(n){return Math.round(n).toLocaleString('en-US')};
+var pr=function(n){return '$'+(n%1?n.toFixed(2):n)};
+
+var TIERS=[{"id":"chat","n":"Microsoft 365 Copilot Chat","short":"Copilot Chat","p":0,"pl":"כלול במנוי","c":"var(--t1)","sub":"כל מנוי Microsoft 365 או Office 365 כשיר","inc":["צ׳אט מעוגן ווב עם Enterprise Data Protection","Copilot Pages, העלאת קבצים, יצירת תמונות","Copilot ב-Outlook עם הארקה בתיבה וביומן","סוכני Word, Excel ו-PowerPoint בתוך אפליקציית Copilot","Copilot Notebooks, בכפוף לרישיון SharePoint או OneDrive","Copilot Chat Analytics למנהלי מערכת (מיולי 2026)"],"exc":["הארקה מובנית בנתוני Microsoft Graph","Researcher ו-Analyst","Copilot בפגישות Teams","Copilot Cowork"],"up":"הוספת רישיון בתשלום פותחת הארקה ב-Graph ו-Copilot בתוך היישומים","flag":"נמדד בפועל בטננט (30–31.8.2026): מכסת פעולות יומית של כ-22–24 פעולות AI במדרגה הכלולה, בלי שום מד למשתמש. הודעת החסימה ״נסה שוב מחר או שדרג״ היא האזהרה הראשונה."},{"id":"biz","n":"Microsoft 365 Copilot Business","short":"Copilot Business","p":21,"pl":"$21 למשתמש","c":"var(--t2)","sub":"תוסף ל-SMB, עד 300 מושבים · מבצע רשמי: $18 בשנה הראשונה, עד 31.12.2026","prereq":"נרכש רק על Business Basic, Standard, Premium או Apps for business, ועד 300 מושבים.","inc":["אותן יכולות AI כמו התוסף הארגוני","הארקה מובנית בנתוני Microsoft Graph","Copilot בתוך היישומים ובפגישות Teams","Researcher, Analyst ו-Notebooks"],"exc":["מעל 300 מושבים בטננט","שכבת Purview נגזרת מחבילת הבסיס, לא מה-SKU הזה"],"up":"התוסף הארגוני מסיר את תקרת 300 המושבים ונרכש על כל בסיס כשיר, כולל Enterprise","flag":"<b>תיקון 27.8.2026.</b> קודם נכתב כאן ש-Copilot Business שולל תיוג רגישות אוטומטי, תיוג חובה ו-DLP מלא. זה שגוי: לפי ה-FAQ הרשמי „The Copilot Business add-on delivers the same capabilities as the Microsoft Copilot offering\". עוצמת שכבת Purview נקבעת ב<b>חבילת הבסיס</b> — Business Basic/Standard מול Business Premium ומול E3/E5 — ולא ברישיון ה-Copilot. מאומת. בנפרד: תחולת פטור הקרדיטים על ה-SKU הזה אינה מתועדת רשמית, ואין לקבוע ללקוח שהפטור חל או שאינו חל."},{"id":"m365","n":"Microsoft 365 Copilot","short":"M365 Copilot","p":30,"pl":"$30 למשתמש","c":"var(--t3)","sub":"התוסף הארגוני, בלי תקרת מושבים","prereq":"נרכש על כל בסיס כשיר: Business Basic/Standard/Premium, ‏Office 365 E1/E3/E5, ‏M365 E3/E5, ‏F1/F3. אין מינימום מושבים.","inc":["כל מה שב-Microsoft 365 Copilot Business","שכבת Microsoft Purview מלאה ב-E3 ו-E5","מחברים מאוחדים (Federated)","פטור מקרדיטים בסוכני B2E פנימיים, מתועד","גישה ל-Copilot Cowork, בכפוף להפעלת חיוב שימוש בטננט"],"exc":["סוכן בערוץ חיצוני מול לקוחות","טריגרים אוטונומיים","קריאה ל-API חיצוני","הבאת מודל משלכם"],"up":"Microsoft Copilot Studio מוסיף פעולות, ערוצים חיצוניים ואוטונומיה"},{"id":"studio","n":"Microsoft Copilot Studio","short":"Copilot Studio","p":null,"pl":"לפי צריכה","c":"var(--t4)","sub":"4 מסלולים: PAYG $0.01, חבילת $200/25,000 לחודש, Copilot Credit P3 ו-Agent P3 שנתי","inc":["סוכן בערוץ חיצוני מול לקוחות","טריגרים אוטונומיים","קריאה ל-API, ERP ו-ServiceNow","Power Platform connectors","שלושה harnesses: GitHub Copilot, Standard ו-Copilot Chat","קיבולת Dataverse התחלתית לטננט: 15GB Database, 20GB File, 2GB Log","בחירת מודל ראשי מקטלוג, כולל Anthropic, xAI ו-Mistral","הבאת מודל מ-Microsoft Foundry דרך Prompt tool"],"exc":["הצבת deployment או מודל fine-tuned משלכם כאורקסטרטור","כיסוי אבטחה ב-Defender מ-1.7.2026","גילוי וממשל סוכנים מרכזי"],"prereq":"אין דרישת Microsoft Copilot, אך יש רישוי יוצר נפרד: ב-PAYG וב-P3 תפקיד Copilot Studio Author ($0); בחבילת קיבולת Copilot Studio User License ($0) לכל בונה.","up":"Microsoft Agent 365 מוסיף גילוי, ממשל וכיסוי אבטחה","flag":"PAYG מחויב $0.01 לקרדיט. חבילת קיבולת היא $200 ל-25,000 קרדיטים לחודש, ללא גלגול חודשי; Agent P3 הוא בריכה שנתית נפרדת ל-Foundry ולשירותים אג'נטיים זכאים. זכויות fair use עם Microsoft Copilot חלות רק על runtime פנימי של Standard/Copilot Chat בערוצי Microsoft; GitHub harness ו-Work IQ APIs מחויבים בקרדיטים."},{"id":"a365","n":"Microsoft Agent 365","short":"Agent 365","p":15,"pl":"$15 למשתמש","c":"var(--t5)","sub":"דורש M365 E5, או E3 בתוספת Defender Suite וגם Purview Suite","prereq":"דרישת הקדם היא חבילת בסיס, לא רישיון Copilot. שני מסלולים ארגוניים בלבד: <b>Microsoft 365 E5</b> לבדו, <b>או</b> ‏Microsoft 365 E3 (או Office 365 E3 בתוספת EMS E3) יחד עם <b>Defender Suite וגם Purview Suite</b> — שתי החבילות, לא אחת מהן. ב-SMB: ‏<b>Business Premium</b> בתוספת Defender Suite for SMB ו-Purview Suite for SMB. ‏Business Standard אינו כשיר. מאומת מול Microsoft Licensing FAQ 122.","inc":["גילוי סוכנים ורישום מרכזי","מצב אבטחה (posture) לסוכנים","הגנה מפני איומים","כיסוי Defender לסוכני Copilot Studio ו-Foundry"],"exc":["אינו מחליף את רישיון ה-Copilot","אינו מוסיף יכולות AI"],"up":"Microsoft 365 E7 מאגד את הכל במחיר נמוך מהרכבה עצמית","flag":"מ-1.7.2026 בלעדיו Defender אינו מכסה סוכני Copilot Studio ו-Foundry. הסוכנים ממשיכים לרוץ, אבל בלי ראות ובלי שליטה."},{"id":"e7","n":"Microsoft 365 E7","short":"M365 E7","p":99,"pl":"$99 למשתמש","c":"var(--t6)","sub":"E5 + Microsoft 365 Copilot + Entra Suite + Agent 365","inc":["כל יכולות Microsoft 365 E5","Microsoft 365 Copilot כלול","Microsoft Agent 365 כלול","Microsoft Entra Suite כלול","פטור מקרדיטים ב-B2E, מתועד","זכויות השימוש ב-Copilot Studio שבאות עם M365 Copilot — סוכנים פנימיים ב-Copilot Chat harness, בכפוף ל-fair use"],"exc":["ה-SKU העצמאי של Copilot Studio — חבילות, PAYG וערוץ חיצוני","הצבת מודל משלכם כאורקסטרטור עדיין לא נתמכת"],"up":"מכיל את ציר 2 ואת Agent 365, כולל זכויות השימוש ב-Copilot Studio שבאות עם Microsoft 365 Copilot. ה-SKU העצמאי נרכש בנפרד","flag":"הרכבה עצמית עולה $117: ‏Microsoft 365 E5 ‏$60, ‏Microsoft 365 Copilot ‏$30, ‏Microsoft Agent 365 ‏$15, ‏Microsoft Entra Suite ‏$12. ‏E7 חוסך $18 למושב — אבל רק אם כל ארבעת הרכיבים באמת בהיקף. ארגון שרוצה Copilot בלי ממשל סוכנים משלם $90 על E5 ועוד Copilot, ואז E7 יקר ב-$9 ולא זול ב-$18."}];
+var TI={};TIERS.forEach(function(t,i){TI[t.id]=i});
+
+/* y=כלול · p=חלקי · n=לא · u=לא מתועד · d=דורש Copilot Studio */
+var MXG=[
+  ['Copilot בתוך היישומים',['Copilot בתוך Word, Excel, PPT, OneNote','Copilot ב-Outlook','Copilot בפגישות Teams','Copilot Pages']],
+  ['הארקה, חיפוש ומקורות ידע',['הארקה בנתוני Microsoft Graph','Researcher, Analyst, Notebooks','אינדוקס Graph Connectors','הארקה במקורות חיצוניים ב-Copilot','מחברים מאוחדים (Federated)','ידע בסוכן · 500 קבצים, 512MB לקובץ']],
+  ['בניית סוכנים וערוצים',['יצירת סוכן פנימי','סוכן שיחתי · Search and retrieval','סוכן אוטונומי · מופעל מאירוע','סוכן בערוץ חיצוני מול לקוחות','טריגרים אוטונומיים','קריאה ל-API, ERP, ServiceNow','Power Platform connectors','תזמור בין סוכנים · Master Agent','כלי MCP בסוכן']],
+  ['מודלים ו-Cowork',['בחירת מודל ראשי מקטלוג','הצבת מודל משלכם כאורקסטרטור','Copilot Cowork']],
+  ['עברית ושפה',['עברית ב-Microsoft 365 Copilot','עברית בסוכן Copilot Studio','Teams Interpreter · תרגום סימולטני']],
+  ['Excel וניתוח נתונים',['Agent Mode ב-Excel, Word, PowerPoint','Excel Agent · ביצוע משימה אוטונומית','פונקציית COPILOT בגיליון','Python in Excel']],
+  ['סוכני Frontier, גישה מוקדמת',['Prompt Coach · שיפור פרומפטים','Learning agent · למידה מובנית','Surveys agent · בניית סקרים','Workflows agent · אוטומציה בשפה טבעית','SharePoint page agent']],
+  ['אבטחה, ממשל ומדידה',['כיסוי אבטחה לסוכנים ב-Defender','גילוי וממשל סוכנים','Copilot Dashboard · מדידת אימוץ','תוויות רגישות ו-DLP']]
+];
+var CAPS=[
+ ['Copilot בתוך Word, Excel, PPT, OneNote',      ['p','y','y','','','y'],'מתחת ל-2,000 מושבים נשאר גם ב-Copilot Chat. מעל הסף הוסר ב-15.4.2026. <b>שתי רמות תיוג שונות בשורה הזו:</b> עצם ההסרה ב-15.4.2026 — <b>מאומת</b>. פיצול ה-2,000 מושבים עצמו — <b>מקור יחיד</b>: הסף אינו מופיע בתיעוד הציבורי של Microsoft אלא בשני פוסטי Message Center, MC1253858 ו-MC1253863, שנשלחו לפי גודל טננט. מדווח גם ב-Computerworld, 25.3.2026. לאמת את הסף מול ה-CSP לפני שמסתמכים עליו.',[["Copilot overview","https://learn.microsoft.com/en-us/copilot/overview"]]],
+ ['Copilot ב-Outlook',                  ['y','y','y','','','y'],'חריג מפורש: נשאר ל-Copilot Chat גם אחרי 15.4.2026, כולל הארקה בתיבה וביומן.',[["Copilot overview","https://learn.microsoft.com/en-us/copilot/overview"]]],
+ ['Copilot בפגישות Teams',              ['n','y','y','','','y'],'סיכום מתוך התמליל. דורש רישיון בתשלום.',[["Copilot overview","https://learn.microsoft.com/en-us/copilot/overview"]]],
+ ['Copilot Pages',                      ['y','y','y','','','y'],'זמין גם בלי רישיון בתשלום.',[["Copilot overview","https://learn.microsoft.com/en-us/copilot/overview"]]],
+ ['הארקה בנתוני Microsoft Graph',       ['n','y','y','','','y'],'קבצים, דוא״ל וצ׳אטים. זה הקו שמפריד בין Copilot Chat לרישיון בתשלום.',[["ארכיטקטורת Copilot","https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture"]]],
+ ['Researcher, Analyst, Notebooks',     ['p','y','y','','','y'],'מחקר מעמיק מרובה מקורות. <b>השורה מתפצלת:</b> ‏Researcher ו-Analyst דורשים רישיון בתשלום ואינם ב-Copilot Chat. ‏<b>Copilot Notebooks כן זמינים ל-Copilot Chat</b> — „available to Microsoft Copilot and Copilot Chat licensed users", בתנאי שלחשבון יש service plan של SharePoint או OneDrive. ‏<b>תיקון 27.8.2026:</b> קודם סומן כאן שכל השלושה חסומים ב-Chat. <b>סתירה שהוכרעה:</b> תיאור השירות מונה את Notebooks תחת „Premium", ודף ה-Support קובע במפורש שהם פתוחים ל-Chat — הוכרע לפי דף ה-Support, שספציפי ליכולת ומאוחר יותר. לאמת בטננט לפני התחייבות. ‏<b>נבדק בטננט (30–31.8.2026):</b> על Business Standard עם SharePoint פעיל, ‏Notebooks לא היה זמין לפני הקצאת מושב בתשלום ונפתח רק אחריה — התצפית תומכת דווקא בצד תיאור השירות, והסתירה למעשה חוזרת להיפתח. ובמושב עצמו: ‏Researcher ו-Analyst בתקרה משותפת של 25 שאילתות בחודש — נבדק בטננט.',[["איך Copilot Notebooks עובד","https://support.microsoft.com/en-us/microsoft-365-copilot/how-microsoft-365-copilot-notebooks-works"],["Copilot overview","https://learn.microsoft.com/en-us/copilot/overview"]]],
+ ['אינדוקס Graph Connectors',           ['y','y','y','','','y'],'<b>לקוחות ארגוניים עם רישיון כשיר, למשל Microsoft 365 E5, זכאים למכסת אינדוקס בלתי מוגבלת.</b> ‏Copilot connectors מורשים בנפרד ועשויים לדרוש E5, ‏Viva או יחידות קיבולת נוספות, לפי נפח וסוג הנתונים. מאומת מול Copilot Search FAQ, 18.8.2026.',[["Copilot Search FAQ","https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-search-faq"]]],
+ ['הארקה במקורות חיצוניים ב-Copilot',   ['n','y','y','p','','y'],'האינדוקס קיים בכל טננט, אבל ההארקה ב-Copilot דורשת רישיון Copilot בתשלום או E7.',[["Copilot Search FAQ","https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-search-faq"]]],
+ ['מחברים מאוחדים (Federated)',         ['n','u','y','','','y'],'דף דרישות הקדם נוקב בתוסף Microsoft 365 Copilot או ב-E7 בשמם. ‏<b>תיקון 27.8.2026:</b> אין לקרוא מזה חסימה קשיחה של Microsoft 365 Copilot Business — ה-FAQ הרשמי קובע שהתוסף מספק את אותן יכולות, ופשוט אינו נזכר בשמו בדף המחברים. התיוג הנכון הוא <b>לא מתועד בשם ה-SKU</b>, לא „חסום". לאמת בטננט לפני שמבטיחים ללקוח.',[["דרישות קדם למחברים","https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/prerequisites"],["Copilot Business FAQ","https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-business-faq"]]],
+ ['יצירת סוכן פנימי',                   ['y','y','y','y','','y'],'<b>אינה חסומה ב-Copilot Chat.</b> ‏Agent Builder זמין למשתמשי Chat כשהטננט הפעיל Pay-as-you-go ל-Copilot Studio. סוכן שנשען על הוראות ועל אתרים ציבוריים בלבד אינו מחויב; הארקה בנתוני טננט משותפים, למשל SharePoint או Copilot connectors, מחויבת לפי שימוש. מאומת.',[["Agent Builder","https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/agent-builder-build-agents"],["מדריך מנהלים לסוכנים","https://learn.microsoft.com/en-us/microsoft-365/copilot/agent-essentials/m365-agents-admin-guide"]]],
+ ['סוכן בערוץ חיצוני מול לקוחות',       ['n','n','n','y','','d'],'דורש Microsoft Copilot Studio, גם ב-E7. אין פטור, כל אינטראקציה נצרכת.',[["חיוב ורישוי ב-Copilot Studio","https://learn.microsoft.com/en-us/microsoft-copilot-studio/billing-licensing"]]],
+ ['טריגרים אוטונומיים',                 ['n','n','n','p','','d'],'דורש Microsoft Copilot Studio, גם ב-E7. ‏**Event triggers נתמכים באנגלית ארה״ב בלבד** לפי Microsoft Learn (29.6.2026), ולכן סוכן אוטונומי אינו זמין בעברית. מאומת.',[["תמיכת שפות בעריכה","https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-language-support"]]],
+ ['עברית בסוכן Copilot Studio',          ['n','n','n','p','','p'],'עברית נתמכת בקנבס העריכה ובתשובות גנרטיביות. אינה ברשימת התמיכה הקולית. הצעות פרומפט לא מופיעות בערוץ M365 Copilot אם שפת הסוכן אינה אנגלית. אי אפשר לשנות שפה ראשית אחרי היצירה. מאומת מול Microsoft Learn, 29.6.2026 — ואושר בנפרד על ידי מומחה Copilot Studio של Microsoft בשידור חי: עברית כשפה ראשית של הסוכן עדיין בפריוויו. המעקף שהוא ממליץ עליו: לבנות את הסוכן באנגלית ולחבר מקורות מידע בעברית.',[["תמיכת שפות בעריכה","https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-language-support"]]],
+ ['עברית ב-Microsoft 365 Copilot',       ['y','y','y','','','y'],'עברית נמצאת ברשימת 50 השפות הנתמכות בפרומפטים ובתשובות. מאומת מול Microsoft Support, פברואר 2026.'],
+ ['קריאה ל-API, ERP, ServiceNow',       ['n','n','n','y','','d'],'דורש Microsoft Copilot Studio, גם ב-E7. אין Actions ברמות שמתחת.',[["חיוב ורישוי ב-Copilot Studio","https://learn.microsoft.com/en-us/microsoft-copilot-studio/billing-licensing"]]],
+ ['Power Platform connectors',          ['n','n','n','y','','d'],'דורש Microsoft Copilot Studio, גם ב-E7.',[["חיוב ורישוי ב-Copilot Studio","https://learn.microsoft.com/en-us/microsoft-copilot-studio/billing-licensing"]]],
+ ['בחירת מודל ראשי מקטלוג',             ['n','n','n','y','','d'],'ב-Copilot Studio אפשר לבחור מודל ראשי מדרופדאון, כולל מודלים חיצוניים מ-Anthropic, xAI ו-Mistral. נדרשת הפעלה בידי מנהל.',[["בחירת מודל ראשי לסוכן","https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-select-agent-model"]]],
+ ['הצבת מודל משלכם כאורקסטרטור',        ['n','n','n','n','','n'],'לא מתועד רשמית בשום רמה. הבאת מודל מ-Microsoft Foundry עובדת רק דרך ה-Prompt tool, לכלי בודד ולא לאורקסטרטור. את המודל שמאחורי Microsoft 365 Copilot אי אפשר להחליף כלל.',[["הבאת מודל משלכם","https://learn.microsoft.com/en-us/microsoft-copilot-studio/bring-your-own-model-prompts"]]],
+ ['Copilot Cowork',       ['n','u','y','','','y'],'שכבה שלישית: דורש רישיון Copilot בתשלום וגם חיוב שימוש (Copilot Credits) פעיל בטננט. מ-1.7.2026 טננט בלי חיוב מאבד גישה כליל — נבדק בטננט (31.8.2026): בלי SKU קרדיטים הסוכן אינו נטען. הפטור של Copilot Studio אינו חל עליו.',[["Cowork זמין לכלל הלקוחות","https://www.microsoft.com/en-us/microsoft-365/blog/2026/06/16/copilot-cowork-is-now-generally-available/"]]],
+ ['כיסוי אבטחה לסוכנים ב-Defender',     ['','','','n','y','y'],'מ-1.7.2026 נדרש Microsoft Agent 365. בלעדיו אין גילוי, מצב אבטחה או הגנה מפני איומים. הסוכנים ממשיכים לרוץ.',[["מעבר לאבטחת Agent 365","https://learn.microsoft.com/en-us/defender-xdr/security-for-ai/transition-agent-security-to-agent-365"]]],
+ ['גילוי וממשל סוכנים',                 ['p','p','p','p','y','y'],'Microsoft Copilot Studio אינו מחליף את Microsoft Agent 365.',[["Microsoft Agent 365","https://learn.microsoft.com/en-us/microsoft-agent-365/overview"]]],
+ ['Prompt Coach · שיפור פרומפטים',      ['n','y','y','','','y'],'סוכן מובנה שמשדרג פרומפט קיים או בונה אחד מאפס לפי מתודולוגיית Goal, Context, Source, Expectations. מקור יחיד.'],
+ ['Learning agent · למידה מובנית',      ['n','f','f','','','f'],'בונה מסלול למידה, מפרק נושא לשלבים ומתאים את ההסבר לרמת הידע. מסומן Frontier, כלומר גישה מוקדמת. מקור יחיד.'],
+ ['Surveys agent · בניית סקרים',        ['n','f','f','','','f'],'בונה סקר בשפה טבעית ומייצא ל-Microsoft Forms, ואז ממשיך להציע שיפורי שאלות. מסומן Frontier. מקור יחיד.'],
+ ['Workflows agent · אוטומציה בשפה טבעית',['n','f','f','y','','f'],'בונה זרימות Power Automate בשפה טבעית, כולל קונקטורים, בלי קוד. מסומן Frontier. אם ייצא ל-GA הוא מביא אוטומציה מבוססת קונקטורים לרישיון Copilot בלי Copilot Studio. מקור יחיד, לאימות.'],
+ ['SharePoint page agent',              ['n','f','f','','','f'],'מייצר תוכן לדפי SharePoint מתוך שיחה עם Copilot. מסומן Frontier. מקור יחיד.'],
+ ['Agent Mode ב-Excel, Word, PowerPoint',['y','y','y','','','y'],'מבצע כמה משימות במקביל במקום אחת בכל פעם ומחליף את App Skills, שפורש רשמית. הגיע ל-GA ב-Excel for Web בדצמבר 2025 וב-Windows ב-27.1.2026. ‏<b>מ-22.4.2026 היכולות הסוכניות ב-Word, ב-Excel וב-PowerPoint כולן ב-GA</b> — זו חוויית ברירת המחדל למנויי Microsoft 365 Copilot ו-Microsoft 365 Premium. זמין גם ל-Microsoft 365 Personal ו-Family עם תוכנית AI credits, בלי רישיון Copilot ארגוני. מאומת.',[["GA ליכולות סוכניות ב-Word, Excel ו-PowerPoint","https://www.microsoft.com/en-us/microsoft-365/blog/2026/04/22/copilots-agentic-capabilities-in-word-excel-and-powerpoint-are-generally-available/"]]],
+ ['Excel Agent · ביצוע משימה אוטונומית',  ['y','y','y','','','y'],'חריג משמעותי: זמין דרך תוסף Excel Labs גם בלי רישיון Copilot ארגוני, כולל על M365 Personal, Family ו-Premium — אומת מול Microsoft Support. השם הרשמי של מייקרוסופט הוא Agent Mode; אינו ברור אם Excel Agent שהודגם הוא אותה יכולת בשם אחר או שכבה עצמאית נוספת. לפי מנהל מוצר Excel במיקרוסופט ישראל, בקרוב לא יידרש תוסף כלל — יהיה זמין ישירות מהצ׳אט. מקור יחיד לזיהוי, מאומת לתנאי הרישוי.'],
+ ['פונקציית COPILOT בגיליון',           ['n','f','f','','','f'],'פונקציית גיליון שקוראת ל-Copilot מתוך תא ומחזירה תוצאה, ונשארת דינמית. הודגם: שיוך שם כל חשבון GL לסעיף המאזן (FSLI) המתאים לפי רשימה נתונה. לפעמים מחזירה תוצאה בשתי עמודות במקום אחת — ניתן לכוון בפרומפט. בשלב Insiders. מקור יחיד.'],
+ ['תזמור בין סוכנים · Master Agent',    ['n','n','n','y','','d'],'סוכן־על ב-Copilot Studio שמנווט בין כמה סוכנים ייעודיים לפי הנחיות. שקוף למשתמש הקצה. מקור יחיד.'],
+ ['כלי MCP בסוכן',                      ['n','n','n','y','','d'],'הודגם MCP ל-Outlook בתוך סוכן Copilot Studio. מקור יחיד.'],
+ ['Teams Interpreter · תרגום סימולטני', ['n','p','p','','','p'],'תרגום חי בשיחה. תומך בעשר שפות בלבד: אנגלית, ספרדית, פורטוגזית, יפנית, מנדרינית, איטלקית, גרמנית, צרפתית, קוריאנית וטאיוואנית. ‏<b>עברית אינה ברשימה — לא כשפת קלט ולא כשפת פלט.</b> Support מציין ששפות מדוברות מסוימות עשויות להיות מזוהות, אך „interpretation accuracy isn׳t guaranteed״, ושהפלט תמיד יהיה באחת מעשר השפות הנתמכות. ‏<b>תיקון 27.8.2026:</b> קודם נכתב כאן שאפשר לשמוע דובר עברית מתורגם לאנגלית — אין לכך אישור רשמי, ואין להציג זאת ללקוח כזוג שפות נתמך. מגבלה קריטית לשוק הישראלי. מאומת.',[["Interpreter ב-Teams","https://support.microsoft.com/en-us/teams/copilot/interpreter-in-microsoft-teams-meetings-and-calls"]]],
+ ['Python in Excel',                    ['n','p','p','','','p'],'פותח אנומליות ותחזיות בתוך Excel. אין הגבלה גיאוגרפית: דף הזמינות של Microsoft אינו מכיל רשימת מדינות. החסמים הם ערוץ עדכונים מגרסה 2408 ורישוי — ורישוי מבוסס־מכשיר ו-Shared Computer Activation אינם נתמכים. להפעלה יש לפתוח את הפרומט ב-using python. מאומת.',[["זמינות Python in Excel","https://support.microsoft.com/en-us/office/python-in-excel-availability-781383e6-86b9-4156-84fb-93e786f7cab0"]]],
+ ['סוכן שיחתי · Search and retrieval',  ['p','y','y','y','','y'],'הטריגר הוא השיחה עצמה: אתם פונים אליו והוא עונה. נפגשים בו באפליקציית Copilot או ב-Teams. מקור יחיד.'],
+ ['סוכן אוטונומי · מופעל מאירוע',       ['n','n','n','y','','d'],'לא מדברים איתו כלל. רץ ברקע ומופעל מטריגר חיצוני. דורש Microsoft Copilot Studio. מקור יחיד.'],
+ ['ידע בסוכן · 500 קבצים, 512MB לקובץ', ['n','n','n','y','','d'],'מגבלת העלאה ישירה לסוכן. הערה איכותית שחוזרת בכל הוובינרים: ככל שכמות התוכן מצומצמת יותר, איכות התשובות גבוהה יותר, כי פחות קונפליקטים בין מסמכים. מקור יחיד.',[["דרישות ומכסות","https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-quotas"]]],
+ ['Copilot Dashboard · מדידת אימוץ',    ['n','p','p','','','p'],'<b>רישיון Copilot אחד מספיק כדי לפתוח את <a href="https://insights.cloud.microsoft" target="_blank" rel="noopener" class="hlink">הלוח</a>.</b> ב-1 עד 49 רישיונות מתקבלים דף Readiness ודף Adoption ו-Impact, כולל מדדים ברמת קבוצה ומסנני HR, ותובנות Copilot ו-Copilot Chat. מ-50 ומעלה נפתחים בנוסף Agent Dashboard, benchmarks, סיכומים חכמים, סקרי Pulse ו-Glint, מגמות שבועיות וחודשיות, תצוגת מנהלים והאצלה. מאומת מול טבלת הזכאות ב-Learn, 18.8.2026.',[["טבלת הזכאות ללוח","https://learn.microsoft.com/en-us/viva/insights/org-team-insights/copilot-dashboard"]]],
+ ['תוויות רגישות ו-DLP',                ['p','p','p','','','y'],'<b>נקבע בחבילת הבסיס, לא ברישיון ה-Copilot.</b> תיוג אוטומטי מבוסס כללים, תיוג חובה ושילוב DLP מלא נגזרים מ-E5 או מ-Business Premium; ‏Business Basic ו-Standard נותנים שכבה מצומצמת. ‏<b>תיקון 27.8.2026:</b> קודם נכתב כאן שהצמצום נובע מ-Microsoft 365 Copilot Business — זה שגוי. ה-FAQ הרשמי קובע ש-Copilot Business מספק את אותן יכולות כמו התוסף הארגוני, ולכן אותה חבילת בסיס נותנת אותה שכבת Purview בשני ה-SKU. מאומת.',[["Copilot Business FAQ","https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-business-faq"],["תיאור שירות Purview","https://learn.microsoft.com/en-us/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-tenantlevel-services-licensing-guidance/microsoft-purview-service-description"]]]
+];
+
+var USES=[
+["ניסוח, סיכום ותרגום","chat","זמין כבר במנוי הקיים. אין מה לשדרג בשבילו.","כללי"],
+["יצירת מסמך או מצגת מאפס","chat","דרך סוכני היישומים בתוך אפליקציית Copilot.","כללי"],
+["עריכת מסמך קיים בתוך Word","chat","מתחת ל-2,000 מושבים זמין כבר עכשיו. מעל הסף נדרש רישיון בתשלום.","כללי"],
+["מענה על נהלים מ-SharePoint","chat","אפשרי עם סוכן, אבל ב-Copilot Chat כל שאילתה נצרכת מהמכסה.","כללי"],
+["אותו דבר בלי צריכת קרדיטים","m365","ב-Copilot Chat כל אינטראקציה נצרכת. ב-Microsoft 365 Copilot Business תחולת הפטור אינה מתועדת רשמית.","כללי"],
+["חיפוש חוצה מיילים, קבצים וצ׳אטים","biz","Copilot Chat אינו מוארק בנתוני הארגון. מעל 300 מושבים או על E3 ו-E5 המינימום הוא תוסף Microsoft 365 Copilot ב-$30.","כללי"],
+["סיכום פגישת Teams","biz","לא נתמך ב-Copilot Chat. דורש תמלול מופעל וזימון שיצא מהארגון שלכם.","כללי"],
+["מחקר מעמיק מרובה מקורות","biz","Researcher אינו זמין ב-Copilot Chat. בנוי על מודל המחקר המעמיק של OpenAI.","כללי"],
+["חיפוש ב-Jira, Salesforce, ServiceNow","biz","האינדוקס קיים בכל טננט, אבל ההארקה דורשת רישיון Copilot בתשלום.","כללי"],
+["זיכרון והתאמה אישית","biz","Copilot לומד מהשיחות ומהפרופיל הארגוני. מנהל הטננט יכול לכבות את הזיכרון לכולם, והמשתמש יכול לעבור לשיחה זמנית.","כללי"],
+["אוטומציה בשפה טבעית בלי קוד","biz","Workflows agent, מסומן Frontier. בנוי על Power Automate. אם ייצא ל-GA הוא חוסך רישיון Copilot Studio — אך אין להבטיח זאת.","כללי"],
+["שליפת נתון ממערכת חיצונית בזמן שיחה","studio","אין קריאת API ברמות שמתחת.","כללי"],
+["סוכן שירות לקוחות באתר","studio","אין ערוץ חיצוני, ואין פטור — כל שיחה נצרכת.","כללי"],
+["דוח סטטוס אוטונומי שבועי","studio","אין טריגרים אוטונומיים ברמות שמתחת. ‏Event triggers באנגלית ארה״ב בלבד.","כללי"],
+["משימה ארוכה מרובת שלבים","m365","Cowork דורש רישיון Copilot בתשלום ואז מחויב בנפרד לפי שימוש.","כללי"],
+["גילוי ואבטחה של כל הסוכנים","a365","מ-1.7.2026 Defender אינו מכסה סוכני Copilot Studio ו-Foundry בלעדיו.","כללי"],
+["גילוי לפני שליחה שהתשובה נוסחה ב-AI","biz","ב-Outlook, כשהתשובה מנוסחת מתכתובת קודמת, מופיעה התראה מפורשת לפני השליחה. תזכורת מובנית שהאחריות על התוצר נשארת אצל המשתמש.","כללי"],
+["ניקוי כרטסת לפני ניתוח","biz","Clean Data מזהה רווחים מיותרים, כפילויות, טקסט לא עקבי ומספרים ששמורים כטקסט. מפותח בישראל.","כספים"],
+["מספרים ששמורים כטקסט מעוותים את הסכום","biz","הודגם: נוסחת סכימה החזירה תוצאה שגויה עד שהטקסטים הומרו למספרים בלחיצה אחת.","כספים"],
+["הסבר נוסחה מורכבת שירשתם","biz","Explain This Formula מסביר את הנוסחה על הנתונים שלכם עצמם, לא בהסבר גנרי.","כספים"],
+["השלמת נוסחה לפי שתי דוגמאות","biz","Formula by Example מזהה את הדפוס ומציע נוסחה אמיתית, לא טקסט סטטי כמו Flash Fill. מפותח בישראל.","כספים"],
+["חילוץ ערך מתוך טקסט חופשי","biz","הודגם חילוץ מיקוד ממיקומים משתנים בכתובת, דרך REGEXEXTRACT שהושלמה אוטומטית.","כספים"],
+["התאמת בנק מול כרטסת","m365","Excel Agent, לא Agent Mode. הודגם: התאמה בין כרטסת קאש לדוח בנק, 69 שניות. בונה נוסחת דירוג לזיהוי כפילויות ואז LOOKUP להתאמה. כמעט מושלם, לא מושלם. דורש פרומפט מפורש: לבקש נוסחאות שקופות ולהזהיר על סכומים כפולים.","כספים"],
+["סגירת חודש ובניית מודל פיננסי","m365","Agent Mode מבצע כמה משימות במקביל. ב-Excel כבר נפוץ. באנגלית החוויה טובה יותר.","כספים"],
+["ניתוח מגמות עם גרפים","m365","Analyst מריץ Python מאחורי הקלעים ומציג את הקוד. רץ ארבע עד עשר דקות — כדאי להזמין ניתוח כבד לפני שהולכים הביתה.","כספים"],
+["אנומליות ותחזיות","m365","דורש Python in Excel. אין חסם גיאוגרפי, אך רישוי מבוסס־מכשיר ו-SCA אינם נתמכים. פותחים את הפרומפט ב-using python.","כספים"],
+["סיווג כרטסות לסעיפי מאזן","m365","פונקציית COPILOT בגיליון, בשלב Insiders. הודגם: שיוך שם כל חשבון GL לסעיף מאזן (FSLI) מרשימה נתונה. נשארת דינמית; לפעמים מחזירה תוצאה בשתי עמודות במקום אחת.","כספים"],
+["גישה ל-Agent Mode בלי רישיון Copilot ארגוני","m365","מאומת מול Microsoft Support: פתוח גם ל-Microsoft 365 Personal/Family עם תוכנית AI credits ול-Premium. רלוונטי לעצמאים ולעסקים קטנים שלא רוכשים רישיון Copilot ארגוני.","כספים"],
+["הכנה לשיחת מכירה מהיסטוריית הלקוח","biz","דורש הארקה במיילים ובפגישות. ב-Copilot Chat אין גישה אליהם.","מכירות"],
+["הכנת הצעת מחיר מתבנית","biz","דורש גישה לתבניות ולמחירונים בארגון.","מכירות"],
+["מי סוכן המכירות הרווחי ביותר","biz","הודגם: Copilot חישב עמודת רווח, הציג את הנוסחה, ואז ענה על השאלה.","מכירות"],
+["זיהוי מגמות מכירה לאורך זמן","biz","הודגם בתוך Excel, כולל ויזואליזציה.","מכירות"],
+["הדגשת עסקאות שבוצעו בסופי שבוע","biz","הודגם. שימו לב שסוף השבוע בישראל שונה — צריך לציין זאת בפרומפט במפורש.","מכירות"],
+["זיקוק לידים חמים מרשימות אירועים","biz","הודגם: הצלבת חמישה קובצי משתתפים וזיהוי מי נכח בכל האירועים, לא רק ברובם.","מכירות"],
+["תזמון פגישת המשך משרשור מייל","biz","ממלא נמענים מהשרשור, מנסח אג׳נדה ומציע שעה לפי היומנים. ב-Outlook החדש והווב בלבד.","מכירות"],
+["השוואת הצעות ספקים בפורמטים שונים","biz","הודגם על הצעות ליסינג: PDF מול Word בבת אחת, ואז מיקוד בתנאי תשלום ומחיר.","לוגיסטיקה ורכש"],
+["זיהוי ספק כפול ברשימת הספקים","biz","Clean Data סימן ״LTD״ מול ״LTD.״ כטקסט לא עקבי. המציג הצביע על כך כאיתור אנומליה, לא רק ניקיון.","לוגיסטיקה ורכש"],
+["ריכוז הזמנות רכש פתוחות ושליחתן במייל","biz","דוגמה למחלקת Advanced agents: מבצע פעולה ומחזיר תשובה בערוץ אחר.","לוגיסטיקה ורכש"],
+["העברת השוואת ספקים למצגת להנהלה","biz","הודגם: מהטבלה ב-Excel ישירות לשקופיות, עם אפשרות לערוך סדר ותוכן.","לוגיסטיקה ורכש"],
+["שליפת מלאי או הזמנה מ-ERP בזמן שיחה","studio","אין קריאת API ברמות שמתחת.","לוגיסטיקה ורכש"],
+["סוכן תחזוקה שעונה מתוך מסמכים טכניים","studio","הדוגמה שהוצגה: מהנדס שואל מה התקלה השכיחה במכונה ומקבל שלבי טיפול ממקרים קודמים.","לוגיסטיקה ורכש"],
+["ניטור רציף של קו ייצור וזיהוי סטיות","studio","זו הדוגמה שמייקרוסופט נותנת לסוכן אוטונומי. ‏<b>לא עובד בעברית</b> — Event triggers באנגלית ארה״ב בלבד.","לוגיסטיקה ורכש"],
+["פתיחת קריאת שירות ב-ServiceNow","studio","אין Actions ברמות שמתחת.","לוגיסטיקה ורכש"],
+["זיהוי מילות מפתח SEO לפוסט","chat","מבוסס ווב, זמין כבר במנוי הקיים.","שיווק"],
+["מייל המשך למשתתפי וובינר","biz","דורש גישה לרשימת המשתתפים בקבצי הארגון.","שיווק"],
+["סיפור לקוח מתוך חומרי הארגון","biz","דורש הארקה. השותף מדווח על מעבר משעות לחצי שעה.","שיווק"],
+["ניתוח מתחרים וסקירת שוק","biz","Researcher. השותף מדווח על 15 עד 20 ניתוחים בשבוע וחיסכון של 10 עד 15 דקות לכל אחד.","שיווק"],
+["תכנון אסטרטגיה שיווקית רבעונית","biz","דורש הארקה בנתוני הארגון כדי שההמלצות יהיו רלוונטיות.","שיווק"],
+["מצגת בערכת המותג הארגונית","biz","תמיכה בתבנית, לוגו וצבעי הארגון. לפי השותף ״שנה שלמה חיכינו לזה״.","שיווק"],
+["יצירת סרטון או אינפוגרפיקה","biz","רכיב Create באפליקציה. סרטון נוצר בכ-20 עד 30 שניות. לא זמין מתוך Teams.","שיווק"],
+["סייען לנציג בזמן אמת מתוך מאגר הידע","biz","זו הדוגמה שמייקרוסופט עצמה נותנת לשלב הראשון: נציג מקבל תשובות מהירות לשאלות נפוצות בזמן השיחה.","שירות לקוחות"],
+["סיכום שיחת לקוח והפקת משימות","biz","דורש תמלול מופעל, וזימון שיצא מהארגון שלכם. פגישה שזומנה מארגון אחר לא תפיק AI Notes.","שירות לקוחות"],
+["ניתוח סקר שביעות רצון לקוחות","m365","Analyst. הודגם על 150 משיבים: מגמות, גרפים והמלצות להמשך במקום שעתיים-שלוש עבודה.","שירות לקוחות"],
+["תרגום סימולטני בשיחה עם לקוח זר","biz","Teams Interpreter. <b>עשר שפות, ועברית אינה ביניהן — לא כקלט ולא כפלט.</b> ‏Support מציין ששפות מדוברות מסוימות עשויות להיות מזוהות אך הדיוק אינו מובטח, והפלט תמיד באחת מעשר השפות הנתמכות. אין להציג עברית↔אנגלית כזוג נתמך. מגבלה קריטית לשוק הישראלי.","שירות לקוחות"],
+["סוכן שעונה מהנהלים ופותח טיקט כשאין תשובה","studio","הודגם: הסוכן עונה מהמסמכים, וכשאין לו תשובה פותח פריט ברשימת SharePoint.","שירות לקוחות"],
+["סוכן שירות באתר מול לקוחות קצה","studio","ערוץ חיצוני. <b>אין פטור — כל שיחה נצרכת מהקרדיטים</b>, בשונה משימוש פנים-ארגוני.","שירות לקוחות"],
+["פתיחת קריאה ב-ServiceNow או Zendesk","studio","אין Actions ברמות שמתחת. האינדוקס למערכות האלה קיים בכל טננט, אבל פעולה בהן דורשת Studio.","שירות לקוחות"],
+["ניתוב אוטומטי של פנייה חדשה לגורם המטפל","studio","סוכן אוטונומי שמזהה פנייה ומקצה אותה. <b>לא עובד בעברית</b> — Event triggers באנגלית ארה״ב בלבד.","שירות לקוחות"],
+["אירוע קריטי שפותח שיחת ועידה אוטומטית","studio","מ-PoC של Microsoft ו-ServiceNow דרך Semantic Kernel: באירוע תקלה קריטית נפתחת שיחת Teams שמרכזת את צוות הטיפול.","שירות לקוחות"],
+["ניסוח תיאור משרה לפי תבנית הארגון","biz","דורש הארקה כדי לשאוב את המידע הארגוני למסמך. ב-Copilot Chat תקבלו תיאור גנרי.","משאבי אנוש"],
+["סינון קורות חיים ואחוז התאמה למשרה","biz","דורש הארקה בקבצים. הודגם שקלול בין ציון הראיון לציון קורות החיים.","משאבי אנוש"],
+["בניית שאלות ראיון מתוך קורות החיים","biz","הודגם: עשר שאלות מקצועיות ועשר אישיות מתוך קובץ המועמד.","משאבי אנוש"],
+["תוכנית קליטה וחפיפה ל-90 יום","biz","דורש גישה לחומרי הארגון. הודגם בניית תוכנית לשלושת החודשים הראשונים.","משאבי אנוש"],
+["חומרי הדרכה, מערכי שיעור ומצגות","chat","זמין כבר. השותף מדווח על חיסכון של 8 עד 10 שעות לכל תהליך פיתוח למידה.","משאבי אנוש"],
+["בניית סקר ויצוא ל-Microsoft Forms","biz","Surveys agent, מסומן Frontier. ממשיך להציע שיפורי שאלות גם אחרי הייצוא.","משאבי אנוש"],
+["ניתוח סקר שביעות רצון עובדים","m365","Analyst. הודגם על 150 משתמשים: מגמות, גרפים והמלצות להמשך במקום שעתיים-שלוש עבודה.","משאבי אנוש"],
+["מסלול למידה אישי לעובד","biz","Learning agent, מסומן Frontier. בודק את רמת הידע ומתאים את ההסבר.","משאבי אנוש"],
+["השוואת חוזים או הצעות בפורמטים שונים","biz","אותו מנגנון שהודגם על הצעות ליסינג: PDF מול Word בבת אחת, ואז מיקוד בסעיפים שמעניינים אתכם.","משפטית"],
+["סיכום חוזה ואיתור סעיפים חריגים","biz","דורש הארקה בקבצי הארגון. ב-Copilot Chat אין גישה למאגר החוזים.","משפטית"],
+["מחקר רגולטורי מרובה מקורות","biz","Researcher מצרף רפרנס לכל טענה ומציג את מהלך המחקר, לא רק את השורה התחתונה.","משפטית"],
+["ניסוח מדיניות שימוש ב-AI לארגון","chat","זמין כבר. השותף ממליץ שהמחלקה המשפטית תגדיר מתי מותר להשתמש בתמלולי שיחות ואיך שומרים על פרטיות מידע ארגוני.","משפטית"],
+["הגנה משפטית על תוצרי הסוכן","studio","Customer Copyright Commitment. <b>מצב אי-בהירות:</b> פסקת Covered Product אינה ב-Product Terms הנוכחיים, מאומת, ודף ה-mitigations החי עדיין כולל את Copilot Studio, מאומת. שהיא הוסרה דווקא ביוני 2026 הוא מקור יחיד. לבקש אישור בכתב מ-Microsoft או מהשותף.","משפטית"],
+["אותה הגנה כשהסוכן משתמש במודל חיצוני","studio","<b>התשובה חד-משמעית: לא מכוסה.</b> לפי טבלת ה-mitigations, מודל שאינו רץ ב-Azure OpenAI ואינו עומד בדרישות — הפלט שלו אינו מכוסה ב-CCC. מאומת.","משפטית"],
+["תיוג רגישות אוטומטי על מסמכים","m365","נגזר מ<b>חבילת הבסיס</b>, לא מרישיון ה-Copilot: תיוג אוטומטי מבוסס כללים, תיוג חובה ושילוב DLP מלא מגיעים מ-E5 או מ-Business Premium. ‏<b>תיקון 27.8.2026:</b> קודם נכתב כאן שזה מה שמצומצם ב-Microsoft 365 Copilot Business ב-$21 — שגוי. אותה חבילת בסיס נותנת אותה שכבת Purview בשני ה-SKU.","משפטית"],
+["מיפוי חשיפת יתר לפני ההטמעה","m365","Restricted SharePoint Search ו-SharePoint Advanced Management. הסיכון אינו ב-Copilot אלא בהרשאות שכבר קיימות ואיש לא בדק.","משפטית"],
+["שליטה בזיכרון Copilot מטעמי פרטיות","biz","מנהל הטננט יכול לכבות את הזיכרון לכלל המשתמשים, והמשתמש יכול לעבור לשיחה זמנית שאינה נשמרת.","משפטית"],
+["סוכן שעונה לעובדים ופותח טיקט אוטומטית","studio","הודגם: הסוכן עונה מהנהלים, וכשאין תשובה פותח פריט ברשימת SharePoint.","IT וחדשנות"],
+["יצירת פריט ב-SharePoint או SQL משיחה","studio","דרך קונקטורים של Power Automate. אין Actions ברמות שמתחת.","IT וחדשנות"],
+["אינדוקס Jira, Salesforce, ServiceNow, Zendesk","biz","Graph Connectors. האינדוקס קיים בכל טננט, ההארקה דורשת רישיון בתשלום.","IT וחדשנות"],
+["חיבור לשרת קבצים מקומי","studio","הודגם כאפשרי תיאורטית. דורש Copilot Studio, ואינו מסלול מתועד.","IT וחדשנות"],
+["תזמור בין כמה סוכנים","studio","Master Agent שאין בו ידע או כלים — רק סוכנים והנחיות מתי לקרוא לכל אחד. שקוף למשתמש הקצה.","IT וחדשנות"],
+["סבב אישורים עם מנהל ואז פעולה ביומן","studio","הודגם מקצה לקצה: סוכן אוסף פרטים, Power Automate מריץ אישור, והאישור מפעיל סוכן שסוגר ביומן.","IT וחדשנות"],
+["חיבור כלי MCP לסוכן","studio","הודגם MCP ל-Outlook בתוך סוכן Copilot Studio.","IT וחדשנות"],
+["מדריך שימוש בפורטל האדמין","chat","זמין כבר במנוי הקיים.","IT וחדשנות"]
+];
+
+/* cop: איזה רישיון Copilot כלול בחבילה. null = אין. cap = תקרת מושבים. */
+var BASE=[
+ {n:'Microsoft 365 Business Basic',p:7,plain:7,cop:null,cap:300,smb:true},
+ {n:'Microsoft 365 Business Standard',p:14,plain:14,cop:null,cap:300,smb:true},
+ {n:'Microsoft 365 Business Standard with Copilot',pn:'Microsoft 365 Business Standard',p:23.5,plain:14,cop:'biz',cap:300,smb:true},
+ {n:'Microsoft 365 Business Premium',p:22,plain:22,cop:null,cap:300,smb:true},
+ {n:'Microsoft 365 Business Premium with Copilot',pn:'Microsoft 365 Business Premium',p:32,plain:22,cop:'biz',cap:300,smb:true},
+ {n:'Microsoft 365 E3',p:39,plain:39,cop:null,cap:0,smb:false},
+ {n:'Microsoft 365 E5',p:60,plain:60,cop:null,cap:0,smb:false},
+ {n:'Microsoft 365 E7',pn:'Microsoft 365 E5',p:99,plain:60,cop:'m365',cap:0,smb:false},
+ {n:'Office 365 E3',p:26,plain:26,cop:null,cap:0,smb:false},
+ {n:'Office 365 E5',p:41,plain:41,cop:null,cap:0,smb:false},
+ {n:'Microsoft 365 F1',p:3,plain:3,cop:null,cap:0,smb:false},
+ {n:'Microsoft 365 F3',p:10,plain:10,cop:null,cap:0,smb:false}
+];
+BASE[1].sid='O365_BUSINESS_PREMIUM';BASE[0].sid='O365_BUSINESS_ESSENTIALS';BASE[3].sid='SPB';
+BASE[5].sid='SPE_E3';BASE[6].sid='SPE_E5';
+/* E7: מחרוזת ה-skuPartNumber אינה מאומתת ב-Learn או ב-Graph, ולכן אינה מוצגת. אין להציג ללקוח מזהה SKU שלא אושר. */
+var ADDONS=[{id:'',n:'ללא תוסף Copilot',p:0},
+ {id:'biz',n:'Microsoft 365 Copilot Business — $21',p:21,smbOnly:true},
+ {id:'m365',n:'Microsoft 365 Copilot — $30',p:30}];
+
+var COWORK_W=[125,500,1200];
+var PERSONAS=[
+ {n:'Corporate Knowledge Workers',l:22,m:11,h:5,c:14250},
+ {n:'Customer-Facing Knowledge Workers',l:17,m:13,h:5,c:14625},
+ {n:'Technical Workers',l:12,m:9,h:14,c:22800},
+ {n:'Managers and Senior Leaders',l:13,m:6,h:3,c:8225}
+];
+var PROFILES=[
+ {id:'office',t:'משרד מקצועי',d:'ניסוח, סיכום וחיפוש. בלי סוכנים.',ses:3,aut:0,b2c:0,cow:0,base:4,addon:''},
+ {id:'knowledge',t:'סוכני ידע פנימיים',d:'שאלות על נהלים ומסמכים מ-SharePoint.',ses:5,aut:.1,b2c:0,cow:0,base:4,addon:''},
+ {id:'service',t:'שירות לקוחות עם סוכן באתר',d:'סוכן פונה לקוחות בערוץ חיצוני.',ses:4,aut:.15,b2c:8000,cow:0,base:4,addon:''},
+ {id:'ops',t:'אוטומציה תפעולית',d:'סוכנים מפעילים תהליכים מול ERP ו-CRM.',ses:5,aut:.3,b2c:0,cow:0,base:6,addon:'m365'},
+ {id:'aifirst',t:'ארגון AI-first',d:'סוכנים אוטונומיים, ממשל מרכזי ו-Cowork.',ses:6,aut:.3,b2c:4000,cow:.25,base:7,addon:''}
+];
+
+(function(){
+  var root=document.documentElement, KEY='copilot-nav-theme';
+  var btns=[].slice.call(document.querySelectorAll('.themetog button'));
+  if(!root||!root.setAttribute||!btns.length) return;
+  function apply(v){
+    if(v==='dark'||v==='light') root.setAttribute('data-ui',v); else {v='auto';root.removeAttribute('data-ui')}
+    btns.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-ui-set')===v?'true':'false')});
+    try{localStorage.setItem(KEY,v)}catch(e){}
+  }
+  var saved='auto';
+  try{saved=localStorage.getItem(KEY)||'auto'}catch(e){}
+  apply(saved);
+  btns.forEach(function(b){b.addEventListener('click',function(){apply(b.getAttribute('data-ui-set'))})});
+})();
+
+var SCREENS=[['where','איפה אתם'],['need','מה אני צריך'],['tiers','שלושה צירים'],['matrix','מטריצת יכולות'],['cost','מחשבון עלות'],['ready','מוכנות'],['intake','טופס קליטה'],['oversharing','חשיפת יתר'],['pilot','תבנית פיילוט'],['value','ערך והוכחות'],['lab','מעבדת הנחיות']];
+
+var tabs=$('#tabs');
+SCREENS.forEach(function(s,i){
+  var b=el('button','tab',s[1]);b.type='button';b.setAttribute('aria-selected',i===0?'true':'false');
+  b.onclick=function(){
+    SCREENS.forEach(function(x){$('#s-'+x[0]).classList.remove('on')});
+    [].forEach.call(tabs.children,function(c){c.setAttribute('aria-selected','false')});
+    $('#s-'+s[0]).classList.add('on');b.setAttribute('aria-selected','true');window.scrollTo({top:0});
+  };
+  tabs.appendChild(b);
+});
+
+function tierCard(t,lbl){
+  var res=el('div','res');res.style.setProperty('--tc',t.c);
+  res.appendChild(el('div','res-top','<span class="res-lbl">'+lbl+'</span><div class="res-tier">'+t.n+'</div><div class="res-price">'+t.pl+'</div>'));
+  var b=el('div','res-body');
+  b.appendChild(el('div','res-row','<div class="res-k">כלול</div><div class="res-v"><ul class="tight"><li>'+t.inc.join('</li><li>')+'</li></ul></div>'));
+  b.appendChild(el('div','res-row','<div class="res-k">לא כלול</div><div class="res-v"><ul class="tight"><li>'+t.exc.join('</li><li>')+'</li></ul></div>'));
+  if(t.prereq)b.appendChild(el('div','res-row','<div class="res-k">דרישת קדם</div><div class="res-v">'+t.prereq+'</div>'));
+  b.appendChild(el('div','res-row','<div class="res-k">המעבר הבא</div><div class="res-v">'+t.up+'</div>'));
+  if(t.flag)b.appendChild(el('div','res-row','<div class="res-k">שים לב</div><div class="res-v"><div class="flag"><b>סייג.</b> '+t.flag+'</div></div>'));
+  res.appendChild(b);return res;
+}
+
+/* 1 */
+(function(){
+  var r=$('#s-where');
+  r.appendChild(el('h2','sh','איפה הארגון שלכם יושב?'));
+  r.appendChild(el('p','sub','בחרו את חבילת הבסיס ואת מספר המושבים. השאר נגזר מזה: מה כבר יש לכם, מה אפשר לקנות מעליו, ומה חסום ולמה.'));
+  var f=el('div','card');
+  f.innerHTML='<h3>הבסיס שלכם</h3><div class="field"><label for="wbase">חבילת בסיס</label><select id="wbase">'+
+    BASE.map(function(b,i){return '<option value="'+i+'"'+(i===1?' selected':'')+'>'+b.n+' — '+pr(b.p)+(b.sid?'  ·  '+b.sid:'')+'</option>'}).join('')+
+    '</select><span class="hint">אפשר לאמת מול הטננט ב-<a href="https://admin.microsoft.com" target="_blank" rel="noopener" class="hlink">Microsoft 365 admin center</a> → Billing → Licenses, או ישירות: az rest --url https://graph.microsoft.com/v1.0/subscribedSkus</span></div>'+
+    '<div class="field"><label for="wseats">מושבים <b><span id="wseatsv">30</span></b></label><input type="range" id="wseats" min="5" max="5000" step="5" value="30"></div>';
+  r.appendChild(f);var out=el('div');r.appendChild(out);
+  function draw(){
+    var b=BASE[+$('#wbase').value],st=+$('#wseats').value;$('#wseatsv').textContent=num(st);
+    var bizOK=b.smb&&st<=300, bundleOK=(b.n.indexOf('Microsoft 365 Business Standard')===0||b.n.indexOf('Microsoft 365 Business Premium')===0)&&!b.cop&&st<=300;
+    var a365OK=/E5$|Business Premium/.test(b.n)&&b.n.indexOf('Office')!==0;
+    var have=b.cop==='m365'?'Microsoft 365 Copilot':b.cop==='biz'?'Microsoft 365 Copilot Business':'Microsoft 365 Copilot Chat';
+    var rows=[];
+    rows.push(['ציר 1 · בסיס',b.n+' · '+pr(b.p)+' למושב · '+fmt(st*b.p)+' לחודש']);
+    rows.push(['ציר 2 · Copilot היום',have+(b.cop?'':' בלבד, כלול במנוי ובלי תשלום נוסף')]);
+    var opts=[];
+    if(!b.cop){
+      if(bundleOK)opts.push('החבילה המשולבת with Copilot — הזול ביותר, תוספת של $9.50 עד $10 למושב');
+      if(bizOK)opts.push('תוסף Microsoft 365 Copilot Business — $21 למושב');
+      opts.push('תוסף Microsoft 365 Copilot — $30 למושב, בלי תקרת מושבים');
+    } else opts.push('כבר יש. אין מה להוסיף בציר הזה.');
+    rows.push(['מה אפשר לקנות',opts.join(' · ')]);
+    var gates=[];
+    if(!bizOK&&b.smb&&st>300)gates.push('Copilot Business חסום: מעל 300 מושבים');
+    if(!b.smb&&!b.cop)gates.push('Copilot Business חסום: נמכר רק על חבילות Business');
+    if(!a365OK)gates.push('Microsoft Agent 365 חסום: דורש M365 E5, או E3 יחד עם Defender Suite וגם Purview Suite. ב-SMB: Business Premium בתוספת שתי החבילות');
+    gates.push('Microsoft Copilot Studio פתוח תמיד ואינו דורש רישיון Copilot. הרישיון משנה את החיוב, לא את הגישה.');
+    rows.push(['מה חסום ולמה',gates.join(' · ')]);
+    rows.push(['Copilot בתוך Word ו-Excel',st<2000?'נשמר גם בלי רישיון בתשלום. אין למכור שדרוג בגלל היכולת הזו. מקור יחיד, לאימות מול ה-CSP.':'הוסר ב-15.4.2026 למשתמשים בלי רישיון בתשלום. מקור יחיד.']);
+    rows.push(['פטור מקרדיטים',b.cop==='m365'?'מתועד':b.cop==='biz'?'לא מתועד רשמית':'לא חל — אין רישיון Copilot בתשלום']);
+    out.innerHTML='<div class="res" style="--tc:var(--t3)"><div class="res-top"><span class="res-lbl">המיקום שלכם</span><div class="res-tier">'+b.n+'</div><div class="res-price">'+num(st)+' מושבים · '+have+'</div></div><div class="res-body">'+
+      rows.map(function(x){return '<div class="res-row"><div class="res-k">'+x[0]+'</div><div class="res-v">'+x[1]+'</div></div>'}).join('')+'</div></div>';
+  }
+  $('#wbase').addEventListener('input',draw);$('#wseats').addEventListener('input',draw);draw();
+})();
+
+(function(){
+  var r=$('#s-need');
+  r.appendChild(el('h2','sh','מה אתה צריך שהמערכת תעשה?'));
+  r.appendChild(el('p','sub','בחר מחלקה ואז תרחיש. התשובה היא הרמה המינימלית שפותרת אותו, ומה בדיוק חסר במדרגה שמתחתיה. לכספים, לשיווק, למשאבי אנוש ול-IT היה וובינר ייעודי בסדרה של שותף Microsoft ישראלי. תרחישי הלוגיסטיקה, הרכש ושירות הלקוחות לוקטו מדוגמאות שניתנו בתוך הסשנים האחרים. תרחישי המחלקה המשפטית נשענים על תיעוד Microsoft ועל פרקי הממשל וה-CCC בדוח, ולא על הוובינרים, ולכן חלקם מאומתים ולא מקור יחיד.'));
+  var DEPTS=['הכול'].concat(USES.map(function(u){return u[3]}).filter(function(v,i,a){return a.indexOf(v)===i}));
+  var curDept='הכול';
+  var df=el('div','card');df.appendChild(el('h3',null,'סינון לפי מחלקה'));
+  var dg=el('div','picks');dg.style.gridTemplateColumns='repeat(auto-fill,minmax(118px,1fr))';
+  DEPTS.forEach(function(dp,di){
+    var b=el('button','pick','<span>'+dp+'</span>');b.type='button';b.setAttribute('aria-pressed',di===0?'true':'false');
+    b.onclick=function(){
+      [].forEach.call(dg.children,function(c){c.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');curDept=dp;
+      [].forEach.call(g.children,function(c){c.style.display=(dp==='הכול'||c.dataset.d===dp)?'':'none'});
+    };
+    dg.appendChild(b);
+  });
+  df.appendChild(dg);r.appendChild(df);
+  var g=el('div','picks'),out=el('div');
+  USES.forEach(function(u){
+    var t=TIERS[TI[u[1]]];
+    var b=el('button','pick','<span class="dot"></span><span>'+u[0]+'</span>');
+    b.type='button';b.setAttribute('aria-pressed','false');b.style.setProperty('--tc',t.c);b.dataset.d=u[3];
+    b.onclick=function(){
+      [].forEach.call(g.children,function(c){c.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');out.innerHTML='';
+      var card=tierCard(t,'הרמה המינימלית שפותרת');
+      var body=card.querySelector('.res-body');
+      body.insertBefore(el('div','res-row','<div class="res-k">מה חסר מתחת</div><div class="res-v">'+u[2]+'</div>'),body.firstChild);
+      out.appendChild(card);
+    };
+    g.appendChild(b);
+  });
+  r.appendChild(g);r.appendChild(out);
+})();
+
+/* 2 */
+(function(){
+  var r=$('#s-tiers');
+  r.appendChild(el('h2','sh','שלושה צירים'));
+  r.appendChild(el('p','sub','לחץ על מדרגה כדי לראות מה כלול בה, מה לא, ומה מצדיק את המעבר לזו שמעליה. שלושת הצירים אינם סולם אחד. חבילת הבסיס היא מה שכבר יש לכם, זכאות ה-Copilot נרכשת מעליה, ושכבות הסוכנים עומדות בפני עצמן עם דרישות קדם משלהן.'));
+  var lad=el('div','ladder'),det=el('div');
+  TIERS.forEach(function(t,i){
+    var b=el('button','step','<span class="bar"></span><span class="txt"><span class="step-n">'+t.n+'</span><span class="step-sub">'+t.sub+'</span></span><span class="step-p">'+t.pl+'</span>');
+    b.type='button';b.setAttribute('aria-pressed','false');b.style.setProperty('--tc',t.c);
+    b.onclick=function(){
+      [].forEach.call(lad.children,function(c){c.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');det.innerHTML='';det.appendChild(tierCard(t,i===0?'זכאות כלולה':i<3?'ציר 2 · זכאות Copilot':i<5?'ציר 3 · שכבת סוכנים':'ציר 1 · חבילת בסיס'));
+    };
+    lad.appendChild(b);
+  });
+  r.appendChild(lad);r.appendChild(det);
+  var bp=el('div','card');bp.appendChild(el('h3',null,'חבילות הבסיס, מחירי 1.7.2026, אומתו מול microsoft.com ב-31.8.2026'));
+  var o=el('div','out');
+  BASE.forEach(function(x){o.appendChild(el('div','cell','<span class="k">'+x.n.replace('Microsoft 365 ','')+'</span><span class="v">'+pr(x.p)+'</span>'))});
+  bp.appendChild(o);
+  var cw=el('div','card');
+  cw.appendChild(el('h3',null,'משקלי Copilot Cowork, אומתו מול הקובץ עצמו'));
+  cw.innerHTML+='<div class="brkhead n"><span>סוג משימה</span><span>קרדיטים</span><span>שווי</span><span></span></div>'+
+    [['Light',125],['Medium',500],['Heavy',1200]].map(function(x){
+      return '<div class="brk n"><span>'+x[0]+'</span><span class="m">'+x[1].toLocaleString('en-US')+'</span><span class="s">$'+(x[1]*0.01).toFixed(2)+'</span><span></span></div>'}).join('')+
+    '<div class="brkhead n" style="margin-top:.9rem"><span>פרסונה</span><span>L / M / H</span><span>לחודש</span><span>שווי</span></div>'+
+    PERSONAS.map(function(p){return '<div class="brk n"><span>'+p.n+'</span><span class="s">'+p.l+' / '+p.m+' / '+p.h+'</span><span class="m">'+p.c.toLocaleString('en-US')+'</span><span class="s">$'+(p.c*0.01).toFixed(2)+'</span></div>'}).join('')+
+    '<p class="note">נקרא ישירות מ-<a href="https://aka.ms/CustomerCoworkEstimator" target="_blank" rel="noopener" class="hlink"><code>CustomerCoworkEstimator.xlsx</code></a> בקובץ שסופק ב-31.8.2026, 13,488 בייטים. ברירות המחדל בקובץ מתוארכות 27.5.2026 ומניחות Anthropic Opus 4.8. ‏100 קרדיטים = $1.00. שותפים מקומיים מפרסמים את Heavy כ-1,500 ומעלה; הקובץ אומר 1,200.</p>';
+  r.appendChild(cw);
+  bp.appendChild(el('p','note','זהו ציר 1, וזו ההיררכיה האמיתית היחידה. חבילות ה-Business מוגבלות ל-300 מושבים. ‏E3 ו-E5 אינם כוללים רישיון Copilot, והוא נרכש כתוסף. ‏E7 יושב כאן ולא בציר ה-Copilot: הוא מכיל E5, את התוסף הארגוני, את Entra Suite ואת Agent 365, אך לא את Copilot Studio.'));
+  r.appendChild(bp);
+})();
+
+/* 3 */
+(function(){
+  var r=$('#s-matrix');
+  r.appendChild(el('h2','sh','מטריצת יכולות'));
+  r.appendChild(el('p','sub','38 יכולות על פני שש הרמות. לחץ על שורה לקבלת ההסבר. תא ריק פירושו שהרמה אינה משנה את התשובה.'));
+  var LG=[['c-y','כלול'],['c-p','חלקי'],['c-d','דורש Copilot Studio'],['c-f','Frontier, גישה מוקדמת'],['c-u','לא מתועד'],['c-n','לא כלול']];
+  r.appendChild(el('div','legend',LG.map(function(x){
+    return '<span class="c '+x[0]+'">'+x[1]+'</span>'}).join('')));
+  var w=el('div','mwrap'),tb=el('table','mx');
+  var hd='<thead><tr><th>יכולת</th>';
+  TIERS.forEach(function(t){hd+='<th style="border-top:3px solid '+t.c+'">'+t.short+'</th>'});
+  tb.innerHTML=hd+'</tr></thead>';
+  var det=el('div');
+  var M={y:['c-y','כלול'],n:['c-n','לא'],p:['c-p','חלקי'],u:['c-u','לא מתועד'],d:['c-d','דורש Studio'],f:['c-f','Frontier']};
+  var byLabel={};CAPS.forEach(function(c){byLabel[c[0]]=c});
+  var placed=0;
+  function row(c){
+    var tr=el('tr');tr.appendChild(el('td',null,c[0]));
+    c[1].forEach(function(v){tr.appendChild(el('td',null,v?'<span class="c '+M[v][0]+'">'+M[v][1]+'</span>':'<span style="color:var(--no)">–</span>'))});
+    tr.onclick=function(){
+      var s=c[3]?'<div class="srcs"><b>מקור</b>'+c[3].map(function(x){
+        return '<a href="'+x[1]+'" target="_blank" rel="noopener">'+x[0]+'</a>'}).join('')+'</div>':'';
+      det.innerHTML='<div class="card"><h3>'+c[0]+'</h3><p style="margin:0;font-size:.95rem">'+c[2]+'</p>'+s+'</div>'};
+    return tr;
+  }
+  MXG.forEach(function(g,gi){
+    var tbody=el('tbody','grp');
+    var hd=el('tr','ghead');
+    var th=el('th',null,'<span class="gt">'+g[0]+'</span><span class="gc">'+g[1].length+'</span>');
+    th.setAttribute('colspan',String(TIERS.length+1));
+    th.setAttribute('role','button');th.setAttribute('tabindex','0');
+    th.setAttribute('aria-expanded','true');
+    hd.appendChild(th);tbody.appendChild(hd);
+    g[1].forEach(function(lbl){
+      var c=byLabel[lbl];
+      if(!c){return}
+      placed++;tbody.appendChild(row(c));
+    });
+    function toggle(){
+      var open=tbody.classList.toggle('shut')===false;
+      th.setAttribute('aria-expanded',open?'true':'false');
+    }
+    th.onclick=toggle;
+    th.onkeydown=function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggle()}};
+    tb.appendChild(tbody);
+  });
+  if(placed!==CAPS.length){
+    var restBody=el('tbody','grp');
+    var restHd=el('tr','ghead');
+    var rth=el('th',null,'<span class="gt">שאר היכולות</span>');
+    rth.setAttribute('colspan',String(TIERS.length+1));
+    restHd.appendChild(rth);restBody.appendChild(restHd);
+    var seen={};MXG.forEach(function(g){g[1].forEach(function(l){seen[l]=1})});
+    CAPS.forEach(function(c){if(!seen[c[0]])restBody.appendChild(row(c))});
+    tb.appendChild(restBody);
+  }
+  w.appendChild(tb);r.appendChild(w);
+  r.appendChild(el('p','note','״דורש Studio״ פירושו שהיכולת אינה מגיעה עם המדרגה, גם ב-E7, ומחייבת רישיון Microsoft Copilot Studio בנפרד. ״Frontier״ הוא סימון של Microsoft לגישה מוקדמת: היכולת קיימת אך אינה GA, ואין להבטיח אותה ללקוח. שורות שמקורן בסדרת וובינרים של שותף מסומנות ״מקור יחיד״ בהסבר.'));
+  r.appendChild(det);
+})();
+
+/* 4 */
+(function(){
+  var r=$('#s-cost');
+  r.appendChild(el('h2','sh','מחשבון עלות'));
+  r.appendChild(el('p','sub','בוחרים פרופיל, גודל וחבילה. אין צורך להזין קרדיטים או טוקנים — הפרופיל קובע את הנחות השימוש, והן מוצגות במפורש.'));
+  var cta=el('div',null,'<b>צריכים גם השוואת ספקים?</b> <span style="opacity:.8">המחשבון כאן ממוקד ברישוי Copilot. לניתוח מורחב שמשווה גם Anthropic, OpenAI ו-Google — </span><a href="https://github.com/Valor-Automation-Solutions/ai-cost-calculator/blob/main/ai-provider-cost-calculator.html" target="_blank" rel="noopener" style="color:var(--acc);font-weight:600">פתח מחשבון מורחב עם השוואת ספקים ↗</a>');
+  cta.className='cta';
+  r.appendChild(cta);
+  var g=el('div','grid2'),L=el('div'),R=el('div');
+  var cur=PROFILES[0];
+
+  var pc=el('div','card');pc.appendChild(el('h3',null,'1 · מה הארגון עושה'));
+  var pg=el('div','picks');pg.style.gridTemplateColumns='1fr';
+  PROFILES.forEach(function(p,i){
+    var b=el('button','pick','<span class="dot"></span><span><b style="display:block">'+p.t+'</b><span style="font-size:.83rem;opacity:.75">'+p.d+'</span></span>');
+    b.type='button';b.setAttribute('aria-pressed',i===0?'true':'false');
+    b.style.setProperty('--tc',TIERS[Math.min(i+1,5)].c);
+    b.onclick=function(){
+      [].forEach.call(pg.children,function(c){c.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');cur=p;
+      $('#base').value=p.base;lastAddon=p.addon;syncAddon();calc();
+    };
+    pg.appendChild(b);
+  });
+  pc.appendChild(pg);L.appendChild(pc);
+
+  var fc=el('div','card');
+  fc.innerHTML='<h3>2 · גודל וחבילה</h3>'+
+   '<div class="field"><label for="emp">עובדים <b><span id="empv">300</span></b></label><input type="range" id="emp" min="10" max="5000" step="10" value="300"></div>'+
+   '<div class="field"><label for="pct">אחוז שמקבל רישיון <b><span id="pctv">100</span>%</b></label><input type="range" id="pct" min="10" max="100" step="5" value="100">'+
+   '<span class="hint">בפועל כמעט אף ארגון לא מרשה 100% ביום הראשון.</span></div>'+
+   '<div class="field"><label for="base">חבילת בסיס</label><select id="base">'+
+   BASE.map(function(b,i){return '<option value="'+i+'">'+b.n+' — '+pr(b.p)+'</option>'}).join('')+'</select></div>'+
+   '<div class="field"><label for="addon">תוסף Copilot</label><select id="addon"></select>'+
+   '<span class="hint" id="addonhint"></span></div>'+
+   '<div class="field"><label for="persona">פרסונה ל-Cowork</label><select id="persona">'+
+   PERSONAS.map(function(p,i){return '<option value="'+i+'">'+p.n+' — '+p.c.toLocaleString('en-US')+' קרדיטים</option>'}).join('')+
+   '</select><span class="hint">ברירות המחדל של Microsoft, נקראו ישירות מ<a href="https://aka.ms/CustomerCoworkEstimator" target="_blank" rel="noopener" class="hlink">קובץ ה-Estimator</a> בקובץ שסופק ב-31.8.2026.</span></div>';
+  L.appendChild(fc);
+  g.appendChild(L);g.appendChild(R);r.appendChild(g);
+
+  var lastAddon='';
+  function syncAddon(){
+    var b=BASE[+$('#base').value],sel=$('#addon');
+    var opts=ADDONS.filter(function(a){return !a.smbOnly||b.smb});
+    sel.innerHTML=opts.map(function(a){return '<option value="'+a.id+'">'+a.n+'</option>'}).join('');
+    if(b.cop){sel.value='';sel.disabled=true;
+      $('#addonhint').textContent='החבילה כבר כוללת '+(b.cop==='m365'?'Microsoft 365 Copilot':'Microsoft 365 Copilot Business')+'.';}
+    else{sel.disabled=false;
+      sel.value=opts.some(function(a){return a.id===lastAddon})?lastAddon:'';
+      $('#addonhint').textContent='‏E3 ו-E5 אינם כוללים Copilot. בלי תוסף אין הארקה בנתוני הארגון.';}
+  }
+
+  function brk(k,a,b,c){return '<div class="brk n"><span>'+k+'</span><span class="s">'+fmt(a)+'</span><span class="m">'+fmt(b)+'</span><span class="s">'+fmt(c)+'</span></div>'}
+  function qbadge(type){
+    var m={official:'מחירון רשמי',partial:'מיפוי רשמי חלקי',estimate:'הערכה כיוונית, לא מחירון רשמי'}[type];
+    return '<span class="qbadge qb-'+type+'">'+m+'</span>';
+  }
+  function asum(k,v){return '<div class="brk n"><span>'+k+'</span><span class="m" style="grid-column:2/5">'+v+'</span></div>'}
+  function rng(a,b){return Math.round(a)===Math.round(b)?fmt(a):fmt(a)+'–'+fmt(b)}
+
+  function calc(){
+    var emp=+$('#emp').value,pct=+$('#pct').value/100;
+    var base=BASE[+$('#base').value],addon=ADDONS.filter(function(a){return a.id===$('#addon').value})[0]||ADDONS[0];
+    $('#empv').textContent=num(emp);$('#pctv').textContent=+$('#pct').value;
+    var seats=Math.round(emp*pct),rest=emp-seats;
+    var lic=base.cop||addon.id||null;
+    var perSeat=base.p+(base.cop?0:addon.p);
+    var seat=seats*perSeat+rest*base.plain;
+
+    var ses=cur.ses,aut=cur.aut;
+    function I(s,a){return seats*(s*21*2+s*21*a*5)*0.01}
+    var iL=I(ses*.5,0),iM=I(ses,aut),iH=I(Math.min(ses*2.5,10),Math.min(aut*2,.6));
+
+    var b2c=cur.b2c*(emp/300);
+    var bL=b2c*.5*4*.01,bM=b2c*5.5*.01,bH=b2c*3*7*.01;
+
+    var kw=Math.round(seats*.7),adopt=lic?cur.cow:0;
+    var per=PERSONAS[+($('#persona')?$('#persona').value:0)]||PERSONAS[0];
+    var cL=Math.round(kw*adopt*.4)*per.c*.5*.01;
+    var cM=Math.round(kw*adopt)*per.c*.01;
+    var cH=Math.round(kw*adopt*2)*(per.c*2)*.01;
+
+    var docExempt=(lic==='m365'),undoc=(lic==='biz');
+    function legs(i,c){
+      if(docExempt)return{bill:0,exp:i,cow:c};
+      if(undoc)return{bill:0,exp:i+c,cow:0};
+      return{bill:i,exp:0,cow:0};
+    }
+    var gL=legs(iL,cL),gM=legs(iM,cM),gH=legs(iH,cH);
+    var tL=seat+bL+gL.bill+gL.cow,tM=seat+bM+gM.bill+gM.cow,tH=seat+bH+gH.bill+gH.cow;
+
+    var packEligible=(!cur.b2c&&!adopt),packs=Math.ceil((docExempt?0:iH)/0.01/25000);
+
+    var flags='';
+    if(base.cap&&emp>base.cap)flags+='<div class="flag"><b>מעל תקרת ה-SKU.</b> '+base.n+' מוגבל ל-'+base.cap+' מושבים. עבור '+num(emp)+' עובדים נדרשת חבילת Enterprise.</div>';
+    if(pct<100)flags+='<div class="flag"><b>ריבוב.</b> עדכון <a href="https://aka.ms/ProductTermssite" target="_blank" rel="noopener" class="hlink">Product Terms</a> ממאי 2026 מחייב ברישיון כל משתמש קצה שנהנה מפלט הסוכן, גם בעקיפין. מקור יחיד, לאימות מול ה-CSP.</div>';
+    if(cur.cow>0&&!lic)flags+='<div class="flag"><b>Cowork אינו זמין.</b> הוא דורש רישיון Copilot בתשלום, ולכן אינו נכלל בחישוב.</div>';
+    if(cur.cow>0&&lic==='biz')flags+='<div class="flag"><b>Cowork על Business אינו בסכום.</b> תחולת החיוב שלו על Microsoft 365 Copilot Business אינה מתועדת רשמית, ולכן הוא מוצג בשורת החשיפה ולא בעלות. אם יתברר שהוא מדוד גם שם, העלות בפועל גבוהה מהמוצג כאן.</div>';
+    if(!lic)flags+='<div class="flag"><b>אין רישיון Copilot בתצורה הזו.</b> אין הארקה בנתוני הארגון, ואין Copilot בתוך היישומים מעבר למה ש-Copilot Chat נותן. כל אינטראקציה של סוכן נצרכת מהמכסה. סליידר אחוז הרישוי אינו משפיע על העלות כל עוד לא נבחר תוסף.</div>';
+
+    R.innerHTML=
+     '<div class="out">'+
+     '<div class="cell"><span class="k">'+(lic?'מושבים מורשים':'עובדים')+'</span><span class="v">'+num(lic?seats:emp)+'</span></div>'+
+     '<div class="cell"><span class="k">'+(lic?'למושב מורשה':'למשתמש')+'</span><span class="v">'+pr(perSeat)+'</span></div>'+
+     '<div class="cell"><span class="k">עלות מנויים לחודש</span><span class="v">'+fmt(seat)+'</span></div>'+
+     '<div class="cell hi"><span class="k">סה״כ צפוי לחודש</span><span class="v">'+rng(tM,tM+gM.exp)+'</span></div></div>'+
+     (rest&&lic?'<p class="note">'+num(rest)+' עובדים ללא רישיון Copilot מתומחרים לפי '+(base.pn||base.n)+' ב-'+pr(base.plain)+'.</p>':'')+
+     flags+
+     '<div class="card"><h3>טווח חודשי '+qbadge('official')+'</h3><div class="band">'+
+     '<div><span class="bk">נמוך</span><span class="bv">'+rng(tL,tL+gL.exp)+'</span></div>'+
+     '<div class="mid"><span class="bk">צפוי</span><span class="bv">'+rng(tM,tM+gM.exp)+'</span></div>'+
+     '<div><span class="bk">גבוה</span><span class="bv">'+rng(tH,tH+gH.exp)+'</span></div></div>'+
+     '<p class="note">‏USD list, web-direct, ללא מע״מ. מחירי CSP-NCE בישראל ותנאיהם שונים. אין להציג את המספרים כהצעת מחיר בלי מעבר דרך ה-CSP.</p></div>'+
+     '<div class="card"><h3>עלות צריכה, שווי לפי $0.01 לקרדיט '+qbadge('estimate')+'</h3>'+
+     '<p class="note">שורות הצריכה בכרטיס הזה — סוכנים פנימיים, סוכן מול לקוחות ו-Cowork — נגזרות מנוסחת הערכה פנימית ומברירות המחדל של מיקרוסופט לקובץ ה-Estimator. אף אחת מהן אינה טבלת תמחור רשמית לפי פעולה או סשן; אין להציג אותן כהצעת מחיר לפני כיול מול נתוני שימוש אמיתיים מפיילוט.</p>'+
+     '<div class="brkhead n"><span></span><span>נמוך</span><span>צפוי</span><span>גבוה</span></div>'+
+     (cur.b2c?brk('סוכן מול לקוחות',bL,bM,bH):'')+
+     (docExempt&&adopt?brk('Copilot Cowork · '+per.n,cL,cM,cH):'')+
+     brk(docExempt?'סוכנים פנימיים — פטור מתועד':(undoc?'סוכנים פנימיים — לא מתועד':'סוכנים פנימיים'),gL.bill,gM.bill,gH.bill)+
+     (gM.exp||gH.exp?'<div class="brk n"><span class="s">תקרת חשיפה שאינה ודאית</span><span class="s">'+fmt(gL.exp)+'</span><span class="s">'+fmt(gM.exp)+'</span><span class="s">'+fmt(gH.exp)+'</span></div>':'')+
+     '<p class="note">'+(docExempt
+       ?'החבילה כוללת רישיון Microsoft 365 Copilot, ולכן סוכני B2E פנימיים פטורים מקרדיטים. הפטור מתועד, בכפוף ל-fair usage שסיפו אינו מפורסם.'
+       :undoc
+       ?'החבילה כוללת Microsoft 365 Copilot Business. תחולת פטור הקרדיטים על ה-SKU הזה אינה מתועדת רשמית, וכך גם הזכאות ל-Cowork. שניהם מוצגים כתקרת חשיפה ולא כעלות ודאית.'
+       :'אין בחבילה רישיון Copilot, ולכן כל אינטראקציה פנימית נצרכת מהמכסה.')+'</p>'+
+     (packEligible&&packs>0
+       ?'<p class="note">חלופה ללא Azure: '+packs+' חבילות של 25,000 קרדיטים = '+fmt(packs*200)+' לחודש, מחושב לפי הרמה הגבוהה כדי שהסוכן לא ייכבה ב-125%. מתועד לסוכני Copilot Chat ו-SharePoint בלבד.</p>'
+       :(cur.b2c||adopt)
+       ?'<p class="note">מסלול החבילות ללא Azure אינו מתועד לסוכן בערוץ חיצוני ולא ל-Cowork. שניהם דורשים Pay-as-you-go או P3, כלומר מנוי Azure מקושר.</p>'
+       :'<p class="note">שווי PAYG מחייב מנוי Azure מקושר.</p>')+'</div>'+
+     '<div class="card"><h3>הנחות הפרופיל</h3>'+
+     asum('סשנים למשתמש ביום',ses+' · טווח 0.5× עד 2.5× בתקרת 10')+
+     asum('אחוז סשנים אוטונומיים',Math.round(aut*100)+'% · טווח 0 עד 2× בתקרת 60%')+
+     (cur.b2c?asum('שיחות לקוח בחודש',num(b2c)):'')+
+     (adopt?asum('אימוץ Cowork מעובדי הידע',Math.round(adopt*100)+'% · טווח 0.4× עד 2×'):'')+
+     (cur.b2c?'<p class="note">שיחות הלקוח מתואמות לינארית למספר העובדים, בסיס 8,000 שיחות ל-300 עובדים.</p>':'')+
+     '<p class="note">חבילת קרדיטים מכסה 25,000 קרדיטים ב-$200, ונקודת החיתוך מול PAYG היא 20,000 קרדיטים לחודש. <b>אכיפה:</b> סוכנים נכבים ב-<b>125%</b> מהקיבולת המשולמת מראש — אבל אין חובה לחכות ל-1 לחודש: אפשר להקצות מחדש קיבולת מסביבה אחרת, לרכוש חבילות נוספות, או להפעיל Pay-as-you-go מיד וההגבלה מתבטלת. <b>Agent flows נאכפים כבר ב-100%</b> — הרצות חדשות נחסמות, אך הסוכן עצמו ממשיך לעבוד בכל מה שאינו flow. מאומת.</p></div>'+
+     '<div class="card"><h3>תנאי רכש ב-CSP-NCE</h3>'+
+     asum('חלון ביטול או הפחתת מושבים','168 שעות מרגע ההזמנה')+
+     asum('אחרי החלון','משלמים על מלוא המושבים עד תום החוזה')+
+     asum('שדרוג באמצע תקופה','אפשרי, אך סופי ובלתי הפיך')+
+     '<p class="note">מכאן הכלל התפעולי: לא לרכוש מושבי מלאי מראש. תיוג: מאומת.</p>'+
+     ((gM.bill+gM.cow+bM)*12>200000?'<p class="note"><b>שווה לבחון Pre-Purchase Plan.</b> בצריכה שנתית בסדר הגודל הזה יש הנחות מדורגות של 5% עד 20%. שימו לב שמדרגה 6 מגיעה לאיזון רק מעל 66 מיליון קרדיטים לשנה, ומתחת לזה מדרגה 5 בתוספת PAYG על היתרה זולה יותר.</p>':'')+
+     '</div>';
+  }
+  ['emp','pct','persona'].forEach(function(k){if($('#'+k))$('#'+k).addEventListener('input',calc)});
+  $('#base').addEventListener('input',function(){syncAddon();calc()});
+  $('#addon').addEventListener('input',function(){lastAddon=$('#addon').value;calc()});
+  $('#base').value=4;syncAddon();calc();
+})();
+(function(){
+  var r=$('#s-ready');
+  r.appendChild(el('h2','sh','מוכנות תשתיתית ומגבלות'));
+  r.appendChild(el('p','sub','רכישת רישיון אינה סוף התהליך. אלה הדברים שמפילים הטמעות בשטח, ומגבלות שפה ופלטפורמה. הפרק התחיל כסדרת וובינרים של שותף Microsoft ישראלי, ורובו כבר <b>אומת מול Microsoft Learn ו-Microsoft Support</b>: לכל טענה מאומתת מופיע קישור לדף שהיא נשענת עליו. מה שנותר על מקור יחיד מסומן ככזה במקום, ורק הוא דורש אימות לפני שמציגים אותו כמחייב.'));
+  var CARDS=[
+  ["דרישות קדם","<div class=\"flag\"><b>תיבת דואר בהיברידי או On-Premises מבטלת את Copilot ב-Outlook.</b> מורשה Copilot עם תיבה מקומית <b>כן</b> ממשיך להשתמש ב-Copilot מחוץ ל-Outlook על תוכן ענן, אבל בתוך Outlook האייקון מעומעם ואין חוויה, והארקה בתיבה וביומן אינה נתמכת. מאומת מול Learn, ‏Exchange Hybrid and Copilot behaviour. זו הבדיקה שהכי מפילה פרויקטים, וכדאי לעשות אותה לפני הצעת מחיר.</div><div class=\"brkhead\" style=\"grid-template-columns:150px 1fr\"><span>רכיב</span><span>מה Microsoft מחייבת רשמית</span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>רישוי</span><span style=\"text-align:right;font-family:inherit\"><b>מנוי בסיס כשיר ורישיון Copilot</b><br><span class=\"s\">ראו מסך שלושה צירים</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>תיבת דואר</span><span style=\"text-align:right;font-family:inherit\"><b>Exchange Online</b><br><span class=\"s\">היברידי ו-On-Premises אינם נתמכים</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>Microsoft Entra ID</span><span style=\"text-align:right;font-family:inherit\"><b>חשבון לכל משתמש</b></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>דפדפן ונייד</span><span style=\"text-align:right;font-family:inherit\"><b>דפדפן מודרני עם cookies של צד שלישי</b><br><span class=\"s\">נייד: iOS ו-iPadOS 16.0 ומעלה, ‏Android 10 ומעלה</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>נקודות קצה</span><span style=\"text-align:right;font-family:inherit\"><b>דומיינים ו-WebSockets פתוחים</b><br><span class=\"s\">יש רשימה רשמית שאסור לחסום</span></span></div><details class=\"more\"><summary>פרטים נוספים (3)</summary><div class=\"more-in\"><p class=\"note\">ממשל <a href=\"https://go.microsoft.com/fwlink/?linkid=2185219\" target=\"_blank\" rel=\"noopener\" class=\"hlink\">SharePoint</a>, תיוג <a href=\"https://purview.microsoft.com\" target=\"_blank\" rel=\"noopener\" class=\"hlink\">Purview</a> והטמעה מדורגת מומלצים בחום, אך אינם חובה. מקור: דף דרישות המינימום ב-Microsoft Learn, מעודכן 19.5.2026. מאומת.</p><p class=\"note\"><b>ארבעה סעיפים שנהוג להציג כדרישות קדם, ואינם.</b> ‏OneDrive, ‏Microsoft 365 Apps for Enterprise, ערוץ העדכונים וה-Outlook החדש אינם ברשימת המינימום של Microsoft. הם קובעים אילו יכולות יופיעו, לא אם Copilot ייפרס. ערוץ העדכונים כן מחייב ליכולות מסוימות, למשל Python in Excel.</p><p class=\"note\"><b>כלי המוכנות הרשמיים.</b> ‏Copilot Success Kit — מדריך מוכנות טכנית, צ׳קליסט אימוץ, מדריך הקצאת רישיונות ו-Scenario Library; ו-Automated Readiness Assessment, כלי קוד פתוח של Microsoft ב-GitHub שקורא דרך Graph API בהרשאות קריאה בלבד. אין נכס של Microsoft בשם Copilot Optimization Assessment, וסקר בן 20 עד 25 שאלות שמחזיר PDF הוא תהליך של שותף. אין להציג אותו ללקוח כנכס של Microsoft.</p></div></details><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-minimum-requirements\" target=\"_blank\" rel=\"noopener\">דרישות מינימום לפריסה</a><a href=\"https://learn.microsoft.com/en-us/exchange/hybrid-deployment/exchange-hybrid-and-copilot-behaviour\" target=\"_blank\" rel=\"noopener\">Exchange היברידי ו-Copilot</a><a href=\"https://adoption.microsoft.com/en-us/copilot/success-kit/\" target=\"_blank\" rel=\"noopener\">Copilot Success Kit</a><a href=\"https://github.com/microsoft/m365-copilot-automated-readiness-assessment\" target=\"_blank\" rel=\"noopener\">Automated Readiness Assessment</a></div>"],
+  ["מגבלות שפה ופלטפורמה","<div class=\"flag\"><b>Teams Interpreter אינו תומך בעברית.</b> תרגום סימולטני חי תומך בעשר שפות: אנגלית, ספרדית, פורטוגזית, יפנית, מנדרינית, איטלקית, גרמנית, צרפתית, קוריאנית וטאיוואנית. <b>עברית אינה ברשימה — לא כשפת קלט ולא כשפת פלט.</b> ‏<b>תיקון 27.8.2026:</b> קודם נכתב כאן שאפשר לשמוע דובר עברית מתורגם לאנגלית — אין לכך אישור רשמי. ‏Support מציין ששפות מדוברות מסוימות עשויות להיות מזוהות אך „interpretation accuracy isn׳t guaranteed״, ושהפלט תמיד באחת מעשר השפות הנתמכות.</div><div class=\"flag\"><b>סוכן אוטונומי אינו זמין בעברית.</b> ‏Event triggers, המנגנון שמפעיל סוכנים אוטונומיים, נתמכים באנגלית ארה״ב בלבד לפי Microsoft Learn מ-29.6.2026. עברית כן נתמכת בקנבס העריכה ובתשובות גנרטיביות, אך לא בתמיכה הקולית. מאומת.</div><p class=\"note\"><b>Python in Excel.</b> אין חסם גיאוגרפי: דף הזמינות הרשמי של Microsoft אינו מכיל רשימת מדינות ואינו מזכיר את ישראל. החסמים האמיתיים הם ערוץ העדכונים (Current או Monthly Enterprise מ-2408, ‏Semi-Annual מ-2502) ורישוי. ‏<b>רישוי מבוסס־מכשיר ו-Shared Computer Activation אינם נתמכים</b>, ולכן ארגון עם עמדות משותפות או עובדי קו ייצור לא יקבל אנומליות ותחזיות ב-Excel, ללא קשר לרישיון Copilot.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://support.microsoft.com/en-us/teams/copilot/interpreter-in-microsoft-teams-meetings-and-calls\" target=\"_blank\" rel=\"noopener\">Interpreter ב-Teams</a><a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-language-support\" target=\"_blank\" rel=\"noopener\">תמיכת שפות ב-Copilot Studio</a><a href=\"https://support.microsoft.com/en-us/office/python-in-excel-availability-781383e6-86b9-4156-84fb-93e786f7cab0\" target=\"_blank\" rel=\"noopener\">זמינות Python in Excel</a></div>"],
+  ["ממשל: ההצטלבות היא הסיכון","<p style=\"margin:0 0 .6rem;font-size:.96rem\">מידע רגיש שאינו משותף הוא בסדר. מידע משותף שאינו רגיש הוא בסדר. <b>הבעיה מתחילה בהצטלבות ביניהם.</b> קובץ שכר שמשותף רק ל-CFO הוא בסדר; אותו קובץ משותף לכל הארגון הופך את Copilot למנוע חשיפה.</p><p class=\"note\">Copilot מכבד את הרשאות המשתמש ואינו עוקף אותן. לכן הסיכון אינו ב-Copilot אלא בהרשאות שכבר קיימות ואיש לא בדק. יש למפות רגישות מול רמת שיתוף לפני ההטמעה, לא אחריה.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search\" target=\"_blank\" rel=\"noopener\">Restricted SharePoint Search</a></div>"],
+  ["למה AI Notes לא עובד","<p style=\"margin:0;font-size:.96rem\">תלוי מתי. במצב <b>Only during the meeting</b> ‏Copilot מייצר AI Notes ומשימות <b>בזמן הפגישה בלי תמלול ובלי הקלטה</b>, אבל המשתתף צריך להדליק אותו ידנית. <b>תמלול או הקלטה נדרשים לשימוש אחרי הפגישה</b> ובלשונית Recap. בנוסף, פגישה שזומנה מארגון אחר לא תפיק AI Notes גם אם התמלול פעיל. מאומת מול Microsoft Support.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://support.microsoft.com/en-US/teams/copilot/use-copilot-without-transcribing-or-recording-a-teams-meeting-or-call\" target=\"_blank\" rel=\"noopener\">Copilot בלי תמלול או הקלטה</a></div>"],
+  ["מגבלות סוכן ומדידה","<p style=\"margin:0;font-size:.96rem\">העלאת ידע ישירות לסוכן: <b>עד 500 קבצים, כל אחד עד 512MB</b>. אבל הערה שחוזרת בכל הוובינרים: ככל שכמות התוכן שהסוכן מתשאל מצומצמת יותר, איכות התשובות גבוהה יותר. הנטייה להעלות הכול פוגעת בתוצאה.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-quotas\" target=\"_blank\" rel=\"noopener\">דרישות ומכסות ב-Copilot Studio</a></div>"],
+  ["מדידת אימוץ","<p style=\"margin:0 0 .7rem;font-size:.96rem\"><b>רישיון Copilot אחד מספיק כדי לפתוח את <a href=\"https://insights.cloud.microsoft\" target=\"_blank\" rel=\"noopener\" class=\"hlink\">הלוח</a>.</b> טבלת הזכאות ב-Learn (18.8.2026) קובעת שעיבוד הנתונים מתחיל עם 50 רישיונות Viva Insights <b>או רישיון Copilot אחד</b>. מה שהסף של 50 מגביל הוא היכולות המתקדמות בלבד, לא הגישה עצמה.</p><div class=\"brkhead\" style=\"grid-template-columns:150px 1fr\"><span>שער</span><span>מה צריך לדעת</span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>רצפת גודל קבוצה</span><span style=\"text-align:right;font-family:inherit\"><b>ברירת מחדל 10 עובדים, מינימום 5</b><br><span class=\"s\">מחלקה בת שישה אנשים לא תופיע בהשוואה בין מחלקות עד שמנהל ישנה את הסף</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>מסננים ומפות חום</span><span style=\"text-align:right;font-family:inherit\"><b>דורשים רישיון Viva Insights</b><br><span class=\"s\">במסלול של Copilot בלבד, עם העלאת סקר מצטבר, אינם נתמכים</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>ניהול גישה</span><span style=\"text-align:right;font-family:inherit\"><b>דרך אפליקציית Viva Insights</b><br><span class=\"s\">הפקד הישן ומסלול ה-PowerShell בוטלו. כיבוי האפליקציה מכבה גם Copilot Analytics וגם advanced analysis</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>תפקיד נדרש</span><span style=\"text-align:right;font-family:inherit\"><b>AI Administrator</b><br><span class=\"s\">אינו מקבל גישה אוטומטית, חייב להוסיף את עצמו</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>זמני תפוגה</span><span style=\"text-align:right;font-family:inherit\"><b>24 שעות · 7 ימים · 3 ימים</b><br><span class=\"s\">שינוי גישה · העלאת נתונים ארגוניים · רשימת הרחקה</span></span></div><div class=\"brk\" style=\"grid-template-columns:150px 1fr\"><span>Agent Dashboard</span><span style=\"text-align:right;font-family:inherit\"><b>public preview בלבד</b><br><span class=\"s\">קיים לצד Copilot Dashboard ו-Consumption Dashboard</span></span></div><details class=\"more\"><summary>פרטים נוספים (3)</summary><div class=\"more-in\"><p class=\"note\"><b>פרטיות, נקודה שעדיף להעלות מראש.</b> בברירת מחדל נכלל בלוח גם שימוש ב-Copilot Chat בדפדפן של עובדים שאינם מורשי Copilot, שימוש שאינו קשור לשום רישיון. רשימת הרחקה מאפשרת להחריג אותם. בארגון עם ועד עובדים זו שיחה שעדיף לנהל לפני הגילוי.</p><p class=\"note\"><b>ארבעה צירי מדידה:</b> אימוץ ושימוש, יעילות ותפוקה, ערך עסקי, ואמון ותאימות. הנתונים הכמותיים ב-Copilot Dashboard וב-Usage Report: אימוץ לפי אפליקציה, תאריך פעילות אחרון לכל משתמש מורשה, שימוש ברמת פיצ׳ר, השוואה בין מחלקות ורצף שבועות שימוש. ‏Exchange Online חובה, תיבות משותפות אינן נתמכות.</p><p class=\"note\"><b>הערה תפעולית ללקוח.</b> ניהול הטמעת Copilot אינו תוספת של 5% למשרה קיימת אלא לפחות 50% משרה. ארגונים שמקצים את זה כתוספת צדדית נכשלים. מקור יחיד.</p></div></details><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/viva/insights/org-team-insights/copilot-dashboard\" target=\"_blank\" rel=\"noopener\">טבלת הזכאות ללוח</a><a href=\"https://learn.microsoft.com/en-us/viva/insights/advanced/admin/manage-settings-copilot-dashboard\" target=\"_blank\" rel=\"noopener\">הגדרות הלוח ורצפת הקבוצה</a><a href=\"https://learn.microsoft.com/en-us/viva/insights/advanced/setup-maint/environment-requirements\" target=\"_blank\" rel=\"noopener\">דרישות סביבה ל-Viva Insights</a></div>"],
+  ["מסע ההטמעה, עשרה שלבים","<p style=\"margin:0 0 .6rem;font-size:.96rem\">התשובה לשאלה ״מה עושים אחרי הרכישה״. זו מתודולוגיה של מיישם ולא תיעוד של Microsoft — <b>תיוג: מקור יחיד</b> — אבל היא מתומחרת בפועל אצל לקוחות ולכן משפיעה על היקף העסקה.</p><div class=\"brkhead\" style=\"grid-template-columns:28px 130px 1fr\"><span>#</span><span>שלב</span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>1</span><span>רישוי ותיק עסקי</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">למה בכלל. בלי תשובה טובה לשאלת ה״למה״, שום דבר לא מחזיק לאורך זמן</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>2</span><span>מנדט ואפיון</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">ההנהלה מחליטה על אסטרטגיה; מגדירים בעלי עניין ומושפעים</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>3</span><span>תשתית ונתונים</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">לא שלב IT בלבד. אם החיווט לא נכון, החשמל פשוט לא זורם</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>4</span><span>רתימת הנהלה</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">לא אירוע חד-פעמי אלא מעגל הנהגה מתמשך</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>5</span><span>פיילוט ממוקד</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">קבוצה מצומצמת, ללמוד ולתקן, לייצר הצלחות קטנות מוקדם</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>6</span><span>זיהוי Champions</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">שגרירי שינוי, מזוהים דרך סקר למנהלים או יחד עם משאבי אנוש</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>7</span><span>הדרכה והנגשה</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">השלב עתיר המאמץ: וובינרים, סדנאות, ליווי אחד על אחד</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>8</span><span>הרחבה והפצה</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">סיפורי הצלחה מהפיילוט; יצירת ביקוש פנימי</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>9</span><span>מדידה ושיפור</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">לא שלב סיום — מלווה את כל התהליך</span></span></div><div class=\"brk\" style=\"grid-template-columns:28px 130px 1fr\"><span>10</span><span>הכרה והוקרה</span><span style=\"text-align:right;font-family:inherit\"><span class=\"s\">חגיגת הצלחות, קהילות פנימיות שממשיכות להוביל</span></span></div><details class=\"more\"><summary>פרטים נוספים (5)</summary><div class=\"more-in\"><p class=\"note\">לאורך כל עשרת השלבים רצה <b>תקשורת פנים-ארגונית</b> כשכבה עוטפת, לא כשלב נפרד.</p><p class=\"note\"><b>מי מוביל.</b> הפרויקטים שמצליחים הם אלה שיש בהם <b>פונקציה אחת חוצת-ארגון</b> שמדברת גם עסקית וגם טכנולוגית — מנהל חדשנות, מנהל טרנספורמציה דיגיטלית, או צוות קטן של IT, דאטה וביזנס. במקביל נדרשת רתימה מפורשת מלמעלה: הכרזה של מנכ״ל או סמנכ״ל מערכות מידע.</p><p class=\"note\"><b>חלוקת אחריות למדידה:</b> מוביל שינוי ארגוני (ניהול שינוי, משאבי אנוש) אחראי על הנתונים האיכותיים; צוות IT אחראי על הכמותיים מ-Usage Report ו-Copilot Dashboard; מנהל פרויקט עסקי מחבר את השניים ומדווח להנהלה. <b>קצב:</b> baseline לפני ההשקה, ואז בדיקה חוזרת כל שלושה חודשים.</p><p class=\"note\"><b>חמישה מעגלים שמהם נגזרת האסטרטגיה:</b> חזון ויעדים עסקיים ← אסטרטגיית AI ← תהליכים עסקיים ← אנשים ויכולות ← תרבות וערכים. הניסוח שלהם שווה אימוץ בשיחת מכירה: <b>AI טוב אינו זה שמחליף תהליך, אלא זה שלוקח תהליך ומעצים אותו.</b></p><p class=\"note\"><b>מול המחלקה המשפטית.</b> נדרשת מדיניות שימוש כתובה — למשל אם מותר להשתמש בתמלולי שיחות. מדדי תאימות אפשריים: אחוז העובדים שעברו הכשרה לשימוש אחראי, חתימה על אישור קריאה, או סימולציה קצרה ב-LMS.</p></div></details>"]
+  ];
+  CARDS.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-ready');
+  var MORE=[
+  ["שני שמות לאותו מוצר, ומה להגיד ללקוח","<p style=\"margin:0 0 .7rem;font-size:.96rem\">מ-2026 Microsoft מפצלת בין שם המוצר לשם המנוי, ומשתמשת בשניהם באותו עמוד. שני הצדדים נכונים, וכדאי לדעת מתי להשתמש בכל אחד.</p><div class=\"brkhead\"><span>איפה</span><span style=\"grid-column:2/5\">השם שמופיע</span></div><div class=\"brk\"><span>בכותרות ובגוף המאמרים ב-Learn</span><span><b>Microsoft Copilot</b> · <b>Microsoft Copilot Business</b> · <b>Microsoft Copilot Chat</b></span><span></span><span></span></div><div class=\"brk\"><span>בסעיף ״Available plan״ של תיאור השירות</span><span><b>Microsoft 365 Copilot</b> — זה שם התוכנית לרכישה</span><span></span><span></span></div><div class=\"brk\"><span>בחשבונית, במרכז הניהול וב-Product Terms</span><span><b>Microsoft 365 Copilot</b> · סעיף 22.13</span><span></span><span></span></div><p class=\"note\"><b>מאומת</b> · תיאור השירות הרשמי, עודכן 21.8.2026. הכלי הזה נצמד לשם המנוי, כי זה מה שהלקוח יראה בחשבונית. אם לקוח מגיע עם צילום מסך מ-Learn שכתוב בו ״Microsoft Copilot Business״ — זה אותו מוצר, לא מוצר חדש.</p><div class=\"flag\"><b>מונחים חדשים בתיאור השירות: ‏M365 Copilot (Basic) ו-M365 Copilot (Premium).</b> ״Basic״ הוא מה שקראנו לו עד היום Copilot Chat. ״Premium״ הוא הרישיון בתשלום. היכולות שמסומנות Premium ודורשות רישיון: ‏Researcher, ‏Analyst, ‏Copilot Notebooks, ‏Edit with Copilot, והארקה בנתוני העבודה.</div>"],
+  ["שבעה באגים מתועדים בעברית ובכיוון RTL","<div class=\"brkhead\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr\"><span>איפה</span><span>מה קורה</span><span>למה</span><span>מעקף</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>ממשק הצ׳אט של Copilot</b></span><span class=\"s\">עברית מיושרת לשמאל; משפט מעורב עברית־אנגלית משבש את סדר המילים</span><span class=\"s\">אין זיהוי אוטומטי של כיוון טקסט בממשק הווב</span><span class=\"s\">שאילתות פשוטות בלי תווים מיוחדים</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>הכתבה קולית</b></span><span class=\"s\">הגדרת עברית לא מתפקדת ונופלת לאנגלית, והתעתיק משובש</span><span class=\"s\">אין תמיכה רשמית בעברית במנוע הפיענוח הקולי</span><span class=\"s\">הקלדה ידנית או כלי תמלול חיצוני</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>Excel · תיבת Subtotal</b></span><span class=\"s\">התפריטים הנפתחים מפסיקים להגיב כשהממשק בעברית</span><span class=\"s\">באג לוקליזציה ביישום כיוון הממשק בתיבות דו־שיח</span><span class=\"s\">להחליף את שפת התצוגה של Office לאנגלית לפעולה הזו ולחזור</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>Visio for the Web</b></span><span class=\"s\">טקסט עברי נכון בעריכה, מתהפך ביציאה ממצב עריכה</span><span class=\"s\">טיפול שגוי בתווים ניטרליים: רווח, סוגריים, קו תחתון</span><span class=\"s\">להימנע מתווים ניטרליים או להפריד צורות לעברית ולאנגלית</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>Windows Terminal 1.19+</b></span><span class=\"s\">מילים בעברית מוצגות הפוך לגמרי — ״םולש״ במקום ״שלום״</span><span class=\"s\">מנוע AtlasEngine שהפך לברירת מחדל אינו תומך ב-RTL</span><span class=\"s\">לחזור למנוע DxRender</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>תרגום מצגות PowerPoint</b></span><span class=\"s\">הטקסט מתורגם, אבל כיוון השקופית והתיבות נשאר כשהיה</span><span class=\"s\">כלי התרגום נוגע בתוכן בלבד ולא בפריסה</span><span class=\"s\">התאמה ידנית של הכיוון אחרי התרגום</span></div><div class=\"brk\" style=\"grid-template-columns:1.1fr 1.4fr 1.2fr 1.3fr;align-items:start\"><span><b>סוכני Copilot Studio</b></span><span class=\"s\">הצעות פרומפט לא מופיעות בערוץ Microsoft 365 Copilot</span><span class=\"s\">מגבלת הפצה כששפת המקור של הסוכן אינה אנגלית</span><span class=\"s\">להפיץ דרך Microsoft Teams או ערוץ צ׳אט ייעודי</span></div><p class=\"note\">שש מהשורות מקורן בדיווחי משתמשים ב-Microsoft Q&amp;A וב-GitHub, לא בתיעוד רשמי. כלומר: יש עדות שהבאג קיים, אין התחייבות של Microsoft לתקן ואין הבטחה שהוא עדיין פתוח. שורת Copilot Studio לבדה <b>מאומתת</b> מול Microsoft Learn. לפני שמציגים את הטבלה ללקוח כדאי לבדוק שהבאג עדיין משחזר.</p>"],
+  ["תשתית באזור Israel Central","<div class=\"brkhead\"><span>שירות</span><span style=\"grid-column:2/4\">זמינות</span><span>משמעות</span></div><div class=\"brk\"><span>Azure File Sync</span><span><b>זמין</b></span><span></span><span>סנכרון קבצים מקומי בתוך גבולות המדינה</span></div><div class=\"brk\"><span>Windows 365 Enterprise GPU</span><span><b>לא זמין</b></span><span></span><span>Standard, Super ו-Max חסומים. גם Select ו-Flex לא ברשימה</span></div><div class=\"brk\"><span>Graph Data Connect ל-SharePoint</span><span><b>מותנה</b></span><span></span><span>דורש התאמה בין אזור ה-M365 של הטננט לאזור חשבון Azure</span></div><p class=\"note\"><b>מאומת</b> · ‏Israel Central מופיע במפורש ברשימת האזורים החסומים ל-GPU Cloud PCs ב-Microsoft Learn, עודכן 19.5.2026. לקוח ישראלי שצריך מחשבי קצה וירטואליים עם מאיץ גרפי לעומסי AI או גרפיקה — לא יקבל אותם באזור המקומי, ויצטרך לוותר על ריבונות הנתונים או על ה-GPU.</p>"],
+  ["על מה אפשר להרכיב את Microsoft 365 Copilot","<p style=\"margin:0 0 .7rem;font-size:.96rem\">רשימת התוכניות הזכאיות רחבה בהרבה ממה שנהוג להניח. זו נקודת מכירה: לא חייבים לשדרג את כל הארגון ל-E3 כדי להוסיף Copilot לעובד מסוים.</p><div class=\"brkhead\"><span>משפחה</span><span style=\"grid-column:2/5\">תוכניות זכאיות</span></div><div class=\"brk\"><span>Microsoft 365</span><span>E7, E5, E3, F1, F3, Business Basic, Business Standard, Business Premium, Apps for business, Apps for enterprise</span><span></span><span></span></div><div class=\"brk\"><span>Office 365</span><span>E5, E3, E1, F3</span><span></span><span></span></div><div class=\"brk\"><span>Teams</span><span>Teams Essentials, Teams Enterprise, Teams EEA</span><span></span><span></span></div><div class=\"brk\"><span>תיבות דואר ואחסון</span><span>Exchange Kiosk / Plan 1 / Plan 2, SharePoint Kiosk / Plan 1 / Plan 2, OneDrive Plan 1 / Plan 2</span><span></span><span></span></div><div class=\"brk\"><span>אחר</span><span>Planner Plan 1, Project Plan 3, Project Plan 5, Project Online Essentials, Visio Plan 1, Visio Plan 2, Clipchamp</span><span></span><span></span></div><p class=\"note\"><b>מאומת</b> · דף הרישוי ב-Microsoft Learn, עודכן 18.8.2026. ‏<b>Microsoft 365 Copilot Business</b> ב-$21 מותנה בארבע תוכניות בלבד: Business Basic, ‏Business Standard, ‏Business Premium ו-Apps for Business. שימו לב לתוצאה: ארגון על Business Standard יכול לבחור בין $21 ל-$30. הבחירה אינה נכפית עליו לפי גודל.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-licensing\" target=\"_blank\" rel=\"noopener\">תוכניות רישוי ל-Copilot</a><a href=\"https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-business-faq\" target=\"_blank\" rel=\"noopener\">Copilot Business FAQ</a></div>"]
+  ];
+  MORE.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-value');
+  r.appendChild(el('h2','sh','ערך, מספרים והוכחות'));
+  r.appendChild(el('p','sub','מה באמת אפשר להבטיח ללקוח, ומה עומד מאחורי כל מספר. המקורות כאן חזקים מאוד או חלשים מאוד, ולכן חשוב לדעת מי מי.'));
+  var CARDS=[
+  ["המספרים של Forrester, ומה הם באמת אומרים","<div class=\"brkhead\"><span>מדד</span><span>ערך</span><span style=\"grid-column:3/5\">הערה</span></div><div class=\"brk\"><span>החזר השקעה (ROI)</span><span class=\"m\">116%</span><span class=\"s\" style=\"grid-column:3/5\">לאורך שלוש שנים</span></div><div class=\"brk\"><span>תקופת החזר</span><span class=\"m\">10 חודשים</span><span class=\"s\" style=\"grid-column:3/5\">נקודת איזון</span></div><div class=\"brk\"><span>ערך נוכחי נקי (NPV)</span><span class=\"m\">$19.7M</span><span class=\"s\" style=\"grid-column:3/5\">לשלוש שנים</span></div><div class=\"brk\"><span>חיסכון בזמן למשתמש</span><span class=\"m\">9 שעות בחודש</span><span class=\"s\" style=\"grid-column:3/5\">ממוצע</span></div><div class=\"brk\"><span>האצת קליטת עובד</span><span class=\"m\">עד 25%</span><span class=\"s\" style=\"grid-column:3/5\">קיצור זמן חפיפה</span></div><div class=\"brk\"><span>שיפור באחוזי סגירה</span><span class=\"m\">2.5 נקודות אחוז</span><span class=\"s\" style=\"grid-column:3/5\">במכירות</span></div><p class=\"note\"><b>מאומת</b> · ‏Total Economic Impact של Microsoft 365 Copilot, מרץ 2025, מחקר שהוזמן על ידי Microsoft. הארגון שבמודל אינו ארגון אמיתי אלא <b>ארגון מורכב (Composite)</b>: ‏25,000 עובדים והכנסה שנתית של 6.25 מיליארד דולר.</p><div class=\"flag\"><b>אל תיקחו את המספרים האלה ללקוח של 300 מושבים.</b> יחס ההחזר נגזר ממנופים שקיימים רק בקנה מידה של 25,000 עובדים: ‏14.8 מיליון דולר מתוך התועלת מגיעים משיפור בתהליכי המכירה, לא מחיסכון בזמן. ארגון קטן לא יגיע לשם.</div><div class=\"srcs\"><b>מקור</b><a href=\"https://tei.forrester.com/go/microsoft/M365Copilot/\" target=\"_blank\" rel=\"noopener\">מחקר Forrester TEI</a></div>"],
+  ["הפירוק שכדאי להראות ללקוח","<div class=\"brkhead\"><span>סעיף עלות</span><span>שלוש שנים</span><span style=\"grid-column:3/5\">מהסך הכול</span></div><div class=\"brk\"><span>רישיונות Microsoft 365 Copilot</span><span class=\"m\">$5.7M</span><span class=\"s\" style=\"grid-column:3/5\">33%</span></div><div class=\"brk\"><span>הטמעה וניהול</span><span class=\"m\">$4.4M</span><span class=\"s\" style=\"grid-column:3/5\">26%</span></div><div class=\"brk\"><span>הדרכה וגילוי יכולות</span><span class=\"m\">$6.9M</span><span class=\"s\" style=\"grid-column:3/5\">40%</span></div><div class=\"flag\"><b>ההדרכה יקרה מהרישיונות.</b> ‏6.9 מיליון דולר על הדרכה מול 5.7 מיליון על רישיונות. במודל של Forrester עצמה, הרישיון הוא שליש מהעלות. לקוח שמתקצב רישיונות בלבד מתקצב שליש מהפרויקט.</div><p class=\"note\"><b>נגזר מחישוב</b> · ‏$5.7M חלקי $30 חלקי 36 חודשים נותן כ-5,300 מושבים מורשים מתוך 25,000 עובדים, כלומר כ-21%. הארגון שבמודל לא רישה את כולם. זו תשובה טובה ללקוח ששואל אם צריך לרכוש לכל הארגון.</p>"],
+  ["לקוחות והתייחסויות בישראל","<div class=\"brkhead\"><span>מי</span><span style=\"grid-column:2/5\">מה</span></div><div class=\"brk\"><span>בנק הפועלים</span><span>תוכנית ״Kickoff 365״ שהוכרזה בפברואר 2026 בשיתוף Microsoft ישראל: ‏12 פרויקטים, מעבר מערכות ל-Microsoft 365 והטמעת Copilot אצל אלפי עובדים</span><span></span><span></span></div><div class=\"brk\"><span>קבוצת שטראוס</span><span>הטמעת Copilot 365 בליווי UBTECH. המיקוד היה בצד האנושי: רשת ״Champions״ בכל מחלקה וסדנאות מותאמות</span><span></span><span></span></div><div class=\"brk\"><span>Sapiens</span><span>קיצור זמן ההגעה לשוק בחצי. ‏<b>שימו לב:</b> זה הושג עם כלי פיתוח של Microsoft ו-Azure, לא עם Microsoft 365 Copilot. לא לערבב בין השניים</span><span></span><span></span></div><div class=\"brk\"><span>מרכז המו״פ בהרצליה</span><span>הוקם ב-1991 כמרכז הפיתוח הראשון של Microsoft מחוץ לארצות הברית. ‏<b>Microsoft Agent 365 פותח שם</b></span><span></span><span></span></div><div class=\"brk\"><span>Rubrik ישראל</span><span>בעקבות רכישת Laminar הישראלית, פיתח המרכז המקומי פתרון DSPM ל-Microsoft 365 Copilot</span><span></span><span></span></div><div class=\"brk\"><span>CTERA</span><span>אינטגרציה שמאפשרת לארגוני ממשל וביטחון להחיל מנגנוני Copilot על מערכת קבצים מבוזרת</span><span></span><span></span></div><p class=\"note\"><b>מקור יחיד</b> · העיתונות העסקית הישראלית ואתרי השותפים, למעט מרכז המו״פ ו-CTERA שמגובים בנכסים של Microsoft עצמה. שמות לקוחות הם חומר מכירה מצוין, אבל אין בהם נתוני ביצוע מאומתים. אפשר לומר ״הבנק הגדול בישראל יצא לדרך״, לא ״הבנק חסך X״.</p>"],
+  ["מערכות רב־סוכנים","<p style=\"margin:0 0 .6rem;font-size:.96rem\">הוכחת היתכנות משותפת ל-Microsoft ול-ServiceNow חיברה את Now Assist לסוכני Microsoft דרך Semantic Kernel. באירוע תקלה קריטית המערכת פותחת <b>שיחת ועידה ב-Microsoft Teams</b> באופן אוטומטי ומרכזת אליה את צוות הטיפול.</p><p class=\"note\">זו התמונה שמסבירה ללקוח למה קיים Microsoft Agent 365: ברגע שסוכנים משני ספקים שונים פועלים יחד בארגון, צריך שכבה שמגלה אותם, מזהה אותם ומחילה עליהם מדיניות. <b>מקור יחיד</b> · בלוג הפיתוח של Microsoft.</p>"]
+  ];
+  CARDS.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-ready');
+  var C8=[
+  ["מה בדיוק קונים ב-$30","<p style=\"margin:0 0 .7rem;font-size:.96rem\">אפליקציית Microsoft 365 Copilot נבנתה מחדש סביב סרגל צד קבוע. חמשת הרכיבים האלה דורשים את הרישיון בתשלום. השותף נשאל בשידור מה מגיע בלעדיו וענה ״שום דבר״, <b>וזו הגזמה</b>: ‏Copilot Chat כן נותן צ׳אט מעוגן ווב, ‏Pages, העלאת קבצים, יצירת תמונות ויצירת סוכנים, במגבלות. מה שאין בלי רישיון הוא ההארקה בנתוני הארגון וחמשת הרכיבים שבטבלה.</p><div class=\"brkhead\"><span>רכיב</span><span style=\"grid-column:2/5\">מה הוא עושה</span></div><div class=\"brk\"><span>Search</span><span>חיפוש AI חוצה Outlook, ‏SharePoint, ‏OneDrive ו-Teams, כולל זיהוי טקסט בתוך תמונות</span><span></span><span></span></div><div class=\"brk\"><span>Chat</span><span>הצ׳אט המוכר, זהה לזה שבתוך Teams</span><span></span><span></span></div><div class=\"brk\"><span>Agents</span><span>גישה לסוכנים ול-Agent Store</span><span></span><span></span></div><div class=\"brk\"><span>Notebooks</span><span>מחברת שמרכזת שיחות, קבצים וסיכומי פגישות, ועונה רק מתוכן המחברת</span><span></span><span></span></div><div class=\"brk\"><span>Create</span><span>תמונות, אינפוגרפיקות, סרטונים, קריינות וסקרים, לפי ערכת המותג הארגונית</span><span></span><span></span></div><div class=\"flag\"><b>סרגל הצד אינו מופיע בתוך Teams.</b> הוא נגיש מהדפדפן ומאפליקציית Copilot בלבד. אם לקוח אומר ״אני לא רואה את זה״, זו הסיבה הראשונה לבדוק.</div><p class=\"note\"><b>מקור יחיד</b> · סדרת וובינרים של שותף Microsoft ישראלי, אוגוסט 2026.</p>"],
+  ["שלוש מחלקות סוכנים, ואיפה העברית נשברת","<div class=\"brkhead\"><span>מחלקה</span><span style=\"grid-column:2/4\">מה היא עושה</span><span>עברית</span></div><div class=\"brk\"><span>Basic</span><span>שולף מידע ממערכות פנימיות, מסכם ועונה</span><span></span><span>תקין</span></div><div class=\"brk\"><span>Advanced</span><span>מבצע פעולות ובונה תהליכי עבודה לפי בקשה</span><span></span><span>תקין</span></div><div class=\"brk\"><span>Autonomous</span><span>פועל עצמאית, מזהה בעיה ומנתב לאדם או לסוכן אחר</span><span></span><span><b>לא</b></span></div><div class=\"flag\"><b>השורה השלישית היא המגבלה מ-§9.3.</b> ‏Event triggers, המנגנון שמפעיל סוכן אוטונומי, נתמכים באנגלית ארה״ב בלבד. שתי המחלקות הראשונות עובדות בעברית; השלישית לא.</div><p style=\"margin:.8rem 0 .4rem;font-size:.96rem\"><b>Researcher ו-Analyst.</b> לפי השותף, ‏Researcher בנוי על מודל המחקר המעמיק של OpenAI ו-Analyst על o3-mini. ‏Analyst מריץ Python מאחורי הקלעים, מציג את הקוד, ורץ ארבע עד עשר דקות למשימה — כדאי לבקש ניתוח כבד לפני שהולכים הביתה. הוא עובד גם בעברית.</p><p class=\"note\"><b>Agent Mode ב-Excel, Word ו-PowerPoint</b> מבצע כמה משימות במקביל ולפי השותף מחליף את חוויית ה-Skills. ‏<b>״כרגע באנגלית החוויה מרשימה יותר״</b> — ציטוט מהשידור, ושווה להעביר ללקוח ישראלי. <b>מקור יחיד.</b></p>"],
+  ["Workflows agent, אוטומציה בלי Copilot Studio","<p style=\"margin:0 0 .6rem;font-size:.96rem\">סוכן בשם Workflows, המסומן Frontier, בונה זרימות אוטומציה בשפה טבעית בלי קוד. מתחת למכסה הוא <b>Power Automate</b>, עם אותם קונקטורים לאותן מאות מערכות. מעליו יושבת שכבת אורקסטרציה של Copilot והארקה דרך Microsoft Graph שמכבדת הרשאות. הוא קורא את עץ הארגון, ולכן ״כשמגיע מייל מהמנהל שלי״ נפתר מעצמו.</p><div class=\"flag\"><b>זו הנקודה הרישויית.</b> אם היכולת תצא ל-GA כפי שהודגמה, היא מכניסה אוטומציה מבוססת קונקטורים לתוך רישיון Copilot — בלי רישיון Copilot Studio נפרד. עד אז <b>אין להבטיח אותה בהצעת מחיר</b>.</div>"],
+  ["תזמור סוכנים, איך זה נראה בפועל","<p style=\"margin:0 0 .7rem;font-size:.96rem\">בהדגמה חיה נבנו ב-Copilot Studio ארבעה סוכנים. זו התשובה ללקוח ששואל ״מה בונים אחרי הסוכן הראשון״.</p><div class=\"brkhead\"><span>סוכן</span><span style=\"grid-column:2/5\">מה יש בו</span></div><div class=\"brk\"><span>סוכן ידע</span><span>ספריית מסמכים ב-SharePoint בלבד. בלי כלים, בלי סוכנים אחרים</span><span></span><span></span></div><div class=\"brk\"><span>סוכן מבצע</span><span>שני כלים: ‏MCP ל-Outlook ויצירת אירוע ביומן. בלי ידע</span><span></span><span></span></div><div class=\"brk\"><span>סוכן בקשות</span><span>נושא שיחה אחד שאוסף פרטים, ואוטומציית אישורים ב-Power Automate</span><span></span><span></span></div><div class=\"brk\"><span><b>Master Agent</b></span><span><b>אין בו ידע, כלים או נושאים — רק סוכנים והנחיות מתי לקרוא לכל אחד</b></span><span></span><span></span></div><p class=\"note\">ההנחיה למאסטר כללה תנאי מפורש: סוכן היומן מופעל <b>רק</b> אחרי שהתקבל אישור מהמנהל. משתמש הקצה מדבר עם סוכן אחד ואינו יודע על השאר. <b>מקור יחיד.</b></p>"],
+  ["מחיר המחירון אינו המחיר הסופי","<p style=\"margin:0 0 .6rem;font-size:.96rem\">בוובינר של שותף Microsoft ישראלי הוצג קמפיין: לקוחות על <b>Business Standard או Business Premium</b> יכלו לשדרג כך שהחבילה תכלול את Microsoft 365 Copilot <b>בתוספת של $12 למושב</b>, ברכישה של עשרה באנדלים ומעלה, עד סוף יוני 2026.</p><div class=\"flag\"><b>הקמפיין פג. המסקנה לא.</b> מול מחיר מחירון של $30 לתוסף, הפרש כזה מלמד שיש מרווח מסחרי אצל השותפים. אל תתייחסו למחשבון העלות כאן כאל מחיר סופי — הוא מחיר מחירון, ונקודת פתיחה למשא ומתן.</div><p class=\"note\"><b>מקור יחיד</b> · קמפיין שותף שתוקפו פג ביוני 2026.</p>"]
+  ];
+  C8.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-ready');
+  var C11=[
+  ["Copilot Fall Release, אוקטובר 2025","<p style=\"margin:0 0 .7rem;font-size:.96rem\"><b>תיקון ייחוס.</b> ‏12 היכולות האלה הן ה-Copilot Fall Release שהוכרז ב-<b>23.10.2025</b>, ולא עדכון מאוגוסט 2026. הן שייכות בעיקר ל-<b>Copilot לצרכן</b> ואינן סט זכאויות של Microsoft 365 Copilot ארגוני, ולכן אין להסיק מהן מה מקבל מושב מורשה בארגון. מייקרוסופט שחררה עדכון רחב לאפליקציית Copilot, הכולל 12 יכולות שהמטרה שלהן להפוך אותו לאישי, תומך ומחובר יותר. חלקן כבר זמינות וחלקן צפויות בשבועות הקרובים.</p><div class=\"brkhead\"><span>יכולת</span><span style=\"grid-column:2/5\">מה היא נותנת</span></div><div class=\"brk\"><span>AI חברתי</span><span style=\"grid-column:2/5\" class=\"s\">שיחות קבוצתיות עד 32 משתתפים, כולל סיכומים, הצבעות וחלוקת משימות</span></div><div class=\"brk\"><span>זיכרון ארוך טווח</span><span style=\"grid-column:2/5\" class=\"s\">זוכר פרטים חשובים וחוזר אליהם בעתיד, עם דמות ויזואלית חדשה לשיחות קוליות</span></div><div class=\"brk\"><span>הצעות יזומות</span><span style=\"grid-column:2/5\" class=\"s\">פעולות המשך מוצעות על בסיס פעילות קודמת</span></div><div class=\"brk\"><span>למידה אינטראקטיבית</span><span style=\"grid-column:2/5\" class=\"s\">שאלות, לוחות ויזואליים והכוונה קולית</span></div><div class=\"brk\"><span>דפדפן AI</span><span style=\"grid-column:2/5\" class=\"s\">מבין הקשר, מסכם מידע, מבצע פעולות וניווט קולי</span></div><div class=\"flag\"><b>לא ברור אילו מהיכולות דורשות רישיון Copilot בתשלום ואילו כלולות ב-Chat החינמי.</b> השותף הציג זאת כשדרוג לאפליקציית Copilot בכללותה, בלי הבחנה לפי SKU. יש לבדוק בטננט לפני שמבטיחים משהו ללקוח.</div><p class=\"note\"><b>מקור יחיד</b> · הוצג כפתיחה לוובינר מנהל הכספים, 23.8.2026.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://www.microsoft.com/en-us/microsoft-copilot/blog/2025/10/23/human-centered-ai/\" target=\"_blank\" rel=\"noopener\">ההכרזה המקורית, 23.10.2025</a></div>"],
+  ["תשובת Outlook שנוסחה ב-AI, והגילוי לפני שליחה","<p style=\"margin:0 0 .6rem;font-size:.96rem\">כשמשתמש מבקש מ-Copilot לנסח תשובה למייל על בסיס תכתובת קודמת, האפליקציה <b>מציגה התראה מפורשת לפני השליחה</b>: ״התשובה מנוסחת בקופיילוט — שים לב לקרוא עליה״. זו הגנה מובנית שמזכירה למשתמש לבדוק את התוצר לפני שהוא יוצא בשמו.</p><p class=\"note\">זה חיזוק מוצרי לעיקרון שחוזר בכל סדרת הוובינרים: <b>האחריות הסופית על התוצר נשארת אצל המשתמש</b>, ו-Copilot נותן בסיס של 60 עד 70 אחוז ולא תשובה סופית. שווה להזכיר את הפיצ׳ר הזה ללקוחות שדואגים מהאמינות של תשובות אוטומטיות. מקור יחיד.</p>"],
+  ["Reconciliation אוטומטי, מה קרה בפועל בהדגמה","<p style=\"margin:0 0 .7rem;font-size:.96rem\">Excel Agent קיבל כרטסת קאש מול דוח בנק לאותו חודש, ומשימה: לבצע התאמה ולאתר חריגים. זמן הריצה: <b>69 שניות</b>.</p><div class=\"brkhead\"><span>שלב</span><span style=\"grid-column:2/5\">מה נדרש בפרומפט</span></div><div class=\"brk\"><span>הנחיה מרכזית</span><span style=\"grid-column:2/5\" class=\"s\">״צור נוסחאות Excel בכל גיליון כדי שההתאמה תהיה ניתנת לבדיקה בכל שורה״ — לא מספיק לבקש תשובה, צריך לדרוש נוסחה שקופה</span></div><div class=\"brk\"><span>רמז קריטי</span><span style=\"grid-column:2/5\" class=\"s\">״שים לב שסכומים מסוימים עלולים להיות כפולים״ — בלי הרמז הזה הסוכן לא בהכרח מטפל בכפילויות נכון</span></div><div class=\"flag\"><b>התוצאה כמעט מושלמת אך לא באופן אוטומטי.</b> הסוכן בנה נוסחת דירוג לזיהוי סכומים חוזרים ואז נוסחת LOOKUP להתאמה. כל השורות התאימו חוץ משתי רשומות בקאש בלי מקבילה בבנק, ושתיים הפוך. לפי מנהל המוצר, לא תמיד התוצאה בפעם הראשונה היא הטובה ביותר — צריך להנחות את הסוכן כמו עובד, עם הבהרות נוספות.</div><p class=\"note\">זו דוגמה קונקרטית לאותה משמעת פרומפטים (Goal, Context, Source, Expectation) שמופיעה גם בוובינר הפרומפטים והאקסל. <b>מקור יחיד.</b></p>"],
+  ["Teams, Word ו-PowerPoint: מה השתנה לאחרונה","<p style=\"margin:0 0 .6rem;font-size:.96rem\"><b>סיכום Teams מתבסס גם על הצ׳אט, לא רק על התמלול.</b> הודעות, קישורים ונקודות שסוכמו בצ׳אט הפגישה נכנסים עכשיו ל-AI Notes. שני התנאים המקוריים עדיין נדרשים: תמלול מופעל, והזימון יצא מהארגון.</p><div class=\"flag\"><b>Upload from this device, עם השלכת ממשל שקטה.</b> קובץ מקומי שמעלים ל-Copilot Chat נשמר בפועל ל-OneDrive — כי Copilot פועל רק על תוכן ענני. קובץ שמעולם לא היה בענן הופך להיות שם, בלי שהמשתמש בהכרח קולט שזו ״העלאה״ במובן הממשלי.</div><p style=\"margin:.6rem 0;font-size:.94rem\"><b>Word:</b> לפי השותף, עד 10 רפרנסים (במקום 3), בלי הגבלת תווים על הפרומפט, וכ-80,000 מילה בסך כל הרפרנסים. סוגים נתמכים: Word, PowerPoint, PDF, פגישות, דוא״ל — לא Excel. <u>שימו לב:</u> מקורות כלליים של Microsoft מזכירים גם תקרה של כ-2,000 תווים על טקסט הפרומפט עצמו ומספר פריטים שנע בין 10 ל-20 לפי הקשר — כדאי לבדוק בפועל בטננט לפני שמבטיחים ״בלי הגבלה״ ללקוח.</p><p style=\"margin:.6rem 0;font-size:.94rem\"><b>סיכום אוטומטי ב-Word אינו ברירת מחדל</b> — יש להפעיל דרך תפריט Copilot בסרגל הכלים. כרגע בעיקר ב-Web; פיצ׳רים חדשים מגיעים לווב לפני האפליקציות השולחניות, דפוס עקבי בכל הסדרה.</p><p style=\"margin:.6rem 0;font-size:.94rem\"><b>Word, שני עדכונים נוספים:</b> ביבליוגרפיה אוטומטית עם רפרנסים למסמכים שהתבסס עליהם — צפוי להתגלגל מיוני. וסיכום מצורפת עם שני פקדים בפאנל \"Summary by Copilot\": כפתור <b>\"Ask Copilot\"</b> לצ׳אט ממוקד, ותפריט <b>\"Summarize a file\"</b>. בראש התפריט מופיע <b>\"Only certain files are supported\"</b> — לא כל סוגי הצרופות נתמכים. (תוקן מצילום מסך; קודם נרשם \"AS Copilot\".)</p><details class=\"more\"><summary>פרטים נוספים (2)</summary><div class=\"more-in\"><p class=\"note\"><b>PowerPoint:</b> נתיב פנים-ארגוני (אנשים, מסמכים, פגישות, מיילים) ונתיב חוץ-ארגוני עם אג׳נדה הניתנת לעריכה מלאה. הוספת נושא בנתיב החוץ-ארגוני יכולה למשוך דטה פנים-ארגוני דרך סלאש — הנתיבים מצטלבים ברמת הנושא הבודד. מקור יחיד.</p><p class=\"note\">Clean Data with Copilot הגיע לאפליקציה השולחנית לאחרונה — היה זמין רק בווב כחצי שנה קודם לכן.</p></div></details>"],
+  ["Facilitator, ותשובת Q&A שכדאי לצטט מילה במילה","<p style=\"margin:0 0 .6rem;font-size:.96rem\"><b>Facilitator — כתיבה שיתופית בזמן אמת של פרוטוקול הפגישה.</b> בשונה מ-AI Notes שמסכם אחרי מעשה, Facilitator כותב את הפרוטוקול תוך כדי הפגישה, והמשתמש יכול לערוך במקביל לצידו — שיתוף פעולה חי, לא רק תוצר סופי. עד לאחרונה היה זמין רק בווב; עכשיו זמין גם באפליקציה השולחנית. <b>יש להפעיל אותו מראש באפשרויות הפגישה</b> ב-Teams, לכל פגישה בנפרד.</p><p style=\"margin:.6rem 0;font-size:.94rem\"><b>שפת ה-Recap ניתנת לבחירה, בנפרד משפת הפגישה.</b> עד עכשיו אם התמלול היה בעברית הסיכום יצא בעברית ולהפך. עכשיו אפשר לבחור את שפת הסיכום באופן עצמאי — שימושי לפגישה שהתנהלה באנגלית אך הצוות המקומי רוצה סיכום בעברית.</p><div class=\"flag\"><b>הציטוט הכי חד בכל הוובינר, כשנשאלה מה זמין ללא רישוי:</b> \"לצערי הרב שום דבר ממה שהצגתי לא יחכה למישהו ללא רישוי. כל מה שהצגתי הוא חלק מחבילת קופיילוט 365.\" משפט מוכן לשימוש מול לקוח שמנסה להבין מה הוא מקבל בחינם.</div><p class=\"note\">Q&A נוסף: יצירת קובץ Excel עם תוכן בעברית עובדת, גם אם שם הקובץ עצמו נשאר באנגלית — שאלה של פורמט, לא מגבלה עקרונית. מקור יחיד.</p>"],
+  ["Copilot Memory, הטבלה המלאה ותבנית לסוכן טוב","<p style=\"margin:0 0 .6rem;font-size:.96rem\">הבעיה שהיא פותרת — Copilot היסטורית הרגיש פחות ״חבר״ מ-ChatGPT כי לא זכר כלום בין שיחות. Memory סוגר את הפער בלי לאמן את המודל על הנתונים.</p><div class=\"brkhead\"><span>מה</span><span style=\"grid-column:2/5\">איך</span></div><div class=\"brk\"><span>למידה</span><span>משיחות קודמות, פרופיל ארגוני, והנחיות מפורשות ב-Settings → Personalization</span><span></span><span></span></div><div class=\"brk\"><span>למידה פסיבית</span><span>בונה פרופיל: תחומי עניין, שפה, קצב בקשות — ומציע יזום בלי שביקשו</span><span></span><span></span></div><div class=\"brk\"><span>עדכון הזיכרון</span><span>בשפה טבעית דרך הצ׳אט עצמו — ״מעכשיו עדכן אותי כל שבועיים״</span><span></span><span></span></div><div class=\"brk\"><span>בדיקה ומחיקה</span><span>״מה אתה זוכר על ההעדפות שלי״ בצ׳אט. המסך: <b>Personalization → Copilot memory</b>, שתי לשוניות (Copilot memory / Work profile), מחיקה פר-פריט, ובתחתית מתג ראשי ו-<b>Delete all memories</b></span><span></span><span></span></div><div class=\"brk\"><span>מידע רגיש</span><span>Temporary Chat — שום דבר לא נשמר לזיכרון</span><span></span><span></span></div><div class=\"brk\"><span>כיבוי ארגוני</span><span><b>מנהל הטננט מכבה לכולם ברמת הטננט</b></span><span></span><span></span></div><div class=\"flag\"><b>Sounds Like Me עדיין לא שוחרר.</b> זה הפיצ׳ר שאמור לפתור סופית את התאמת סגנון הכתיבה; עד אז Memory + Personalization הם הפתרון הזמני.</div><p style=\"margin:.7rem 0 .4rem;font-size:.96rem\"><b>שלוש הדוגמאות המדויקות שהודגמו לרמות הסוכן:</b> Basic — ״מה הסטטוס של שלב 2 בפרויקט X ומה התקציב הנותר?״ Advanced — ״סקור את כל הזמנות הרכש הפתוחות ושלח לי אותן למייל״. Autonomous — מזהה פנייה חדשה לתמיכה ומנתב אותה בלי שאף אחד ביקש.</p><p style=\"margin:.6rem 0;font-size:.94rem\"><b>Agent Store</b> (\"Find agents to help you complete any task\"). <b>Your agents:</b> Meeting Summarizer, Researcher (Frontier), Analyst (Frontier), Sales Expert, Competitor Insights Bot, Visual Creator, <b>Copilot Assistance</b>, HR Helper. <b>Built by Microsoft:</b> Researcher, Analyst, Visual Creator, <b>Prompt Coach</b>, <b>Writing Coach</b>, <b>Idea Coach</b>.</p><p class=\"note\"><b>תבנית לסוכן מותאם אישית, ניתנת לשימוש ישיר:</b> סוכן \"Meeting Summarizer\" עם הנחיות מדויקות — פתיחה ב״שלום לכולם״, סיום ב״בברכה, [שם]״, מבנה קבוע של נקודות מפתח ואז Action Items, וגוף ראשון רבים (״קיימנו״, ״עשינו״). זרימת העבודה: בלי לכתוב פרומפט — \"/\" ואז קישור הפגישה המתומללת, והסוכן מחזיר סיכום גמור בסגנון האישי. מקור יחיד.</p>"]
+  ];
+  C11.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-lab');
+  r.appendChild(el('h2','sh','מעבדת הנחיות'));
+  r.appendChild(el('p','sub','ספריית הנחיות מוכנות לשימוש, ממופות לחמישה שלבי הטמעה מהפשוט למורכב. נבנתה בסשן נפרד ומשולבת כאן כקטגוריה עצמאית.'));
+  var C13=[
+  ["סולם ההטמעה, חמישה שלבים","<p style=\"margin:0 0 .7rem;font-size:.96rem\">מעבדת הנחיות שבנה עמית מ-<a href=\"https://m365.cloud.microsoft/copilot-prompts\" target=\"_blank\" rel=\"noopener\" class=\"hlink\">Microsoft Copilot Prompt Gallery</a> העברי, שנסרקה ב-23.8.2026 ומורחבת בתרגום למתודולוגיית מפרט ארגוני. הכלי המלא כולל את כל 94 ההנחיות, 69 המפרטים וחומרי הסדנה. <a href=\"https://github.com/Valor-Automation-Solutions/ai-cost-calculator/blob/main/copilot-prompt-lab.html\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--acc)\">לגישה לכלי המלא ←</a></p><div class=\"brkhead\"><span>שלב</span><span>כמות</span><span style=\"grid-column:3/5\">מה זה</span></div><div class=\"brk\"><span>1 · הרצה ישירה</span><span>50</span><span>אין למלא כלום — מדביקים ולוחצים. כולל deep links שנפתחים ישר בצ׳אט.</span></div><div class=\"brk\"><span>2 · השלמת פרטים</span><span>29</span><span>שדות בסוגריים מרובעים למילוי: [אפשרות A], [פרויקט], [מטרה].</span></div><div class=\"brk\"><span>3 · על התוכן שלכם</span><span>15</span><span>דורש קובץ, טקסט מודבק או תמונה מצורפת — קובץ, גיליון, תמליל, צילום מסך.</span></div><div class=\"brk\"><span>4 · מפרט ארגוני</span><span>69</span><span>שבעה שדות מלאים: תפקיד, משימה, מקורות, שלבי עבודה, פורמט, רף איכות, מה לעשות כשחסר מידע.</span></div><div class=\"brk\"><span>5 · סוכן ואוטומציה</span><span>—</span><span>סוכני SharePoint, סוכנים דקלרטיביים ב-Copilot Studio, Power Automate, Azure AI Foundry. ובנוסף פירוק סקיל לשלוש שכבות הסוכן, הוראות, מקורות ידע ו-actions, עם המרה מוצגת של סקיל דיווח מע״מ.</span></div><div class=\"brk\"><span>כלי · מסקיל לסוכן</span><span>—</span><span>ממיר SKILL.md לשלוש השכבות ומסמן מה לא עובר, כי סוכן declarative רץ בסבב יחיד. <a href=\"https://github.com/Valor-Automation-Solutions/ai-cost-calculator/blob/main/skill-to-copilot-studio.html\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--acc)\">לממיר ←</a></span></div><p class=\"note\">294 שדות עריכה חיים בכלי המלא; טופס ארגוני אחד עם 11 שדות ממלא 163 מקומות בבת אחת. מקור יחיד — נבנה מתוך Prompt Gallery הרשמי של Microsoft.</p>"],
+  ["דוגמאות אמיתיות משלושת השלבים הראשונים","<div class=\"brkhead\"><span>שלב 1</span><span style=\"grid-column:2/5\">הרצה ישירה, בלי מילוי</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">סכם את המגמות המרכזיות שמשפיעות על ענף שירותי הבריאות כיום</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">כיצד Copilot יכול לעזור לי להיות פרודוקטיבי יותר בעבודה?</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">מה חדש ב-Copilot?</span></div><div class=\"brkhead\" style=\"margin-top:.8rem\"><span>שלב 2</span><span style=\"grid-column:2/5\">השלמת שדות בסוגריים</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">השווה את [היתרונות/היעילות/העלויות] של [אפשרות A] מול [אפשרות B]</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">השווה ביצועים היסטוריים של [פרויקטים / גישות] והצע לקחים שנלמדו</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">סכם את ההבדלים המרכזיים בין [כלים/תוכנות] לאימוץ של הצוות</span></div><div class=\"brkhead\" style=\"margin-top:.8rem\"><span>שלב 3</span><span style=\"grid-column:2/5\">דורש קובץ, טקסט או תמונה</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">תאר מה נמצא בתמונה זו</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">סכם את המידע שסופק בשתי שורות, והדגש את הרעיונות המרכזיים. טקסט:</span></div><div class=\"brk\"><span></span><span style=\"grid-column:2/5\" class=\"s\">לסכם את כל ההערות ב[קובץ], מאורגנות לפי הצעות, שאלות ובעיות</span></div><p class=\"note\">כל ההנחיות בטבלה זו ציטוט מדויק מהמעבדה המלאה, לצורך המחשה בלבד.</p>"],
+  ["שלב 4: עשרים משפחות שיטה ושתי דוגמאות מלאות","<p style=\"margin:0 0 .7rem;font-size:.96rem\">כל אחת מ-69 ההנחיות הארגוניות נגזרת מאחת מ-20 משפחות שיטה, ולכל משפחה מבנה קבוע: תפקיד, מקורות, שלבי עבודה, פורמט פלט, רף איכות, ומה לעשות כשחסר מידע.</p><p style=\"margin:0 0 .8rem;font-size:.9rem;color:var(--muted)\">השוואה לצורך החלטה · סקירת שוק ומגמות · ערכת הערכה ומודל בשלות · הסבר מושג · פיתוח מיומנות · שיטות עבודה ותהליך · ניתוח חומר חזותי · דינמיקת צוות ופגישות · משוב ושיחות קשות · הערות בתוך מסמך · תקציר · כתיבת קוד · שיפור ביצועים · איתור תקלות · סיעור מוחות · דוח מנהלים מקובץ · שכתוב ועריכה · תרגום · התאמת טון · סקירת ספרות מחקרית</p><div class=\"brk\" style=\"grid-template-columns:1fr;align-items:start;padding:.7rem 0\"><span><b>השוואה לצורך החלטה</b><br><span class=\"s\"><b>תפקיד:</b> אתה אנליסט שתומך בהחלטה של [שם המחלקה] ב[שם הארגון].</span><br><span class=\"s\"><b>מקורות:</b> הפנה אל [מסמך הדרישות], אל [אתר SharePoint של הפרויקט] ואל כל השוואה קודמת שנעשתה בארגון בנושא.</span><br><span class=\"s\"><b>שלבים:</b> הצג את קריטריוני ההשוואה לפני ההשוואה עצמה, וסמן אילו קריטיים ואילו רצויים. ← השווה לפי הקריטריונים בטבלה, שורה לכל קריטריון. ← ציין במפורש נתונים שלא מצאת, במקום להשלים אותם בהיגיון. ← סיים בהמלצה אחת עם שני נימוקים ותנאי אחד שיכול להפוך אותה.</span><br><span class=\"s\"><b>פורמט:</b> טבלת השוואה, אחריה פסקת המלצה של עד 120 מילה, ואחריה רשימת פערי המידע.</span><br><span class=\"s\"><b>רף איכות:</b> כל תא בטבלה מכיל נתון או ״לא ידוע״. אין ניסוח כללי כמו ״יעיל יותר״ בלי מספר או מקור.</span><br><span class=\"s\"><b>כשחסר מידע:</b> עצור ושאל עד שלוש שאלות ממוקדות לפני שאתה ממשיך.</span></span></div><div class=\"brk\" style=\"grid-template-columns:1fr;align-items:start;padding:.7rem 0\"><span><b>איתור תקלות</b><br><span class=\"s\"><b>תפקיד:</b> אתה עוזר ל[תפקיד] ב[שם הארגון] לאתר את מקור התקלה.</span><br><span class=\"s\"><b>מקורות:</b> יומן השגיאות או הסקריפט שהודבק, וכן [אתר התיעוד הפנימי] אם התקלה במערכת ארגונית.</span><br><span class=\"s\"><b>שלבים:</b> נסח את התסמין ואת ההתנהגות הצפויה בשתי שורות. ← הצע עד שלוש סיבות אפשריות, מדורגות לפי סבירות, עם נימוק לכל אחת. ← לכל סיבה כתוב בדיקה אחת שמאשרת או שוללת אותה.</span><br><span class=\"s\"><b>פורמט:</b> תסמין, סיבות אפשריות, בדיקות, ואחריהן הפעולה המומלצת הראשונה.</span><br><span class=\"s\"><b>רף איכות:</b> אין הצעת תיקון לפני שיש בדיקה שמאשרת את הסיבה.</span><br><span class=\"s\"><b>כשחסר מידע:</b> אם היומן חלקי, ציין אילו שורות היו עוזרות.</span></span></div><p class=\"note\">שתי דוגמאות מלאות מתוך 20. שאר המשפחות והמפרטים המלאים בכלי המלא.</p>"],
+  ["מפגש שעתיים, המתווה הנלווה","<div class=\"brkhead\"><span>זמן</span><span>מקטע</span><span style=\"grid-column:3/5\">מה קורה</span></div><div class=\"brk\"><span class=\"m\">0:00–0:10</span><span><b>פתיחה</b></span><span style=\"grid-column:3/5\" class=\"s\">העובדים כבר משתמשים ב-AI, רק לא בכלי שהארגון משלם עליו ולא בסביבה שבה הדאטה נשאר בפנים.</span></div><div class=\"brk\"><span class=\"m\">0:10–0:25</span><span><b>ההדגמה</b></span><span style=\"grid-column:3/5\" class=\"s\">איכות התשובה תלויה במידע שצירפתם אליה. כשאין לו מידע הוא משלים את החסר בעצמו.</span></div><div class=\"brk\"><span class=\"m\">0:25–0:45</span><span><b>מה כבר יש ומה עוד לא</b></span><span style=\"grid-column:3/5\" class=\"s\">בלי המפה הזו משתמש מנסה משהו שהכלי לא יכול לעשות אצלו, ואחרי כישלון אחד הוא מפסיק לנסות.</span></div><div class=\"brk\"><span class=\"m\">0:45–1:15</span><span><b>תרגול</b></span><span style=\"grid-column:3/5\" class=\"s\">אחרי כל תוצאה עוצרים וקוראים אותה. מה שיוצא מהכלי הוא טיוטה שצריך לעבור עליה.</span></div><div class=\"brk\"><span class=\"m\">1:15–1:30</span><span><b>מה לא מוסרים לכלי</b></span><span style=\"grid-column:3/5\" class=\"s\">הכלל שיוצא מהדיון: הכלי מכין, אדם שולח.</span></div><div class=\"brk\"><span class=\"m\">1:30–1:50</span><span><b>שלוש המשימות</b></span><span style=\"grid-column:3/5\" class=\"s\">המשימה של מחר נכתבת עם תאריך.</span></div><div class=\"brk\"><span class=\"m\">1:50–2:00</span><span><b>סגירה</b></span><span style=\"grid-column:3/5\" class=\"s\">אם אף אחד לא יבדוק בעוד שבועיים מי ביצע את המשימה של מחר, היא לא תבוצע.</span></div><p style=\"margin:.8rem 0 .4rem;font-size:.96rem\"><b>שתי רמות גישה, לא שלוש.</b> (א) Copilot Chat בלי תוספת רישוי — כלול ברישיונות הנפוצים, לא רואה תוכן עבודה ארגוני. (ב) עם תוסף הרישוי — נפתחת גישה לקבצים, אתרי SharePoint, מיילים, פגישות והודעות Teams דרך Microsoft Graph, ביחד ולא בשלבים.</p><div class=\"flag\">סוכנים והרצות אוטומטיות אינם רמת גישה שלישית אלא ציר נפרד: נמכרים לפי צריכה ומחייבים מכסה משלהם, גם כשלמשתמש כבר יש תוספת רישוי.</div><p class=\"note\">מבוסס על ״מסלול 1, יסודות העבודה עם קופיילוט״, מתווה מפגש שעתיים של ואלור. מקור יחיד.</p>"]
+  ];
+  C13.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-ready');
+  var C14=[
+  ["שלוש דרכים לבנות סוכן, ומה כל אחת פותחת","<p style=\"margin:0 0 .7rem;font-size:.96rem\">לפי מומחה Copilot Studio של Microsoft: זו נקודת הבלבול הנפוצה ביותר אצל לקוחות. שלושה כלים בשמות דומים, שלוש מדרגות מורכבות שונות לגמרי.</p><div class=\"brkhead\"><span>כלי</span><span>מי משתמש</span><span style=\"grid-column:3/5\">מה נפתח</span></div><div class=\"brk\"><span>Copilot Studio Agent Builder</span><span>משתמש קצה או IT</span><span>סוכני Retrieval בלבד — שולפים ומחזירים תשובה. לא מבצעים פעולות</span></div><div class=\"brk\"><span>SharePoint Agent</span><span>משתמש קצה</span><span>אותה רמה, מתוך ספריית מסמכים: מסמנים קבצים, לוחצים ״צור סוכן״</span></div><div class=\"brk\"><span>Copilot Studio המלא</span><span>IT או בעל עסק, לא משתמש קצה</span><span>כל שלוש הרמות: Retrieval, Task (פעולות פרואקטיביות), Autonomous (מטריגר חיצוני)</span></div><div class=\"flag\"><b>שני מקורות עצמאיים מתכנסים לאותו מודל.</b> Retrieval/Task/Autonomous כאן מקבילים ל-Basic/Advanced/Autonomous ממקור אחר בכלי הזה — שמות שונים, אותה חלוקה תלת-שכבתית.</div><p class=\"note\">מקור יחיד. שים לב: זה נפרד מדרישת הרישוי — Agent Builder דורש USL כדי להיפתח בכלל; הטבלה מתארת מה קורה אחרי שהגישה קיימת.</p><p style=\"margin:.7rem 0 0;font-size:.94rem\"><b>שני פקדי ממשל שכדאי לדעת עליהם:</b> ניתן להגביל את ההרשאה לייצר סוכנים לקבוצות מוגדרות בלבד. פיצ׳ר תקציב ייעודי לסוכנים היה אמור להיכנס ביולי 2026 — יש לבדוק סטטוס בטננט.</p>"],
+  ["מגבלות Knowledge, ושני מנגנוני חיבור שלא לבלבל ביניהם","<div class=\"flag\"><b>תיקון: זו לא מדרגה אחת.</b> וובינר אחר תיאר ״512MB עם רישיון, 7MB בלעדיו״ — לא מדויק. יש שני מנגנונים נפרדים, מאומת מול Microsoft Learn.</div><div class=\"brkhead\"><span>מנגנון</span><span>בלי USL</span><span>עם USL</span><span></span></div><div class=\"brk\"><span>SharePoint, מחובר בזמן אמת</span><span>עד 7MB לקובץ</span><span>עד 200MB, ואיכות חיפוש טובה יותר</span><span></span></div><div class=\"brk\"><span>Upload / סנכרון ל-Dataverse</span><span>עד 512MB</span><span>עד 512MB, זהה</span><span></span></div><div class=\"brkhead\"><span>מגבלה נוספת</span><span style=\"grid-column:2/5\">הערך</span></div><div class=\"brk\"><span>קבצים לסוכן בסך הכל</span><span style=\"grid-column:2/5\">עד 500. עד 1,000 קבצים למקור SharePoint/OneDrive בודד, סנכרון כל 4-6 שעות</span><span></span></div><div class=\"brk\"><span>Instructions</span><span style=\"grid-column:2/5\">עד 8,000 תווים</span><span></span></div><div class=\"brk\"><span>טבלאות בתוך מסמכים</span><span style=\"grid-column:2/5\">קובץ PDF שהועלה נהנה מזיהוי תמונות וטבלאות, ו-Copilot מחלץ טבלה מ-PDF או מצילום מסך. טבלאות מורכבות עדיין מצריכות בדיקה, ולעיתים Data from Picture ב-Excel מהיר יותר</span><span></span></div><div class=\"brk\"><span>תוכן מוטמע (embedded)</span><span style=\"grid-column:2/5\">מאונדקס רק ב-750 עד 1,000 עמודים ראשונים, כ-1.8 מיליון תווים</span><span></span></div><p style=\"margin:.6rem 0;font-size:.94rem\"><b>ככל שהקובץ קרוב יותר לסוכן, איכות התשובות גבוהה יותר.</b> מקור ידע ממוקד וקטן עדיף על ספרייה עצומה אחת. מ-Build (2-3 ביוני 2026, בפריוויו): אפשר לקבץ כמה אתרי SharePoint למקור ידע אחד בעל שם.</p><div class=\"brkhead\"><span>מנגנון</span><span style=\"grid-column:2/5\">איך הוא עובד</span></div><div class=\"brk\"><span>Graph Connectors</span><span>אינדוקס מראש למערכות בשם: Salesforce, Confluence, ServiceNow, Zendesk. מהיר לאחר ההקמה</span><span></span><span></span></div><div class=\"brk\"><span>Power Platform Connectors (~1,400)</span><span>בזמן אמת, בלי אינדוקס — שאילתה חיה בכל פנייה</span><span></span><span></span></div><div class=\"brk\"><span>קונקטורים לפעולות, Tools (~1,500)</span><span>לביצוע פעולות, לא לשליפת ידע. כולל קונקטורים מותאמים אישית</span><span></span><span></span></div><p class=\"note\">מקור יחיד. ה-RAG רץ &quot;בקופסה&quot; על Azure AI Search: embeddings וחיפוש סמנטי אינם ניתנים לקונפיגורציה. RAG מותאם אישית נבנה ב-Foundry ומחובר כמקור ידע.</p>"],
+  ["MCP, Deep Reasoning ותזמור חוצה-פלטפורמות","<p style=\"margin:0 0 .6rem;font-size:.96rem\"><b>MCP נתמך.</b> שלושה שלבים: custom connector לשירות היעד → הצבעה על ה-MCP server → חיבור בין השניים. אחרי החיבור הוא זמין גם ל-Power Automate, לא רק לסוכן.</p><div class=\"flag\"><b>Deep Reasoning הוא הגדרה לכלי בודד, לא לסוכן כולו.</b> תפיסה שגויה נפוצה: הפעלתו לא הופכת את כל הסוכן לחשיבה מעמיקה. יש להנחות במפורש איזה כלי צריך reasoning ומתי. עולה יותר בכוח עיבוד — אבל מפחית הזיות ומשפר דיוק באותו כלי. שווה להפעיל דווקא בכלים שבהם טעות יקרה, ולכבות בשאר לחיסכון.</div><p style=\"margin:.6rem 0;font-size:.94rem\"><b>תזמור חוצה-פלטפורמות (Build, יוני 2026, מתגלגל).</b> מעבר ל-Master Agent שמתזמר בין סוכני Studio, כבר אפשר לחבר סוכן שנבנה ב-Azure AI Foundry, ובקרוב גם סוכני Microsoft 365 Copilot — אורקסטרציה בין כמה פלטפורמות בתזמור אחד.</p><p class=\"note\">BYOM ל-1,900 מודלי Foundry עדיין בפריוויו פרטי, צפוי להיפרס בשבועות הקרובים. ברירת המחדל נותרת GPT-4o. RPA מתוך Studio ו-Code Interpreter (Python בסוכן, לא ב-Excel) הוכרזו ב-Build (2-3 ביוני 2026) ועדיין מתגלגלים. מקור יחיד.</p>"],
+  ["שלושה מתגים בשמם המדויק, ומה RAG לא עושה","<p style=\"margin:0 0 .6rem;font-size:.96rem\"><b>לכיוון סוכן שנשען על SharePoint, לפי Learn, כבו שלושה מתגים בשמם המדויק:</b> Web Search ברמת הסוכן, Use general knowledge ברמת הסוכן, ו-Allow the AI to use its own general knowledge (preview) ברמת ה-generative answers node. כשהשלושה כבויים, סוכן שלא מוצא תשובה ב-Knowledge עונה \"no response\" במקום להמציא.</p><div class=\"flag\"><b>מה RAG לא מבטיח, כדאי לומר ללקוח לפני שהוא מצפה לזה:</b> ‏RAG מביא מידע ומחזיר תשובה מנוסחת. הנחיות מותאמות <b>כן</b> שולטות בעיצוב ובפורמט, אבל התוצאה אינה דטרמיניסטית: לפלט שחייב להיות זהה בכל פעם מוסיפים workflow ואימות. הוא אינו מבטיח פלט לפי תבנית קשיחה — למשל מבנה חוזה עם כותרות מדויקות כמו שביקשתם — ואינו ״לומד״ מהשימוש.</div><p style=\"margin:.6rem 0;font-size:.94rem\"><b>זמן אינדוקס:</b> בין דקות ליום שלם, לרוב שעה עד 12 שעות. אין מוניטור שמראה ״המידע מוכן״ — תשובות חלשות בדקות הראשונות לא אומרות שיש בעיה.</p><p style=\"margin:.6rem 0;font-size:.94rem\"><b>אנטי-פטרן: שרת קבצים מקומי.</b> קונקטור קיים תיאורטית, אך לפי השותף ״רחוק רחוק מהמציאות״ מבחינת איכות. ההמלצה: מיגרציה ל-SharePoint Online לפני בניית הסוכן.</p><p class=\"note\">רישוי SharePoint Agent: עם USL אחד לפחות בטננט הוא \"built-in\" למורשים; משתמשים לא מורשים צורכים אותו סוכן ב-PAYG. RBAC לניהול ריבוי סוכנים חוצה-סביבות דורש תפקיד Power Platform Admin. מקור יחיד, למעט שמות המתגים והמגבלות שמאומתים.</p><div class=\"srcs\"><b>מקור</b><a href=\"https://learn.microsoft.com/en-us/microsoft-copilot-studio/guidance/retrieval-augmented-generation\" target=\"_blank\" rel=\"noopener\">הנחיות RAG ב-Copilot Studio</a></div>"]
+  ];
+  C14.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-ready');
+  var C15=[["נבדק בפועל: שלוש שכבות רישוי בטננט אחד, 30–31.8.2026","<p style=\"margin:0 0 .7rem;font-size:.96rem\">בדיקה חיה בטננט valorsolution: ‏Business Standard, מושב Microsoft 365 Copilot for Business, וניסיון גישה ל-Cowork. שלוש שכבות רישוי נפרדות, וכל אחת נעצרת במקום אחר.</p><div class=\"brkhead\"><span>שכבה</span><span style=\"grid-column:2/5\">מה נמצא</span></div><div class=\"brk\"><span>1 · Copilot Chat הכלול</span><span>מכסה יומית שנמדדה בכ-22–24 פעולות AI. אין מד ואין התראה מקדימה — הודעת ״נסה שוב מחר או שדרג״ היא האזהרה הראשונה.</span><span></span><span></span></div><div class=\"brk\"><span>2 · מושב Copilot for Business</span><span>אומת ב-Graph: כל 10 תוכניות השירות ב-Success, כולל M365_COPILOT_TEAMS, ‏BUSINESS_CHAT ו-COPILOT_STUDIO_IN_COPILOT. נפתחו Copilot באפליקציות השולחניות, ‏Excel Personalization (הנחיות אישיות, יוני 2026) — וגם Copilot Notebooks, שלפי דף ה-Support היו אמורים להיות זמינים עוד קודם (ראו מטריצת היכולות). ‏Researcher ו-Analyst כלולים, בתקרה משותפת של 25 שאילתות בחודש.</span><span></span><span></span></div><div class=\"brk\"><span>3 · Copilot Cowork</span><span>חסום: אין SKU קרדיטים ב-subscribedSkus, אין תוכנית שירות של Cowork במושב, והסוכן נכשל בטעינה — ״לא ניתן לטעון את התוכן״, בלי הסבר רישויי.</span><span></span><span></span></div><div class=\"flag\"><b>המסקנה ללקוח.</b> מושב Copilot בתשלום אינו מקנה Cowork. בלי הפעלת חיוב Copilot Credits ברמת הטננט אין גישה כלל מ-1.7.2026 — מי שמבטיח Cowork בהצעת מחיר בלי להקים חיוב שימוש, מוכר מסך שגיאה.</div><p class=\"note\"><b>נבדק בטננט</b> · ‏30–31.8.2026. משקלי ה-Estimator‏ (125/500/1,200) הם אינדיקציה בלבד ומניחים Anthropic Opus 4.8. הנוסחאות הגלויות בו מסכמות עם SUMPRODUCT לפי פרסונה, מחלקות ב-100 לשווי PAYG, ואז בסך המשתמשים לממוצע — ראו כרטיס המשקולות במחשבון.</p>"]];
+  C15.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-tiers');
+  var C16=[["דף הרכישה מוביל ב-Suites: המערך המלא, עם ובלי Teams","<p style=\"margin:0 0 .7rem;font-size:.96rem\">דף הרכישה הרשמי (ממשק עברי, USD, למשתמש לחודש בהתחייבות שנתית, לפני מס; צולם 31.8.2026) כבר אינו מציג את Standard ואת Premium לבדם. המערך מוביל בחבילות Suite עם ‏Copilot לעסקים, וה-Suite של Standard מסומן ״מומלץ״. זה השינוי שיומן השינויים הרשמי מתעד: ‏Copilot Chat ו-Microsoft 365 Copilot הפכו מ-Add-ons ל-Suites במאי 2026.</p><div class=\"brkhead\"><span>מסלול</span><span>עם Teams</span><span>בלי Teams</span><span></span></div><div class=\"brk\"><span>Microsoft 365 Business Basic</span><span class=\"m\">$7.00</span><span class=\"m\">$5.40</span><span></span></div><div class=\"brk\"><span>יישומי Microsoft 365 לעסקים (Apps for business)</span><span class=\"m\">—</span><span class=\"m\">$10.00</span><span></span></div><div class=\"brk\"><span>Business Standard + Copilot לעסקים <span class=\"s\">(Suite, ״מומלץ״)</span></span><span class=\"m\">$23.50</span><span class=\"m\">$20.30</span><span></span></div><div class=\"brk\"><span>Business Premium + Copilot לעסקים <span class=\"s\">(Suite)</span></span><span class=\"m\">$32.00</span><span class=\"m\">$28.80</span><span></span></div><div class=\"flag\"><b>ה-SKU העצמאיים לא נעלמו, אבל ירדו לשורה השנייה.</b> ‏Business Standard לבדו עדיין נמכר ב-$14 (דף המוצר, 31.8.2026), ו-Microsoft 365 Copilot Business עדיין קיים כתוסף (מסמך ההשוואה, עמ׳ 8; נוסף כתוסף בדצמבר 2025) ב-$21, ובמבצע $18 עד 31.12.2026. אבל מי שנכנס לדף הרכישה פוגש Suites. ועוד דיוק מהמסמך: תקרת 300 המושבים נספרת על <b>כלל מושבי ה-Business יחד</b>, לא לכל תוכנית בנפרד.</div><p class=\"note\"><b>מאומת</b> · צילומי דף הרכישה, 31.8.2026 · Modern Work Plan Comparison — SMB, פורסם 1.8.2026.</p>"],["שני מסמכי ההשוואה הרשמיים: מה הם קובעים","<p style=\"margin:0 0 .7rem;font-size:.96rem\">שני מסמכי השוואה רשמיים של Microsoft, שניהם בתאריך פרסום 1.8.2026: ‏SMB‏ (11 עמודים, עד 300 מושבים) ו-Enterprise‏ (15 עמודים). אלה מסמכי המקור לרישוי, מעל דפי השיווק.</p><div class=\"brkhead\"><span>קביעה</span><span style=\"grid-column:2/5\">פירוט</span></div><div class=\"brk\"><span>Copilot Chat + Analytics</span><span style=\"grid-column:2/5\">כלולים (●) בכל שלוש תוכניות ה-Business ובכל שמונה תוכניות ה-Enterprise, כולל Office 365 E1. ‏Analytics נוסף ביולי 2026.</span></div><div class=\"brk\"><span>Microsoft 365 Copilot</span><span style=\"grid-column:2/5\">כלול (●) רק ב-E7. בכל שאר התוכניות — תוסף (+).</span></div><div class=\"brk\"><span>Microsoft Security Copilot</span><span style=\"grid-column:2/5\">כלול ב-E5 וב-E7: ‏400 SCU לחודש לכל 1,000 משתמשים, עד 10,000 SCU. בשאר התוכניות תוסף, כולל שלוש תוכניות ה-Business.</span></div><div class=\"brk\"><span>Agent 365</span><span style=\"grid-column:2/5\">עמודת רישוי משל עצמו. שכבת בסיס — Agent ID, ‏Agent Registry, ‏insights בסיסיים ופעולות ממשל — כלולה בכל התוכניות; השכבה המתקדמת, כולל Agent Security, ב-E7 וברישיון Agent 365.</span></div><div class=\"brk\"><span>Copilot Studio for Teams</span><span style=\"grid-column:2/5\">כלול בכל שלוש תוכניות ה-Business — בונה צ׳אטבוטים בתוך Teams, בלי הודעות כלולות.</span></div><div class=\"brk\"><span>בלי Teams</span><span style=\"grid-column:2/5\">כמעט כל תוכנית — Business, ‏E1/E3/E5/E7, ‏F1/F3 — זמינה לרכישה גם בגרסה בלי Teams, במחיר נמוך יותר.</span></div><p class=\"note\"><b>מאומת</b> · ‏Modern Work Plan Comparison — SMB ו-Enterprise, פורסמו 1.8.2026. יומני השינויים המלאים של שני המסמכים — בנספח הדוח.</p>"],["Copilot Studio, אוגוסט 2026: הקרדיטים, ה-harnesses והממשל","<p style=\"margin:0 0 .7rem;font-size:.96rem\">מדריך הרישוי הרשמי מאוגוסט 2026 מחדד ש-<b>Copilot Credits</b> הם יחידת צריכה משותפת ל-Copilot Studio, ‏Microsoft Copilot, ‏Cowork, Dynamics 365, ‏Power Platform ו-Work IQ APIs. זה לא מחליף את המושב; זה ציר חיוב נפרד.</p><p><b>שלושת ה-harnesses.</b> ‏GitHub Copilot מיועד לבנייה אג'נטית מקצה לקצה; Standard לסוכנים שיחתיים עם topics ו-flows; ו-Copilot Chat להתאמת Copilot לידע ארגוני. ב-Standard וב-Copilot Chat, הרצה פנימית בערוצי Microsoft תחת זהות של משתמש Microsoft Copilot מורשה כפופה ל-fair use. ‏GitHub harness ו-Work IQ APIs אינם נכללים בפטור.</p><p><b>ארבע דרכי תשלום.</b> ‏PAYG: ‏$0.01 לקרדיט; Copilot Credit P3 שנתי: 300K–300M קרדיטים בהנחה של 5%–20%; Agent P3 שנתי: 20K/100K/500K ‏ACU, כאשר ACU=$1=100 קרדיטים, לשירותים זכאים ב-Studio וב-Foundry; או חבילת קיבולת $200 ל-25,000 קרדיטים לחודש. יתרות חבילה אינן מתגלגלות; P3 ו-Agent P3 פוקעים בסוף השנה.</p><p><b>רישוי יוצר וממשל.</b> ‏PAYG/P3 דורשים Copilot Studio Author ($0); חבילת קיבולת דורשת Copilot Studio User License ($0) לכל בונה. ב-PPAC מנהלים צריכה, מגבילים שיתוף לפי Editor/Viewer ומכבים פרסום סוכני GenAI. קיבולת Dataverse הראשונית לטננט עם מסלול קרדיטים היא 15GB Database, ‏20GB File ו-2GB Log.</p><div class=\"flag\"><b>ההבחנה החשובה ל-Cowork.</b> האקסל שסופק הוא מודל תקציב כיווני ל-Cowork, לא מחירון או התחייבות של Copilot Studio. הוא מניח Anthropic Opus 4.8, ו-Microsoft מצהירה במפורש שהעלות בפועל יכולה להשתנות לפי אזור, זמינות, עומס ומספר משתמשים.</div><p class=\"note\"><b>מקור:</b> Microsoft Copilot Studio Licensing Guide, August 2026, עמ' 4-15 ו-20; CustomerCoworkEstimator(Budget).xlsx שסופק ב-31.8.2026.</p>"]];
+  C16.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+(function(){
+  var r=$('#s-tiers');
+  var C17=[["נבדק בפועל: אותה שאלה, שלוש תוצאות — עשרה קייסים חיים, 31.8.2026","<p style=\"margin:0 0 .7rem;font-size:.96rem\">עשרה תרחישים הורצו בפועל בטננט valorsolution (31.8.2026), כל אחד עם פרומפט מדויק ותוצאה שאומתה מול נתוני מקור — לא מדגם משוער. זו רמת אימות גבוהה מהמקור הראשי שהשתמש בו שאר פרק התרחישים המחלקתיים (וובינר שותף חיצוני, §8).</p><div class=\"brkhead\"><span>קייס</span><span style=\"grid-column:2/5\">מה קרה בפועל</span></div><div class=\"brk\"><span>06 · שאלה בלי קובץ, שכבה כלולה</span><span>Copilot לא המציא מספר. הסביר שאין קובץ זמין וביקש לצרף Excel או CSV.</span><span></span><span></span></div><div class=\"brk\"><span>07b · אותה שאלה, מושב עם Work IQ, בלי קובץ</span><span>איתר לבד את הקובץ הרלוונטי ב-OneDrive וענה נכון, בלי שצורף דבר לשיחה.</span><span></span><span></span></div><div class=\"brk\"><span>07 · אותה שאלה, קובץ מצורף ידנית</span><span>ענה תוך 18 שניות, עם פירוט מקור מצוטט.</span><span></span><span></span></div><div class=\"flag\"><b>המסקנה ללקוח.</b> שלושת המצבים ממחישים בדיוק את קו הרישוי: השכבה הכלולה נמנעת מלענות בלי מקור, ואילו Work IQ (מושב בתשלום) מוצא את המקור בעצמו. זו ההדגמה הישירה ביותר לשווי שה-$21–30 קונים, לא תיאור שיווקי.</div><p class=\"note\">קייס נוסף מאותה סוללה (05, שכבה כלולה): שאלת עומס-יתר על עובד הובילה למעבר יזום למצב Plan ובניית גיליון תוכנית עבודה מלא — תמונת מצב, שאלות מנחות, סיכונים, בעלי אחריות ותאריכים — מפרומפט ניהולי אחד. <b>נבדק בטננט</b> · 31.8.2026. תיעוד מלא של כל עשרת הקייסים (פרומפט, תמלול, אימות טכני) ב-outputs/valor/live_clips/2026-08-31/INDEX.md בסביבת העבודה.</p>"]];
+  C17.forEach(function(c){var d=el('div','card');d.innerHTML='<h3>'+c[0]+'</h3>'+c[1];r.appendChild(d)});
+})();
+
+(function(){
+  var r=$('#s-intake');
+  r.appendChild(el('h2','sh','טופס קליטה · פרופיל ארגון'));
+  r.appendChild(el('p','sub','שאלון ידני שממלאים לפני פגישת גילוי. אינו קורא מ-Graph ואינו שולח נתון החוצה — הכול נשאר בדפדפן. השדות נגזרים מדרישות המינימום המאומתות במסך מוכנות ובדוח המחקר, §9.1.'));
+
+  var f=el('div','card');
+  f.innerHTML='<h3>1 · רישוי ותשתית</h3>'+
+    '<div class="field"><label for="ilic">רישיונות בפועל, כפי שדווחו</label><input type="text" id="ilic" placeholder="למשל: 40× Microsoft 365 E3, 10× Business Premium" style="width:100%;background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:9px 10px;font-size:.92rem;border-radius:8px"><span class="hint">לבדיקה: <a href="https://admin.microsoft.com" target="_blank" rel="noopener" class="hlink">Microsoft 365 admin center</a> → Billing → Licenses. מדויק יותר: az rest --url https://graph.microsoft.com/v1.0/subscribedSkus</span></div>'+
+    '<div class="field"><label for="imbx">מיקום תיבות הדואר</label><select id="imbx"><option value="">— בחרו —</option><option value="ol">Exchange Online בלבד</option><option value="hy">היברידי — חלק בענן, חלק מקומי</option><option value="op">On-Premises בלבד</option><option value="unk">לא ידוע, טרם נבדק</option></select><span class="hint">לבדיקה: <a href="https://admin.exchange.microsoft.com" target="_blank" rel="noopener" class="hlink">Exchange admin center</a> → Recipients → Mailboxes, עמודת Recipient type. תיבה שמורשית ל-Copilot אך לא מופיעה שם היא עדיין מקומית. הדרך הבטוחה ביותר בפועל: לשאול את IT אם עדיין רץ שרת Exchange מקומי או Hybrid Configuration פעיל.</span></div>'+
+    '<div class="field"><label for="ich">ערוץ עדכוני Office</label><select id="ich"><option value="">— בחרו —</option><option value="cur">Current Channel</option><option value="mec">Monthly Enterprise Channel</option><option value="sac">Semi-Annual Enterprise Channel</option><option value="unk">לא ידוע</option></select><span class="hint">לבדיקה: <a href="https://config.office.com" target="_blank" rel="noopener" class="hlink">Microsoft 365 Apps admin center</a> → Inventory. מציג ערוץ, גרסה ומספר build לכל מכשיר. למכשיר בודד: File → Account בכל אפליקציית Office.</span></div>'+
+    '<div class="field"><label for="iod">מצב OneDrive</label><select id="iod"><option value="">— בחרו —</option><option value="on">מוגדר ופעיל לכל המשתמשים</option><option value="part">מוגדר לחלק מהארגון</option><option value="off">לא מוגדר</option><option value="unk">לא ידוע</option></select><span class="hint">לבדיקה: <a href="https://admin.microsoft.com" target="_blank" rel="noopener" class="hlink">Microsoft 365 admin center</a> → Users → Active users → משתמש בודד → לשונית OneDrive. תמונת מצב לארגון כולו: אותו admin center → Reports → Usage → OneDrive.</span></div>'+
+    '<div class="field"><label for="iseats">מושבים מתוכננים <b><span id="iseatsv">30</span></b></label><input type="range" id="iseats" min="5" max="5000" step="5" value="30"><span class="hint">אותו מקור כמו רישיונות בפועל — <a href="https://admin.microsoft.com" target="_blank" rel="noopener" class="hlink">Microsoft 365 admin center</a> → Billing → Licenses מציג הקצאה בפועל מול מלאי.</span></div>'+
+    '<div class="field"><label for="isp">מצב ממשל SharePoint</label><select id="isp"><option value="">— בחרו —</option><option value="ok">נבדק, נראה תקין</option><option value="never">מעולם לא נבדק</option><option value="bad">ידוע כבעייתי — שיתופים רחבים או EEEU</option><option value="unk">לא ידוע</option></select><span class="hint">לבדיקה: <a href="https://go.microsoft.com/fwlink/?linkid=2185219" target="_blank" rel="noopener" class="hlink">SharePoint admin center</a> → Advanced Management → Content Management Assessment — אותו כלי המופעל בלשונית ״חשיפת יתר״ במכשיר הזה.</span></div>';
+  r.appendChild(f);
+
+  var df=el('div','card');df.appendChild(el('h3',null,'2 · מחלקות ותהליכים רלוונטיים'));
+  df.appendChild(el('p','note','מסמן אילו מחלקות לבדוק במסך מה אני צריך. הרשימה נגזרת מאותו קטלוג של 84 התרחישים. אין לזה מקור מערכתי אחד — זו שיחה עם ראשי מחלקות, או <a href="https://entra.microsoft.com" target="_blank" rel="noopener" class="hlink">Entra admin center</a> → Users, אם שדה Department מתוחזק ברישום המשתמשים.'));
+  var DEPTS2=USES.map(function(u){return u[3]}).filter(function(v,i,a){return a.indexOf(v)===i});
+  var dg2=el('div','picks');
+  var chosenDepts={};
+  DEPTS2.forEach(function(dp){
+    var b=el('button','pick','<span class="dot"></span><span>'+dp+'</span>');b.type='button';b.setAttribute('aria-pressed','false');
+    b.onclick=function(){var on=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',on?'false':'true');chosenDepts[dp]=!on;draw();};
+    dg2.appendChild(b);
+  });
+  df.appendChild(dg2);r.appendChild(df);
+
+  var out=el('div');r.appendChild(out);
+
+  function draw(){
+    var seats=+$('#iseats').value;$('#iseatsv').textContent=num(seats);
+    var mbx=$('#imbx').value,ch=$('#ich').value,od=$('#iod').value,sp=$('#isp').value,lic=$('#ilic').value;
+    var depts=Object.keys(chosenDepts).filter(function(k){return chosenDepts[k]});
+    var flags='';
+    if(mbx==='hy'||mbx==='op')flags+='<div class="flag"><b>החסם השקט.</b> תיבת דואר היברידית או On-Premises מבטלת את Copilot בתוך Outlook: האייקון מעומעם, ואין הארקה בתיבה או ביומן. Copilot ממשיך לעבוד מחוץ ל-Outlook על תוכן ענן. <a href="https://learn.microsoft.com/en-us/exchange/hybrid-deployment/exchange-hybrid-and-copilot-behaviour" target="_blank" rel="noopener" style="color:var(--warn)">מקור ↗</a></div>';
+    if(mbx==='unk')flags+='<div class="flag"><b>שדה חובה לפני הצעת מחיר.</b> מיקום תיבות הדואר לא נבדק. זו הבדיקה שהכי מפילה פרויקטים.</div>';
+    if(seats>300)flags+='<div class="flag"><b>חוצה 300 מושבים.</b> Microsoft 365 Copilot Business נחסם. נותר Microsoft 365 Copilot בתוסף של $30, בלי תקרת מושבים.</div>';
+    if(seats>2000)flags+='<div class="flag"><b>חוצה 2,000 מושבים.</b> Copilot בתוך Word, Excel ו-PowerPoint הוסר ב-15.4.2026 למי שאין לו רישיון בתשלום. מקור יחיד, MC1253858 ו-MC1253863 — לאמת מול ה-CSP.</div>';
+    if(sp==='bad'||sp==='never'||sp==='unk')flags+='<div class="flag"><b>שער כניסה לחשיפת יתר.</b> ממשל SharePoint לא אושר כתקין. יש להריץ את הצ׳קליסט בלשונית ״חשיפת יתר״ לפני שמתחילים פיילוט.</div>';
+    if(ch==='sac'||ch==='unk')flags+='<div class="flag">ערוץ עדכונים ישן או לא ידוע חוסם יכולות תלויות-גרסה כמו Python in Excel. יש לבדוק גרסה בפועל בטננט.</div>';
+
+    out.innerHTML='<div class="res" style="--tc:var(--t3)"><div class="res-top"><span class="res-lbl">תמצית הפרופיל</span><div class="res-tier">'+num(seats)+' מושבים מתוכננים</div></div><div class="res-body">'+
+      '<div class="res-row"><div class="res-k">רישוי</div><div class="res-v">'+(lic||'לא צוין')+'</div></div>'+
+      '<div class="res-row"><div class="res-k">תיבות דואר</div><div class="res-v">'+({ol:'Exchange Online בלבד',hy:'היברידי',op:'On-Premises',unk:'לא ידוע'}[mbx]||'לא צוין')+'</div></div>'+
+      '<div class="res-row"><div class="res-k">ערוץ עדכונים</div><div class="res-v">'+({cur:'Current',mec:'Monthly Enterprise',sac:'Semi-Annual',unk:'לא ידוע'}[ch]||'לא צוין')+'</div></div>'+
+      '<div class="res-row"><div class="res-k">OneDrive</div><div class="res-v">'+({on:'מוגדר לכולם',part:'חלקי',off:'לא מוגדר',unk:'לא ידוע'}[od]||'לא צוין')+'</div></div>'+
+      '<div class="res-row"><div class="res-k">SharePoint</div><div class="res-v">'+({ok:'נבדק, תקין',never:'לא נבדק',bad:'בעייתי',unk:'לא ידוע'}[sp]||'לא צוין')+'</div></div>'+
+      '<div class="res-row"><div class="res-k">מחלקות</div><div class="res-v">'+(depts.length?depts.join(' · '):'לא נבחרו')+'</div></div>'+
+      '</div></div>'+flags+
+      '<button type="button" id="icopy" class="pick" style="margin-top:var(--s2);display:inline-flex;width:auto">העתק תמצית כטקסט</button><span id="icopied" style="margin-inline-start:8px;font-size:.8rem;color:var(--ok)"></span>';
+    var cb=$('#icopy');
+    if(cb)cb.onclick=function(){
+      var txt='פרופיל ארגון — נרשם ב-'+new Date().toLocaleDateString('he-IL')+'\n'+
+        'רישוי: '+(lic||'—')+'\nתיבות דואר: '+(mbx||'—')+'\nערוץ עדכונים: '+(ch||'—')+'\nOneDrive: '+(od||'—')+'\nמושבים: '+seats+'\nSharePoint: '+(sp||'—')+'\nמחלקות: '+(depts.join(', ')||'—');
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(function(){$('#icopied').textContent='הועתק'});
+      }
+    };
+  }
+  ['iseats','imbx','ich','iod','isp','ilic'].forEach(function(id){var e=$('#'+id);if(e)e.addEventListener('input',draw)});
+  draw();
+})();
+
+(function(){
+  var r=$('#s-oversharing');
+  r.appendChild(el('h2','sh','חשיפת יתר · שער כניסה לפיילוט'));
+  r.appendChild(el('p','sub','זה הפער המסוכן ביותר שנמצא בבדיקת שני התוצרים: אפס אזכורים ל-RCD, ל-RAC, ל-Content Management Assessment, ל-site access reviews ול-Compliance Manager. הצ׳קליסט הזה אינו מוצר בתשלום נפרד — הוא שער כניסה בתוך הפיילוט, לפני שלב 3 (תשתית ונתונים) במסע ההטמעה בעשרה שלבים. שיטה רשמית של Microsoft, שלושה שלבים.'));
+  r.appendChild(el('p','note','לביצוע בפועל: שלבים 1-2 רצים בעיקר ב-<a href="https://go.microsoft.com/fwlink/?linkid=2185219" target="_blank" rel="noopener" class="hlink">SharePoint admin center</a> → Advanced Management, ושלבים 1-3 ב-<a href="https://purview.microsoft.com" target="_blank" rel="noopener" class="hlink">Microsoft Purview portal</a>. הקישורים המפורטים ליד כל פריט למטה מובילים לתיעוד שמסביר מה היכולת עושה, לא לכלי עצמו.'));
+
+  var LG=[
+   ['שלב 1 · תיקון חשיפת יתר','לפני הפיילוט. בלי זה, Copilot חושף מה שכבר משותף בטעות.',[
+     ['Purview DSPM data risk assessments — איתור אתרים עם מידע רגיש וקישורים מסוכנים','https://learn.microsoft.com/en-us/purview/data-security-posture-management-oversharing?tabs=m365'],
+     ['SAM Content Management Assessment — איתור אתרים עם EEEU, ירושה שבורה, ובלי בעלים','https://learn.microsoft.com/en-us/sharepoint/content-management-assessment'],
+     ['Restricted Content Discovery — הגנה זמנית, מחריגה אתרים רגישים מגילוי Copilot','https://learn.microsoft.com/en-us/sharepoint/restricted-content-discovery'],
+     ['Purview DLP for Copilot — מחריג תוכן מהארקה','https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about'],
+     ['אימות ב-Purview Auditing שהתוכן אכן לא צף עוד','https://learn.microsoft.com/en-us/purview/ai-m365-copilot'],
+     ['תוויות רגישות על אתרים לפי דרגת הרגישות','https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites'],
+     ['הסרת גישה עודפת ואנונימית, צמצום קישורי שיתוף','https://learn.microsoft.com/en-us/sharepoint/turn-external-sharing-on-or-off'],
+     ['SAM site access reviews — בעלי אתרים סוקרים גישה ברמת הקובץ','https://learn.microsoft.com/en-us/sharepoint/site-access-review'],
+     ['תיקון ירושת הרשאות שבורה','https://learn.microsoft.com/en-us/sharepoint/what-is-permissions-inheritance'],
+     ['מדיניות בעלות על אתר, SAM site lifecycle management','https://learn.microsoft.com/en-us/sharepoint/create-sharepoint-site-ownership-policy']
+   ]],
+   ['שלב 2 · מעקות קבועים','אחרי הפיילוט. מונע חזרה של הבעיה באתרים חדשים.',[
+     ['Restricted Access Control כברירת מחדל לאתרים עסקיים קריטיים','https://learn.microsoft.com/en-us/sharepoint/restricted-access-control'],
+     ['כיבוי או הגבלה של קבוצות שיתוף ארגוניות ושל קישורי Anyone ברמת הטננט','https://learn.microsoft.com/en-us/sharepoint/shareable-links-anyone-specific-people-organization'],
+     ['דרישת תווית רגישות בזמן הקצאת אתר','https://learn.microsoft.com/en-us/purview/sensitivity-labels-teams-groups-sites'],
+     ['תיוג אוטומטי ותוויות ברירת מחדל','https://learn.microsoft.com/en-us/purview/apply-sensitivity-label-automatically?tabs=apply-label'],
+     ['מדיניות DLP for Copilot לקבצים ולפרומפטים','https://learn.microsoft.com/en-us/purview/dlp-microsoft365-copilot-location-learn-about'],
+     ['Insider Risk Management עם Adaptive Protection','https://learn.microsoft.com/en-us/purview/insider-risk-management-solution-overview'],
+     ['ניטור מתמשך — DSPM Activity Explorer והתראות IRM ו-DLP','https://learn.microsoft.com/en-us/purview/data-security-posture-management-considerations']
+   ]],
+   ['שלב 3 · עמידה ברגולציה','בעיקר ללקוחות מפוקחים, אבל שווה לבדוק תמיד.',[
+     ['Compliance Manager מול דרישות רגולטוריות ל-AI','https://learn.microsoft.com/en-us/purview/compliance-manager'],
+     ['החלטה על שמירה או מחיקה של אינטראקציות Copilot','https://learn.microsoft.com/en-us/purview/retention-policies-copilot'],
+     ['eDiscovery לאינטראקציות Copilot','https://learn.microsoft.com/en-us/purview/edisc-search-copilot-data'],
+     ['מדיניות אתרים לא פעילים','https://learn.microsoft.com/en-us/sharepoint/site-lifecycle-management'],
+     ['Microsoft 365 Archive לתוכן לא פעיל אך בעל ערך','https://learn.microsoft.com/en-us/microsoft-365/archive/archive-overview'],
+     ['מדיניות שמירה ומחיקה, ותוויות שמירה','https://learn.microsoft.com/en-us/purview/create-retention-policies']
+   ]]
+  ];
+
+  LG.forEach(function(stage,si){
+    var c=el('div','card');
+    c.appendChild(el('h3',null,stage[0]));
+    c.appendChild(el('p','note',stage[1]));
+    var prog=el('p','note');prog.style.cssText='font-weight:700;color:var(--ink)';c.appendChild(prog);
+    var items=stage[2];
+    var boxes=[];
+    items.forEach(function(it,ii){
+      var row=el('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)';
+      var cbid='cb-'+si+'-'+ii;
+      var cbx=document.createElement('input');cbx.type='checkbox';cbx.id=cbid;cbx.style.cssText='width:18px;height:18px;flex:none;accent-color:var(--brand)';
+      var lb=el('label',null,it[0]);lb.setAttribute('for',cbid);lb.style.cssText='flex:1;font-size:.9rem';
+      row.appendChild(cbx);row.appendChild(lb);
+      if(it[1]){var a=el('a',null,'מקור ↗');a.href=it[1];a.target='_blank';a.rel='noopener';a.style.cssText='font-size:.78rem;color:var(--brand);white-space:nowrap;flex:none';row.appendChild(a)}
+      c.appendChild(row);boxes.push(cbx);
+      cbx.addEventListener('change',upd);
+    });
+    function upd(){var n=boxes.filter(function(b){return b.checked}).length;prog.textContent=n+' מתוך '+boxes.length+' הושלמו';}
+    upd();
+    r.appendChild(c);
+  });
+
+  var must=el('div','card');
+  must.innerHTML='<h3>כלל שאסור לדלג עליו</h3><div class="flag"><b>להסיר את ההגנות הזמניות — RCD ו-DLP — רק אחרי שהתיקון בפועל הושלם, לא לפני.</b> הגנה זמנית שהוסרה מוקדם מחזירה את החשיפה.</div>';
+  r.appendChild(must);
+
+  var lic=el('div','card');
+  lic.innerHTML='<h3>מה כלול ברישיון Copilot, ומה לא</h3>'+
+    '<p style="margin:0 0 .7rem;font-size:.96rem"><b>SharePoint Advanced Management (SAM) כלול ברישיון Copilot.</b> ברגע שלארגון מוקצה רישיון Copilot אחד, מנהלי SharePoint מקבלים גישה לרוב יכולות SAM בלי עלות נוספת — כולל שתי היכולות שהצ׳קליסט הזה נשען עליהן ביותר: Restricted Content Discovery ו-SAM Content Management Assessment. זה משנה את כלכלת הסקר: אם הלקוח כבר רוכש Copilot, השלב הזה אינו דורש רכישה נוספת.</p>'+
+    '<div class="brkhead"><span>יכולת SAM</span><span style="grid-column:2/5">כלול ברישיון Copilot?</span></div>'+
+    '<div class="brk"><span>Content Management Assessment</span><span style="grid-column:2/5"><b>כן</b> — WW, GCC, GCC-H, DoD</span></div>'+
+    '<div class="brk"><span>Restricted Content Discovery</span><span style="grid-column:2/5"><b>כן</b></span></div>'+
+    '<div class="brk"><span>Restricted Access Control</span><span style="grid-column:2/5"><b>כן</b></span></div>'+
+    '<div class="brk"><span>Site access review</span><span style="grid-column:2/5"><b>כן</b></span></div>'+
+    '<div class="brk"><span>Site ownership / inactive site policy</span><span style="grid-column:2/5"><b>כן</b></span></div>'+
+    '<div class="brk"><span>Sensitivity labels report</span><span style="grid-column:2/5"><b>כן</b>, דורש E5 או G5</span></div>'+
+    '<div class="brk"><span>Restricted site creation by apps</span><span style="grid-column:2/5"><b style="color:var(--warn)">לא</b> — דורש תוסף SharePoint Advanced Management Plan 1 בנפרד</span></div>'+
+    '<p class="note"><b>תיוג: מאומת</b> · מול דף ייעודי ב-Microsoft Learn, ״SharePoint Advanced Management features in Microsoft Copilot licenses״, עודכן 18.8.2026 — ולא מול נוסח Product Terms עצמו, שאינו מפרט הכללה ברמת פיצ׳ר בודד; ההכללה מתועדת בדף המוצר הייעודי הזה ובמדריך היסודות (Foundational deployment blueprint). הכללת היכולות מותנית ב<b>Microsoft 365 E3 או E5</b> (או Office 365 E3/E5) לשירותי הליבה ול-Purview — לאמת מול Product Terms בפועל לפני שמציגים ללקוח מספר סופי, כי הרישוי המדויק ברמת ה-SKU אינו מפורט בדפי Learn.</p>'+
+    '<div class="srcs"><b>מקור</b>'+
+    '<a href="https://learn.microsoft.com/en-us/sharepoint/sharepoint-advanced-management-features-copilot-license" target="_blank" rel="noopener">SAM Features בכל רישיון Copilot</a>'+
+    '<a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/configure-secure-governed-data-foundation-microsoft-365-copilot" target="_blank" rel="noopener">מדריך היסודות המלא</a>'+
+    '</div>';
+  r.appendChild(lic);
+
+  var meta=el('div','card');
+  meta.innerHTML='<h3>סתירות שהוכרעו</h3><p class="note">לא נמצאה סתירה בין המקורות למכשיר זה. שני דפי ה-Learn (מדריך היסודות ודף היכולות הייעודי) מסכימים על מה כלול. הפער היחיד היה בתוצרי ואלור עצמם: אפס אזכורים לפני 24.8.2026.</p>'+
+    '<h3 style="margin-top:var(--s2)">תוקף ובדיקה חוזרת</h3><p class="note">נכון ל-26.8.2026. בדיקה רבעונית הבאה מומלצת: נובמבר 2026, כי SharePoint Advanced Management ו-Purview משתנים חודשית.</p>';
+  r.appendChild(meta);
+})();
+
+(function(){
+  var r=$('#s-pilot');
+  r.appendChild(el('h2','sh','תבנית פיילוט'));
+  r.appendChild(el('p','sub','״פיילוט״ מוזכר ארבע פעמים בין הדוח לפורטל, בלי תבנית אחת שעונה מי, מה, כמה זמן ומה נחשב הצלחה. זו התבנית. שלב 5 מתוך מסע ההטמעה בעשרה שלבים במסך מוכנות.'));
+
+  var mk=el('div','card');
+  mk.innerHTML='<h3>מה Microsoft נותנת בפועל</h3>'+
+    '<p style="margin:0 0 .7rem;font-size:.96rem"><b>Microsoft Copilot Success Kit</b>: Implementation Guide, ‏Quick Start ו-Checklist. לצדו ״30-day success plan״ ו-Success Planner. קיימות ערכות נפרדות ל-SMB, ל-Copilot Chat ולסוכנים. המסגרת הרשמית: לגבש צוות ותוכנית ← להעביר לידיים ← לבחור אנשים ← לטפח קהילה ← לסקור תוצאות.</p>'+
+    '<p class="note"><b>מאומת</b> · Copilot Success Kit ו-Automated Readiness Assessment, כלי קוד פתוח שקורא דרך Graph API בהרשאות קריאה בלבד. שני הנכסים כבר מצוטטים במסך מוכנות.</p>'+
+    '<div class="srcs"><b>מקור</b><a href="https://adoption.microsoft.com/en-us/copilot/success-kit/" target="_blank" rel="noopener">Copilot Success Kit</a><a href="https://github.com/microsoft/m365-copilot-automated-readiness-assessment" target="_blank" rel="noopener">Automated Readiness Assessment</a></div>';
+  r.appendChild(mk);
+
+  var gate=el('div','card');
+  gate.innerHTML='<h3>שער כניסה, לפני שמתחילים</h3><div class="flag"><b>לא מתחילים פיילוט על ממשל תוכן שלא נבדק.</b> להריץ קודם את הצ׳קליסט בלשונית ״חשיפת יתר״ — שלב 1 שם מתאים לחלון שנפתח בשלב 3, ‏״תשתית ונתונים״, במסע ההטמעה בעשרה שלבים.</div>';
+  r.appendChild(gate);
+
+  var asum=el('div','card');
+  asum.innerHTML='<h3>מספרים ש-Microsoft לא נותנת — הנחות עבודה מתויגות</h3>'+
+    '<p style="margin:0 0 .7rem;font-size:.96rem">החיפוש במקורות הרשמיים לא העלה מספרי משתתפים, משך פיילוט או סף הצלחה מספרי. אלה <b>הנחות עבודה</b>, לא ציטוט ממקור. אין להציג אותן ללקוח כדרישה של Microsoft.</p>'+
+    '<div class="brkhead"><span>פרמטר</span><span style="grid-column:2/5">הצעה, מתויגת</span></div>'+
+    '<div class="brk"><span>גודל קבוצת פיילוט</span><span style="grid-column:2/5"><b>10 עד 30 משתתפים</b> · <span class="s">רצפת ברירת המחדל ב-<a href="https://insights.cloud.microsoft" target="_blank" rel="noopener" class="hlink">Copilot Dashboard</a> היא 10, מינימום 5 — קבוצה קטנה יותר לא תופיע בהשוואה בין מחלקות. זהו הנתון היחיד בשורה הזו שמאומת; הטווח סביבו הנחת עבודה.</span></span></div>'+
+    '<div class="brk"><span>משך</span><span style="grid-column:2/5"><b>6 עד 8 שבועות</b> · <span class="s">הנחת עבודה. מספיק לבייסליין ולבדיקת אימוץ ראשונה, לא מתועד ע״י Microsoft.</span></span></div>'+
+    '<div class="brk"><span>סף הצלחה מוצע</span><span style="grid-column:2/5"><b>לדוגמה: 60% מהמשתתפים משתמשים לפחות פעם בשבוע עד תום הפיילוט</b> · <span class="s">הנחת עבודה בלבד — לכייל מול הפרופיל שנאסף בטופס הקליטה, לא לצטט כיעד רשמי.</span></span></div>'+
+    '<p class="note">תיוג: הנחת עבודה בכל שורה למעט רצפת הגודל, שמאומתת. ראו מסך מוכנות → מדידת אימוץ, לפירוט המלא של טבלת הזכאות ללוח.</p>';
+  r.appendChild(asum);
+
+  var team=el('div','card');
+  team.innerHTML='<h3>צוות, אחריות וקצב</h3>'+
+    '<div class="brkhead"><span>תפקיד</span><span style="grid-column:2/5">אחראי על</span></div>'+
+    '<div class="brk"><span>מוביל שינוי ארגוני</span><span style="grid-column:2/5">נתונים איכותיים — ניהול שינוי ומשאבי אנוש</span></div>'+
+    '<div class="brk"><span>צוות IT</span><span style="grid-column:2/5">נתונים כמותיים מ-<a href="https://admin.microsoft.com" target="_blank" rel="noopener" class="hlink">Usage Report</a> ו-<a href="https://insights.cloud.microsoft" target="_blank" rel="noopener" class="hlink">Copilot Dashboard</a></span></div>'+
+    '<div class="brk"><span>מנהל פרויקט עסקי</span><span style="grid-column:2/5">מחבר בין השניים ומדווח להנהלה</span></div>'+
+    '<p class="note"><b>ארבעה צירי מדידה:</b> אימוץ ושימוש, יעילות ותפוקה, ערך עסקי, אמון ותאימות. <b>קצב:</b> baseline לפני ההשקה, ואז בדיקה חוזרת כל שלושה חודשים. תיוג: מקור יחיד — מתודולוגיית מיישם, לא תיעוד Microsoft, כבר מתועד במלואו במסך מוכנות → מסע ההטמעה, עשרה שלבים.</p>'+
+    '<div class="flag"><b>סתירה פתוחה, טרם הוכרעה.</b> ישיבת עבודה מ-26.8.2026 העלתה עמדה מפורשת: ואלור נשארת הגורם המוביל בהטמעה ואינה מעבירה בעלות ל"צ׳מפיון" פנימי בארגון — מנוגד לשלב 6 (זיהוי Champions) במסע ההטמעה שמעליו. אותה ישיבה גם חילקה את קהל היעד לשניים: AI Leaders בארגון (חשיפה מלאה, כולל מחוללים מתקדמים — הם הלקוח) מול משתמש קצה בהדרכת השעתיים (Teams/Outlook/SharePoint/OneDrive בלבד). ראו §5 ב-<code>implementation-instruments.md</code>.</div>';
+  r.appendChild(team);
+
+  var gatefunnel=el('div','card');
+  gatefunnel.innerHTML='<h3>שער אישור: מובילי AI לפני משתמשי קצה</h3>'+
+    '<p style="margin:0 0 .7rem;font-size:.96rem">מיישיבת העבודה מ-26.8.2026: הדרכת שלב 1 הבסיסית אינה נפתחת סתם כך. יש לה שער כניסה עסקי, בסדר קבוע.</p>'+
+    '<div class="brkhead" style="grid-template-columns:28px 170px 1fr"><span>#</span><span>שלב</span><span>מה קורה בו</span></div>'+
+    '<div class="brk" style="grid-template-columns:28px 170px 1fr"><span>1</span><span>לדבר עם מובילי ה-AI בחברה</span><span style="text-align:right;font-family:inherit"><span class="s">לא עם משתמשי הקצה — עם ה-AI Leaders, מי שמחליט אם ואלור נכנסת בכלל</span></span></div>'+
+    '<div class="brk" style="grid-template-columns:28px 170px 1fr"><span>2</span><span>להרשים אותם עם הכלים המתקדמים</span><span style="text-align:right;font-family:inherit"><span class="s">מחוללים, מעבדת ההנחיות, הסילבוס המלא — ״זה לא הדרכה, זה צריך לקנות אותם״</span></span></div>'+
+    '<div class="brk" style="grid-template-columns:28px 170px 1fr"><span>3</span><span>הם מאשררים/קונים את ההדרכה</span><span style="text-align:right;font-family:inherit"><span class="s">שער האישור בפועל — בלי זה לא ממשיכים</span></span></div>'+
+    '<div class="brk" style="grid-template-columns:28px 170px 1fr"><span>4</span><span>רק אז — הדרכת שלב 1 הבסיסית</span><span style="text-align:right;font-family:inherit"><span class="s">למשתמשי הקצה: Teams / Outlook / SharePoint / OneDrive ברמה היומיומית בלבד, בלי מחוללים</span></span></div>'+
+    '<div class="flag"><b>הסדר קריטי, לא גמיש.</b> שלב 4 לא קורה בלי אישור מפורש בשלב 3. מובילי ה-AI הם הלקוח של שלבים 1-2, לא קהל ההדרכה עצמה — הם מי שצריך "לקנות" את זה לפני שמישהו אחר בארגון רואה שקופית.</div>'+
+    '<p class="note">בהמשך הזרם, אחרי שלב 4: לידים מהדרכת הבסיס ← מעבר למסלולים מתקדמים לפי מחלקה עם use cases אמיתיים. תיוג: מקור יחיד — ישיבת עבודה, לא תיעוד Microsoft. פירוט מלא ב-§5, <code>implementation-instruments.md</code>.</p>';
+  r.appendChild(gatefunnel);
+
+  var lab=el('div','card');
+  lab.innerHTML='<h3>תרגול בפיילוט</h3><p style="margin:0;font-size:.96rem">מעבדת ההנחיות מכילה 94 הנחיות מובנות, ממופות לחמישה שלבי מורכבות — בסיס טוב לבחירת תרחישי התרגול בשלב ״הדרכה והנגשה״ (שלב 7) ולמפגש השעתיים הנלווה. <a href="https://github.com/Valor-Automation-Solutions/ai-cost-calculator/blob/main/copilot-prompt-lab.html" target="_blank" rel="noopener" style="color:var(--acc)">לפתיחת מעבדת ההנחיות ←</a></p>';
+  r.appendChild(lab);
+
+  var meta=el('div','card');
+  meta.innerHTML='<h3>סתירות שהוכרעו</h3><p class="note">אין סתירה בין מקורות רשמיים למכשיר זה — הפער הוא ש-Microsoft פשוט לא מפרסמת את שלושת המספרים האלה, לא שהיא סותרת את עצמה. זו הסיבה שהם מסומנים הנחת עבודה ולא מקור יחיד.</p>'+
+    '<h3 style="margin-top:var(--s2)">תוקף ובדיקה חוזרת</h3><p class="note">נכון ל-26.8.2026. הנכסים הרשמיים (<a href="https://adoption.microsoft.com/en-us/copilot/success-kit/" target="_blank" rel="noopener" class="hlink">Success Kit</a>, <a href="https://insights.cloud.microsoft" target="_blank" rel="noopener" class="hlink">Copilot Dashboard</a>) מתעדכנים תכופות יחסית — בדיקה רבעונית הבאה מומלצת: נובמבר 2026.</p>';
+  r.appendChild(meta);
+})();
+})();
+</script>

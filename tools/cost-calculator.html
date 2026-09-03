@@ -1,0 +1,4394 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="מחשבון עלויות לארגונים: מתארים תהליך אחד, מזינים כמה פעמים הוא רץ בחודש, ומקבלים עלות חודשית מול Microsoft Copilot ומול החלופות בשוק.">
+  <title>כמה עולה להריץ תהליך AI | מחשבון עלויות ואלור</title>
+  <style>
+    :root {
+      --ink: #15202b;
+      --ink-soft: #4d5f73;
+      --paper: #eef2f6;
+      --surface: #ffffff;
+      --surface-strong: #ffffff;
+      --line: #d8dfe8;
+      --line-strong: #b6c2d0;
+      --green: #2f6fa8;
+      --green-dark: #22537d;
+      --green-soft: #e3edf6;
+      --mint: #c6dcf0;
+      --amber: #9a5b06;
+      --amber-dark: #663a00;
+      --amber-soft: #fff1cc;
+      --red: #a73d35;
+      --red-soft: #fde7df;
+      --blue: #245f8f;
+      --blue-soft: #e4f0f8;
+      --violet: #6653a4;
+      --violet-soft: #eeeafd;
+      --shadow: none;
+      --shadow-soft: none;
+      --radius-xl: 8px;
+      --radius-lg: 6px;
+      --radius-md: 5px;
+      --radius-sm: 4px;
+      --focus: #2f6fa8;
+      --max-width: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+      --mobile-result-height: 0px;
+    }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Arial, "Noto Sans Hebrew", "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: clip;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    select,
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    a {
+      color: var(--green-dark);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 1px;
+    }
+
+    a:hover {
+      color: var(--blue);
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      inset-block-start: 12px;
+      inset-inline-start: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      color: white;
+      background: var(--ink);
+      border-radius: 4px;
+      transform: translateY(-180%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .shell {
+      width: min(var(--max-width), calc(100% - 36px));
+      margin-inline: auto;
+    }
+
+    .top-rule {
+      height: 7px;
+      background: var(--green-dark);
+    }
+
+    .hero {
+      padding-block: 18px 22px;
+    }
+
+
+    .brand-logo {
+      height: 34px;
+      width: auto;
+      display: block;
+      flex: none;
+    }
+    .brand-sep {
+      width: 1px;
+      height: 22px;
+      background: var(--line, rgba(20,30,45,.18));
+      flex: none;
+    }
+    .brand-name {
+      font-weight: 700;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .brand-logo {
+        background: #fff;
+        border-radius: 3px;
+        padding: 3px 5px;
+      }
+    }
+    :root[data-theme="dark"] .brand-logo {
+      background: #fff;
+      border-radius: 3px;
+      padding: 3px 5px;
+    }
+    @media (max-width: 460px) {
+      .brand-logo { height: 28px; }
+      .brand-name { font-size: .92rem; }
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-block-end: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .source-date {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 6px 12px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(185, 194, 185, 0.9);
+      border-radius: 999px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: end;
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 12px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-block-start: 0;
+    }
+
+    h1 {
+      max-width: 830px;
+      margin-block-end: 12px;
+      font-size: clamp(2.15rem, 4vw, 3.65rem);
+      line-height: 1.02;
+      letter-spacing: -0.065em;
+    }
+
+    .hero-lead {
+      max-width: 760px;
+      margin-block-end: 0;
+      color: var(--ink-soft);
+      font-size: clamp(1.04rem, 1.8vw, 1.25rem);
+    }
+
+    .hero-summary::after {
+      content: "";
+      position: absolute;
+      inset-block-end: -80px;
+      inset-inline-start: -70px;
+      width: 190px;
+      height: 190px;
+      background: rgba(185, 232, 210, 0.14);
+      border-radius: 50%;
+    }
+
+    .hero-summary strong {
+      display: block;
+      margin-block-end: 4px;
+      font-size: 2.3rem;
+      line-height: 1;
+    }
+
+    .hero-summary > p {
+      margin-block-end: 24px;
+      color: #d9e4df;
+    }
+
+    .summary-rule div {
+      min-height: 96px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .summary-rule span {
+      display: block;
+      margin-block-start: 6px;
+      color: #c5d3cd;
+      font-size: 0.78rem;
+    }
+
+    .critical-alert {
+      display: block;
+      gap: 12px;
+      margin-block-start: 20px;
+      padding: 14px 16px;
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid var(--amber);
+      border-radius: var(--radius-lg);
+    }
+
+    .alert-icon {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      color: white;
+      background: var(--amber-dark);
+      border-radius: 50%;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .critical-alert summary {
+      color: var(--amber-dark);
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .critical-alert summary::-webkit-details-marker { display: none; }
+
+    .critical-alert summary::after {
+      content: "▾";
+      font-size: 0.8em;
+      opacity: .7;
+    }
+
+    .critical-alert details[open] summary::after { content: "▴"; }
+
+    .critical-alert .alert-body > p { margin-block-start: 10px; }
+
+    /* בטאב הפירוט האזהרה פרושה במלואה; במסך הראשי היא שורה אחת שנפתחת. */
+    body.costs-mode .critical-alert summary { pointer-events: none; }
+    body.costs-mode .critical-alert summary::after { content: ""; }
+
+    .critical-alert p {
+      margin-block-end: 10px;
+      color: var(--ink-soft);
+    }
+
+    .critical-alert p:last-child {
+      margin-block-end: 0;
+    }
+
+    .badge-official {
+      color: var(--green-dark);
+      background: transparent;
+      border: 1px solid #a9bdd2;
+    }
+
+    .badge-partial {
+      color: #174e72;
+      background: transparent;
+      border: 1px solid #b8c8d6;
+    }
+
+    .badge-estimate {
+      color: #7a4a10;
+      background: transparent;
+      border: 1px solid #cbab74;
+    }
+
+    .method-step strong {
+      display: block;
+      margin-block-end: 4px;
+    }
+
+    .method-step p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .quick-start {
+      position: relative;
+      overflow: hidden;
+      border-color: #a9cdbb;
+    }
+
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    #calculator-form,
+    .calculator-layout > .results-panel {
+      min-width: 0;
+    }
+
+    .calculator-layout .quick-start,
+    .calculator-layout > .results-panel {
+      margin-block: 0;
+    }
+
+    .calculator-layout > .results-panel {
+      position: sticky;
+      inset-block-start: 18px;
+      align-self: start;
+    }
+
+    .result-dock .section-heading {
+      align-items: flex-start;
+      margin-block-end: 18px;
+    }
+
+    .result-dock .section-heading > p {
+      max-width: 420px;
+    }
+
+    .result-dock .human-result-card {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .mode-gate {
+      margin-block-start: 18px;
+      padding: 16px 18px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .mode-tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      background: #eef2f7;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .mode-tab {
+      min-height: 44px;
+      padding: 8px 16px;
+      color: var(--ink-soft);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mode-tab[aria-selected="true"] {
+      color: white;
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .mode-state-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .developer-toggle input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .toggle-track::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 3px;
+      inset-inline-start: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: none;
+      transition: transform 150ms ease;
+    }
+
+    .developer-toggle input:checked + .toggle-track {
+      background: var(--green);
+      border-color: var(--green-dark);
+    }
+
+    .developer-toggle input:checked + .toggle-track::after {
+      transform: translateX(-22px);
+    }
+
+    .developer-toggle input:focus-visible + .toggle-track {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .developer-toggle-copy {
+      display: grid;
+      min-width: 0;
+    }
+
+    .developer-toggle-copy strong {
+      font-size: 1rem;
+    }
+
+    .developer-toggle-copy small,
+    .mode-help {
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+    }
+
+    .mode-help {
+      margin: 8px 0 0;
+    }
+
+    .how-to-use {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border: 1px solid #cfe0d2;
+      border-radius: 5px;
+      background: #f6f9fc;
+    }
+
+    .how-to-use h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .how-to-use ol {
+      margin: 0;
+      padding-inline-start: 1.35rem;
+      display: grid;
+      gap: 5px;
+    }
+
+    .how-to-use li::marker {
+      color: var(--green-dark);
+      font-weight: 700;
+    }
+
+    .how-to-use strong {
+      color: var(--ink);
+    }
+
+    .advanced-how-to-use {
+      margin: 0;
+      padding: 14px 16px;
+      border: 1px solid #cbd8ea;
+      border-radius: 5px;
+      background: #f4f7fc;
+    }
+
+    .advanced-how-to-use h2 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .advanced-how-to-use ol {
+      margin: 0;
+      padding-inline-start: 1.35rem;
+      display: grid;
+      gap: 5px;
+    }
+
+    .advanced-how-to-use li::marker {
+      color: #245b8f;
+      font-weight: 700;
+    }
+
+    .process-auto-estimate {
+      grid-column: 1 / -1;
+      padding: 13px 15px;
+      color: #214f42;
+      background: #e9f1f8;
+      border: 1px solid #b9d8c8;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .developer-workspace {
+      display: grid;
+      gap: 24px;
+      margin-block-start: 24px;
+    }
+
+    
+    body.costs-mode #results-panel {
+      display: none !important;
+    }
+
+    /* באנר האימות חייב להיראות גם בטאב הפירוט, אחרת שדה שגוי יוצר מבוי סתום:
+       הטבלה נעלמת, וההודעה שמסבירה למה יושבת במסך אחר.
+       כשהפאנל במצב שגיאה מציגים אותו, אבל רק את הבאנר שבתוכו. */
+    body.costs-mode #results-panel.is-invalid {
+      display: block !important;
+      margin: 0 0 16px;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      border: 0;
+    }
+
+    body.costs-mode #results-panel.is-invalid > *:not(#validation-banner) {
+      display: none !important;
+    }
+
+    body.costs-mode #results-panel.is-invalid #validation-banner {
+      display: block;
+    }
+
+    /* במצב הארגוני הטופס תופס את כל הרוחב בכל גודל מסך שבו הפריסה
+       כבר אינה עמודה אחת (מעל 740px), לא רק מ־1101px ומעלה. */
+    @media (min-width: 741px) {
+      body.developer-mode .calculator-layout {
+        display: block;
+      }
+
+      body.developer-mode #calculator-form {
+        width: 100%;
+      }
+    }
+
+    body.developer-mode:not(.costs-mode) .advanced-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    /* הטופס והתוצאה נערמים לרוחב מלא במצב הארגוני, במקום שתי עמודות
+       שמשאירות חצי מסך ריק ומטות את התוכן לצד אחד. */
+    body.developer-mode:not(.costs-mode) .calculator-layout {
+      display: block;
+    }
+
+    body.developer-mode:not(.costs-mode) #calculator-form,
+    body.developer-mode:not(.costs-mode) .calculator-layout > .results-panel {
+      width: 100%;
+      max-width: none;
+    }
+
+    body.developer-mode:not(.costs-mode) .calculator-layout > .results-panel {
+      margin-block-start: 20px;
+    }
+
+    /* המשתמש הארגוני אינו מזין טוקנים ואינו מזין שער דולר. הוא מתאר תהליך,
+       מציין מחלקה וכמה הרצות בחודש, והמחשבון עושה את השאר.
+       השדות הטכניים חיים בטאב הפירוט המלא בלבד. */
+    body.developer-mode:not(.costs-mode) .org-optional-field,
+    body.developer-mode:not(.costs-mode) .org-optional-section {
+      display: none !important;
+    }
+
+    
+    body.developer-mode:not(.costs-mode) .provider-disclosure {
+      display: none !important;
+    }
+
+    body.costs-mode .advanced-how-to-use,
+    body.costs-mode .precision-settings {
+      display: none !important;
+    }
+
+    body.costs-mode .developer-workspace {
+      display: block;
+    }
+
+    body.costs-mode .provider-disclosure {
+      width: 100%;
+    }
+
+    .developer-workspace > .panel,
+    .developer-workspace > .critical-alert {
+      margin: 0;
+    }
+
+    .developer-workspace .precision-body,
+    .developer-workspace .disclosure-body {
+      padding: 0;
+    }
+
+    .developer-reference {
+      display: grid;
+      gap: 24px;
+      margin-block-start: 24px;
+    }
+
+    .developer-reference > .info-section {
+      margin: 0;
+    }
+
+    .developer-end-actions {
+      display: flex;
+      justify-content: center;
+      padding-block: 4px 12px;
+    }
+
+    .developer-end-actions button {
+      min-height: 48px;
+      padding: 10px 18px;
+      color: white;
+      background: var(--green-dark);
+      border: 1px solid var(--green-dark);
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .advanced-status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-block-start: 14px;
+      padding: 9px 11px;
+      color: var(--amber-dark);
+      background: transparent;
+      border: 1px solid #d8c39a;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .advanced-status button {
+      min-height: 36px;
+      padding: 5px 10px;
+      color: var(--amber-dark);
+      background: white;
+      border: 1px solid #c99336;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    .plain-language-note {
+      display: block;
+      gap: 12px;
+      align-items: start;
+      margin-block-end: 24px;
+      padding: 2px 14px 2px 0;
+      color: var(--ink);
+      background: none;
+      border: 0;
+      border-radius: 0;
+      border-inline-start: 2px solid var(--mint);
+    }
+
+    .plain-language-note strong {
+      display: block;
+      margin-block-end: 2px;
+    }
+
+    .plain-language-note p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+    }
+
+    .plain-language-icon {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .preset-picker {
+      margin-block-end: 22px;
+    }
+
+    .preset-picker legend {
+      margin-block-end: 10px;
+      padding: 0;
+      font-weight: 700;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .preset-button {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      min-height: 92px;
+      padding: 15px;
+      color: var(--ink);
+      text-align: start;
+      background: var(--surface-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+    }
+
+    .preset-button:hover {
+      border-color: var(--green);
+      box-shadow: none;
+    }
+
+    .preset-button[aria-pressed="true"] {
+      background: var(--green-soft);
+      border-color: var(--green);
+      box-shadow: 0 0 0 2px rgba(47, 111, 168, 0.12);
+    }
+
+    .preset-emoji {
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .preset-title {
+      display: block;
+      font-weight: 700;
+    }
+
+    .preset-description {
+      display: block;
+      margin-block-start: 3px;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+
+    .usage-card {
+      padding: clamp(18px, 3vw, 26px);
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .usage-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-block-end: 14px;
+    }
+
+    .usage-heading label {
+      font-weight: 700;
+    }
+
+    .usage-value {
+      color: var(--green-dark);
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 700;
+    }
+
+    .usage-slider {
+      width: 100%;
+      min-height: 44px;
+      margin: 0;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+
+    .usage-slider:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    .slider-scale {
+      display: flex;
+      justify-content: space-between;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+    }
+
+    .override-note {
+      padding: 9px 11px;
+      color: var(--amber-dark);
+      background: transparent;
+      border: 1px solid #d8c39a;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .compact-check {
+      display: flex !important;
+      gap: 8px;
+      align-items: center;
+      min-height: 44px;
+      margin-block: 7px 0 !important;
+      color: var(--green-dark);
+      font-size: 0.78rem !important;
+      cursor: pointer;
+    }
+
+    .compact-check input {
+      width: 20px !important;
+      min-height: 20px !important;
+      flex: 0 0 20px;
+      padding: 0 !important;
+      accent-color: var(--green);
+    }
+
+    .usage-explanation {
+      margin: 12px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.84rem;
+    }
+
+    .human-translation {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-block-start: 16px;
+    }
+
+    .translation-item {
+      padding: 13px 14px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .translation-item span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .translation-item strong {
+      display: block;
+      margin-block-start: 3px;
+      font-size: 0.96rem;
+      line-height: 1.35;
+    }
+
+    .translation-caveat {
+      grid-column: 1 / -1;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+    }
+
+    .precision-settings,
+    .provider-disclosure,
+    .results-disclosure {
+      margin-block-start: 20px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .precision-settings > summary,
+    .provider-disclosure > summary,
+    .results-disclosure > summary {
+      min-height: 52px;
+      padding: 13px 16px;
+      color: var(--green-dark);
+      background: #f7f9fc;
+      border-radius: 5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .precision-settings[open] > summary,
+    .provider-disclosure[open] > summary,
+    .results-disclosure[open] > summary {
+      border-block-end: 1px solid var(--line);
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    .precision-body,
+    .disclosure-body,
+    .results-detail-body {
+      padding: 20px;
+    }
+
+    .advanced-grid {
+      display: grid;
+      grid-auto-flow: dense;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+    }
+
+    .advanced-grid .process-field {
+      grid-column: 1 / -1;
+    }
+
+    .disclosure-summary-copy small {
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    main {
+      padding-block-end: 60px;
+    }
+
+    .panel,
+    .provider-card,
+    .results-panel,
+    .info-section {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel,
+    .results-panel,
+    .info-section {
+      border-radius: var(--radius-xl);
+    }
+
+    .panel {
+      margin-block-end: 24px;
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px 20px;
+      margin-block-end: 26px;
+      flex-wrap: wrap;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+      flex: 1 1 min(100%, 24ch);
+    }
+
+    .section-heading p {
+      max-width: 600px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.92rem;
+      flex: 1 1 260px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .field label,
+    .field-label {
+      display: block;
+      margin-block-end: 7px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      color: var(--ink);
+      background: var(--surface-strong);
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    }
+
+    .field input,
+    .field select {
+      min-height: 48px;
+      padding: 10px 12px;
+    }
+
+    .field textarea {
+      min-height: 112px;
+      padding: 12px 14px;
+      resize: vertical;
+    }
+
+    .field input:hover,
+    .field select:hover,
+    .field textarea:hover {
+      border-color: #7f9188;
+    }
+
+    .field input[aria-invalid="true"] {
+      background: #fff8f6;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(167, 61, 53, 0.12);
+    }
+
+    .field-help,
+    .field-error,
+    .micro-note {
+      margin-block-start: 6px;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .field-error {
+      min-height: 1.1em;
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      padding-right: 12px;
+      padding-left: 72px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .input-suffix {
+      position: absolute;
+      inset-block-start: 50%;
+      right: auto;
+      left: 12px;
+      color: var(--ink-soft);
+      font-size: 0.72rem;
+      font-weight: 700;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .providers-panel {
+      padding-block-end: 28px;
+    }
+
+    details.providers-panel {
+      padding: 0;
+    }
+
+    details.providers-panel > summary {
+      min-height: 78px;
+      padding: clamp(20px, 3vw, 28px);
+      list-style-position: inside;
+    }
+
+    details.providers-panel .disclosure-body {
+      padding: clamp(20px, 4vw, 36px);
+    }
+
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    fieldset {
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .provider-card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+    }
+
+    .provider-card::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 3px;
+      background: var(--provider-color, var(--green));
+    }
+
+    .provider-card.microsoft {
+      --provider-color: #2f6fa8;
+      grid-column: 1 / -1;
+    }
+
+    .provider-card.anthropic {
+      --provider-color: #a6543a;
+    }
+
+    .provider-card.openai {
+      --provider-color: #176b4d;
+    }
+
+    .provider-card.google {
+      --provider-color: #6a58a6;
+    }
+
+    @media (min-width: 1101px) {
+      body.developer-mode .developer-workspace {
+        grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+        gap: 20px 24px;
+        align-items: start;
+      }
+
+      body.developer-mode .developer-workspace > .critical-alert,
+      body.developer-mode .developer-workspace > .precision-settings {
+        grid-column: 1;
+      }
+
+      body.developer-mode .developer-workspace > .advanced-how-to-use,
+      body.developer-mode .developer-workspace > .provider-disclosure {
+        grid-column: 2;
+      }
+
+      body.developer-mode .advanced-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      body.developer-mode .advanced-grid .process-field {
+        grid-column: 1 / -1;
+      }
+
+      body.developer-mode .provider-card {
+        padding: 18px;
+      }
+    }
+
+    .provider-legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-block-end: 18px;
+      padding: 0;
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    .provider-dot {
+      width: 12px;
+      height: 12px;
+      flex: 0 0 auto;
+      background: var(--provider-color, var(--green));
+      border-radius: 50%;
+      box-shadow: 0 0 0 5px rgba(47, 111, 168, 0.13);
+    }
+
+    .provider-subtitle {
+      margin: -9px 0 18px;
+      color: var(--ink-soft);
+      font-size: 0.84rem;
+    }
+
+    .microsoft-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .pricing-track {
+      padding: 19px;
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+    }
+
+    .pricing-track.estimate {
+      background: #fff8e8;
+      border-color: #e5bf76;
+    }
+
+    .track-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-block-end: 14px;
+    }
+
+    .track-heading h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .selected-rate {
+      min-height: 42px;
+      margin-block-start: 10px;
+      padding: 9px 11px;
+      color: var(--ink-soft);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px dashed var(--line-strong);
+      border-radius: 4px;
+      font-size: 0.78rem;
+      unicode-bidi: plaintext;
+    }
+
+    .credit-number {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    details.advanced {
+      margin-block-start: 14px;
+      border-block-start: 1px solid var(--line);
+      padding-block-start: 12px;
+    }
+
+    details.advanced summary {
+      min-height: 42px;
+      color: var(--green-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding-block-start: 8px;
+    }
+
+    .event-grid .field input {
+      min-height: 42px;
+    }
+
+    .event-grid .field label {
+      font-size: 0.76rem;
+    }
+
+    .event-grid .input-wrap input {
+      padding-right: 12px;
+      padding-left: 58px;
+    }
+
+    .toggle-list {
+      display: grid;
+      gap: 9px;
+      margin-block-start: 16px;
+    }
+
+    .toggle-list > legend {
+      margin-block-end: 2px;
+      padding: 0;
+    }
+
+    .toggle {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      min-height: 44px;
+      padding: 10px 11px;
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .toggle input {
+      width: 20px;
+      height: 20px;
+      margin: 2px 0 0;
+      accent-color: var(--green);
+    }
+
+    .toggle span {
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .toggle small {
+      display: block;
+      margin-block-start: 2px;
+      color: var(--ink-soft);
+      font-size: 0.73rem;
+      font-weight: 400;
+    }
+
+    .toggle:has(input:disabled) {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    .toggle:has(input:disabled) input,
+    .toggle:has(input:disabled) span {
+      cursor: not-allowed;
+    }
+
+    .cache-assumption {
+      display: grid;
+      grid-template-columns: 1fr minmax(150px, 230px);
+      gap: 18px;
+      align-items: center;
+      margin-block-start: 18px;
+      padding: 17px 18px;
+      background: var(--violet-soft);
+      border: 1px solid #d0c7ef;
+      border-radius: 4px;
+    }
+
+    .cache-assumption h3 {
+      margin-block-end: 3px;
+      font-size: 0.94rem;
+    }
+
+    .cache-assumption p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+    }
+
+    .cache-assumption .field input:disabled {
+      color: #7d8782;
+      background: #eeeee9;
+      cursor: not-allowed;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-block-start: 20px;
+    }
+
+    .button-primary {
+      appearance: none;
+      border: 0;
+      border-radius: 4px;
+      padding: 10px 18px;
+      background: var(--green);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .button-primary:hover { background: var(--green-dark); }
+    .button-primary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+    .button-secondary,
+    .scale-button {
+      min-height: 44px;
+      padding: 9px 14px;
+      color: var(--ink);
+      background: white;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .button-secondary:hover,
+    .scale-button:hover {
+      background: var(--green-soft);
+      border-color: #9dbcd8;
+    }
+
+    .results-panel {
+      margin-block: 30px 24px;
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .result-content[hidden] {
+      display: none !important;
+    }
+
+    .validation-banner {
+      display: none;
+      margin-block-end: 18px;
+      padding: 12px 14px;
+      color: #772c26;
+      background: var(--red-soft);
+      border: 1px solid #e1a69c;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .results-panel.is-invalid .validation-banner {
+      display: block;
+    }
+
+    .result-cards {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: 14px;
+      margin-block-end: 20px;
+    }
+
+    .human-result-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+      gap: clamp(20px, 4vw, 42px);
+      align-items: center;
+      padding: clamp(22px, 4vw, 34px);
+      color: white;
+      background: var(--green-dark);
+      border: 1px solid var(--green-dark);
+      border-radius: 6px;
+    }
+
+    .human-result-kicker {
+      display: block;
+      margin-block-end: 7px;
+      color: #cfe0ef;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .human-result-value {
+      display: block;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+
+    .human-result-card > div {
+      min-width: 0;
+    }
+
+    .human-result-copy {
+      margin: 10px 0 0;
+      color: #e4eee9;
+    }
+
+    .human-result-aside {
+      padding: 16px;
+      color: var(--ink);
+      background: white;
+      border-radius: 4px;
+    }
+
+    .coffee-comparison {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .human-result-aside p {
+      margin: 5px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+    }
+
+    .human-result-rate {
+      margin: 12px 0 0;
+      color: #cfe0ef;
+      font-size: 0.75rem;
+    }
+
+    .result-cta {
+      margin-block-start: 12px;
+      align-self: flex-start;
+    }
+
+    .human-result-trust {
+      margin: 7px 0 0;
+      color: #cfe0ef;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .results-disclosure {
+      margin-block-start: 18px;
+    }
+
+    .results-disclosure > .section-heading {
+      margin: 0;
+      padding: 18px 20px 0;
+    }
+
+    .results-wide {
+      margin-block-start: 24px;
+      padding: clamp(22px, 4vw, 38px);
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .results-wide > .section-heading {
+      padding: 0;
+    }
+
+    .results-wide .results-detail-body {
+      padding: 0;
+    }
+
+    .professional-context {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+      gap: 18px;
+      align-items: center;
+      margin-block-end: 20px;
+      padding: 18px;
+      background: #f6f9fc;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .professional-context .human-result-copy,
+    .professional-context .human-result-rate {
+      color: var(--ink-soft);
+    }
+
+    .results-disclosure > summary {
+      list-style-position: inside;
+    }
+
+    .result-card {
+      min-width: 0;
+      padding: 18px;
+      background: #f6f9fc;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .result-card.primary {
+      color: white;
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .result-label {
+      display: block;
+      margin-block-end: 7px;
+      color: var(--ink-soft);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .result-card.primary .result-label,
+    .result-card.primary .result-meta {
+      color: #cfe0ef;
+    }
+
+    .result-value {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+
+    .result-meta {
+      display: block;
+      margin-block-start: 6px;
+      color: var(--ink-soft);
+      font-size: 0.76rem;
+    }
+
+    .chart-card,
+    .table-card {
+      margin-block-start: 16px;
+      padding: 20px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-block-end: 18px;
+    }
+
+    .card-heading h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .card-heading p {
+      margin: 3px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.76rem;
+    }
+
+    .scale-control {
+      display: inline-flex;
+      padding: 3px;
+      background: #eef2f7;
+      border-radius: 4px;
+    }
+
+    .scale-button {
+      min-height: 38px;
+      padding: 6px 10px;
+      background: transparent;
+      border-color: transparent;
+      font-size: 0.76rem;
+    }
+
+    .scale-button[aria-pressed="true"] {
+      color: white;
+      background: var(--ink);
+      box-shadow: none;
+    }
+
+    .chart {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: minmax(185px, 0.8fr) minmax(170px, 1.7fr) minmax(90px, auto);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .chart-label {
+      min-width: 0;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .chart-label small {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    .chart-track {
+      position: relative;
+      height: 28px;
+      overflow: hidden;
+      background: #eef2f7;
+      border-radius: 3px;
+    }
+
+    .chart-bar {
+      width: 0;
+      height: 100%;
+      background: var(--bar-color, var(--green));
+      border-radius: 3px;
+      transition: width 260ms ease;
+    }
+
+    .chart-row.is-estimate .chart-track {
+      background: #fff3d8;
+      border: 1px dashed #c48626;
+    }
+
+    .chart-row.is-estimate .chart-bar {
+      background: #bc7420;
+      border: 2px dashed #fff3d8;
+    }
+
+    .chart-value {
+      direction: ltr;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overscroll-behavior-inline: contain;
+    }
+
+    .scroll-hint {
+      display: none;
+      margin: 0 0 8px;
+      color: var(--ink-soft);
+      font-size: 0.76rem;
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    caption {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      border-block-end: 1px solid var(--line);
+      text-align: right;
+      vertical-align: top;
+    }
+
+    thead th {
+      color: #e7eee9;
+      background: var(--ink);
+      font-size: 0.73rem;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td,
+    tbody tr:last-child th {
+      border-block-end: 0;
+    }
+
+    tbody tr:hover {
+      background: #f8faf7;
+    }
+
+    tbody tr.estimate-row {
+      background: #fff9eb;
+    }
+
+    tbody tr.estimate-row:hover {
+      background: #fff3d2;
+    }
+
+    .rank-cell {
+      width: 54px;
+      color: var(--ink-soft);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .model-cell strong {
+      display: block;
+    }
+
+    .model-cell span,
+    .basis-cell small,
+    .money-cell small {
+      display: block;
+      margin-block-start: 3px;
+      color: var(--ink-soft);
+      font-weight: 400;
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .money-cell {
+      direction: ltr;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .money-cell small {
+      direction: rtl;
+      text-align: right;
+      white-space: normal;
+      unicode-bidi: plaintext;
+    }
+
+    .basis-cell strong {
+      unicode-bidi: plaintext;
+    }
+
+    .info-section {
+      margin-block-start: 24px;
+      padding: clamp(22px, 4vw, 36px);
+    }
+
+    .caveat-grid,
+    .license-grid,
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .caveat-card,
+    .license-card,
+    .source-card {
+      padding: 18px;
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .caveat-card h3,
+    .license-card h3,
+    .source-card h3 {
+      margin-block-end: 7px;
+      font-size: 0.95rem;
+    }
+
+    .caveat-card p { max-width: 62ch }
+    .caveat-card p,
+    .license-card p,
+    .source-card p,
+    .license-card li,
+    .source-card li {
+      margin-block-end: 6px;
+      color: var(--ink-soft);
+      font-size: 0.8rem;
+    }
+
+    .license-card ul,
+    .source-card ul {
+      margin: 0;
+      padding-inline-start: 18px;
+    }
+
+    .simple-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0 0;
+    }
+
+    .simple-plan-grid div {
+      padding: 10px;
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .simple-plan-grid dt {
+      font-weight: 700;
+    }
+
+    .simple-plan-grid dd {
+      margin: 3px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+    }
+
+    .plan-note {
+      margin-block-start: 12px;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+    }
+
+    .source-card li {
+      overflow-wrap: anywhere;
+    }
+
+    .about-note {
+      margin-block-start: 16px;
+      padding: 15px 17px;
+      color: var(--ink-soft);
+      background: var(--blue-soft);
+      border: 1px solid #b8d5e7;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    .footer {
+      padding-block: 26px 38px;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .live-region {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .ltr,
+    bdi {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    @media (max-width: 980px) {
+      .calculator-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .calculator-layout > .results-panel {
+        position: static;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid .process-field {
+        grid-column: 1 / -1;
+      }
+
+      .advanced-grid .process-field {
+        grid-column: 1 / -1;
+      }
+
+      .microsoft-split,
+      .provider-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .provider-card.microsoft {
+        grid-column: auto;
+      }
+
+      .result-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .result-card.primary {
+        grid-column: 1 / -1;
+      }
+
+      .preset-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .simple-plan-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 741px) and (max-width: 980px) {
+      .calculator-layout {
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      }
+
+      .calculator-layout > .results-panel {
+        position: sticky;
+        inset-block-start: 14px;
+      }
+
+    }
+
+    @media (max-width: 1100px) {
+      .scroll-hint {
+        display: block;
+      }
+    }
+
+    @media (max-width: 740px) {
+      html {
+        scroll-padding-block-end: calc(var(--mobile-result-height) + 28px + env(safe-area-inset-bottom));
+      }
+
+      body {
+        padding-block-end: calc(var(--mobile-result-height) + 20px + env(safe-area-inset-bottom));
+      }
+
+      .shell {
+        width: min(100% - 24px, var(--max-width));
+      }
+
+      .brand-row {
+        align-items: flex-start;
+        margin-block-end: 16px;
+      }
+
+      .source-date {
+        max-width: 150px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
+      }
+
+      .hero {
+        padding-block: 14px 18px;
+      }
+
+      .hero .eyebrow {
+        margin-block-end: 6px;
+      }
+
+      .hero-lead {
+        font-size: 0.96rem;
+      }
+
+      .result-dock.results-panel {
+        min-height: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .result-dock > .section-heading {
+        display: none;
+      }
+
+      .result-dock .validation-banner {
+        margin: 0;
+      }
+
+      .result-dock .human-result-card {
+        position: fixed;
+        z-index: 900;
+        inset-inline: 10px;
+        inset-block-end: calc(10px + env(safe-area-inset-bottom));
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: 5px;
+        box-shadow: none;
+      }
+
+      .result-dock .human-result-kicker {
+        margin-block-end: 2px;
+        font-size: 0.65rem;
+      }
+
+      .result-dock .human-result-value {
+        font-size: clamp(1.35rem, 6.5vw, 1.8rem);
+      }
+
+      .result-dock .human-result-copy {
+        display: none;
+      }
+
+      .result-dock .human-result-rate,
+      .result-dock .human-result-aside {
+        display: none;
+      }
+
+      .result-dock .human-result-trust {
+        margin-block-start: 3px;
+        font-size: 0.75rem;
+        line-height: 1.25;
+        white-space: normal;
+      }
+
+      .result-dock .human-result-coffee {
+        margin-block-start: 4px;
+        font-size: 0.75rem;
+      }
+
+      .result-dock .advanced-status {
+        grid-column: 1 / -1;
+        margin: 0;
+        padding: 6px 8px;
+        font-size: 0.7rem;
+      }
+
+      .result-dock .advanced-status button {
+        min-height: 32px;
+        padding-block: 3px;
+      }
+
+      .mode-help {
+        margin-inline: 0;
+      }
+
+      .developer-workspace,
+      .developer-reference {
+        scroll-margin-block-end: calc(var(--mobile-result-height) + 28px);
+      }
+
+      .critical-alert {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading,
+      .card-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .form-grid .process-field,
+      .advanced-grid .process-field,
+      .result-card.primary {
+        grid-column: auto;
+      }
+
+      .translation-caveat {
+        grid-column: auto;
+      }
+
+      .usage-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .chart-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 7px 12px;
+      }
+
+      .chart-track {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .chart-value {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+    }
+
+    @media (max-width: 460px) {
+      .shell {
+        width: min(100% - 18px, var(--max-width));
+      }
+
+      .brand-row {
+        flex-direction: column;
+      }
+
+      .source-date {
+        max-width: none;
+      }
+
+      .panel,
+      .results-panel,
+      .results-wide,
+      .info-section {
+        padding: 18px;
+        border-radius: 6px;
+      }
+
+      .provider-card,
+      .pricing-track,
+      .chart-card,
+      .table-card {
+        padding: 16px;
+      }
+
+      .precision-body,
+      .disclosure-body,
+      .results-detail-body {
+        padding: 14px;
+      }
+
+      .event-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .scale-control {
+        width: 100%;
+      }
+
+      .scale-button {
+        flex: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding-block-end: 0 !important;
+      }
+
+      .top-rule,
+      .form-actions,
+      .mode-gate,
+      .scale-control,
+      .skip-link {
+        display: none !important;
+      }
+
+      .calculator-layout {
+        display: block;
+      }
+
+      .calculator-layout > .results-panel,
+      .human-result-card {
+        position: static !important;
+      }
+
+      .shell {
+        width: 100%;
+      }
+
+      .hero {
+        padding-block: 10px;
+      }
+
+      .brand-row {
+        margin-block-end: 20px;
+      }
+
+      .panel,
+      .provider-card,
+      .results-panel,
+      .results-wide,
+      .info-section,
+      .critical-alert,
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 36pt;
+      }
+
+      .critical-alert,
+      .badge-estimate,
+      .estimate-row {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .hero-summary,
+      .human-result-card,
+      .result-card.primary,
+      thead th {
+        color: black !important;
+        background: white !important;
+        border-color: #777 !important;
+      }
+
+      .hero-summary *,
+      .human-result-card *,
+      .result-card.primary * {
+        color: black !important;
+      }
+
+      .human-result-aside {
+        border: 1px solid #777;
+      }
+
+      .chart-bar {
+        border: 1px solid #444;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      details:not([open]) > :not(summary) {
+        display: block !important;
+      }
+
+      details > summary {
+        display: none !important;
+      }
+
+      .table-scroll {
+        overflow: visible;
+      }
+
+      table {
+        min-width: 0;
+        font-size: 8pt;
+      }
+    }
+    
+    /* ==========================================================
+       שכבת מיתוג ואלור. נטענת אחרונה ומכתיבה את הטיפוגרפיה,
+       הצבעים והחלוקה לאזורים. אין כאן שינוי התנהגות, רק מראה.
+       ========================================================== */
+    :root {
+      --ink: #16181A;
+      --ink-soft: #4B5560;
+      --muted: #77828D;
+      --paper: #ffffff;
+      --line: #DFE5EC;
+      --line-strong: #C3CCD6;
+      --green: #2F6FA8;
+      --green-dark: #22537D;
+      --green-soft: #EDF3F9;
+      --mint: #85A6CB;
+      --blue: #2F6FA8;
+      --blue-soft: #EDF3F9;
+      --focus: #2F6FA8;
+      --max-width: 1120px;
+      --radius-xl: 6px;
+      --radius-lg: 5px;
+      --radius-md: 4px;
+      --radius-sm: 3px;
+    }
+
+    html, body {
+      background:
+        radial-gradient(90% 55% at 88% 0%, #EFF4FA 0%, rgba(239, 244, 250, 0) 62%),
+        linear-gradient(180deg, #FCFDFE 0%, #F8FAFC 45%, #FFFFFF 100%);
+      background-attachment: fixed;
+    }
+    body {
+      font-family: "Segoe UI", "Assistant", "Noto Sans Hebrew", -apple-system,
+        BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      line-height: 1.62;
+    }
+    .top-rule {
+      height: 4px;
+      background: linear-gradient(90deg, #C6D3E4 0%, #7C9AC3 55%, #3F6089 100%);
+    }
+
+    /* ---------- כותרת עליונה ---------- */
+    .hero { padding-block: 26px 30px; }
+    .brand-row { margin-block-end: 34px; }
+    .hero h1 {
+      color: var(--ink);
+      font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+      font-weight: 700;
+      line-height: 1.14;
+      letter-spacing: -0.02em;
+      max-width: 20ch;
+    }
+    .hero-lead {
+      max-width: 62ch;
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      line-height: 1.68;
+    }
+    .eyebrow, .section-kicker {
+      position: relative;
+      margin: 0 0 9px;
+      padding-inline-start: 0;
+      color: var(--green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---------- אזורים במקום כרטיסים ---------- */
+    .panel,
+    .results-panel,
+    .info-section,
+    .critical-alert,
+    .results-disclosure,
+    .provider-disclosure,
+    .precision-settings {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .panel,
+    .results-panel,
+    .info-section,
+    .results-disclosure {
+      margin-block-start: 34px;
+      padding: 30px 0 0;
+      border-top: 1px solid var(--line);
+    }
+    .info-section + .info-section { margin-block-start: 30px; }
+
+    .section-heading h2 {
+      position: relative;
+      color: var(--ink);
+      font-size: clamp(1.25rem, 2.1vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.22;
+    }
+    .section-heading p { color: var(--muted); font-size: 0.88rem; }
+
+    /* ---------- קופסאות פנימיות שנשארות קופסאות ---------- */
+    .mode-gate,
+    .usage-card,
+    .how-to-use,
+    .advanced-how-to-use,
+    .critical-alert,
+    .chart-card,
+    .table-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+    .mode-gate { padding: 14px 16px; margin-block-start: 22px; }
+    .how-to-use, .advanced-how-to-use { padding: 18px 20px; }
+    .critical-alert {
+      padding: 14px 18px;
+      border-inline-start: 3px solid #9A5B06;
+    }
+    .chart-card, .table-card { padding: 20px; }
+
+    /* ---------- טפסים ---------- */
+    input[type="text"],
+    input[type="number"],
+    input[type="search"],
+    textarea,
+    select {
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      font-family: inherit;
+    }
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    button:focus-visible,
+    summary:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    label, .field > span:first-child { color: var(--ink); font-weight: 600; }
+
+    /* ---------- כפתורים ---------- */
+    .button-primary,
+    button.button-primary {
+      background: var(--green-dark);
+      border: 1px solid var(--green-dark);
+      border-radius: 3px;
+      box-shadow: none;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .button-primary:hover { background: #1B4467; border-color: #1B4467; }
+
+    /* ---------- לשוניות מצב ---------- */
+    .mode-tabs { background: #F2F5F9; border: 1px solid var(--line); border-radius: 4px; padding: 3px; }
+    .mode-tabs button { border-radius: 3px; }
+
+    /* ---------- תוצאה ---------- */
+    .human-result-card {
+      background: var(--green-dark);
+      border: 0;
+      border-radius: 4px;
+    }
+    .human-result-aside {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 3px;
+    }
+    .human-result-value { letter-spacing: -0.035em; }
+
+    /* ---------- תגיות ---------- */
+    .badge,
+    .badge-official,
+    .badge-partial,
+    .badge-estimate {
+      background: transparent;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* ---------- טבלה ---------- */
+    table { border-collapse: collapse; }
+    thead th {
+      color: var(--muted);
+      background: transparent;
+      border-block-end: 1px solid var(--line-strong);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    tbody td { border-block-end: 1px solid var(--line); }
+    tbody tr:hover td { background: #F7FAFC; }
+
+    /* ---------- כרטיסי ספק ---------- */
+    .provider-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    /* ---------- תחתית ---------- */
+    .footer {
+      margin-block-start: 46px;
+      padding-block: 22px 34px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ---------- תיקוני פריסה של שכבת המיתוג ---------- */
+    :root { --max-width: 1000px; }
+    .hero h1 { max-width: none; }
+
+    /* עמודה אחת. שתי עמודות השאירו חצי מסך ריק אחרי שהכרטיסים ירדו. */
+    body.developer-mode .developer-workspace { grid-template-columns: minmax(0, 1fr); }
+    body.developer-mode .developer-workspace > .critical-alert,
+    body.developer-mode .developer-workspace > .precision-settings,
+    body.developer-mode .developer-workspace > .advanced-how-to-use,
+    body.developer-mode .developer-workspace > .provider-disclosure { grid-column: 1; }
+
+    /* שורת המצב: פס דק ולא קופסה ריקה */
+    .mode-gate {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px 18px;
+      padding: 0 0 16px;
+      background: none;
+      border: 0;
+      border-block-end: 1px solid var(--line);
+      border-radius: 0;
+    }
+    .mode-help { margin: 0; color: var(--muted); font-size: 0.82rem; }
+
+    /* הפאנל הראשון אחרי שורת המצב לא צריך קו נוסף */
+    .mode-gate + .developer-workspace > *:first-child { margin-block-start: 26px; }
+
+    .how-to-use, .advanced-how-to-use {
+      background: #FAFCFD;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid var(--mint);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-start;
+      margin-block-start: 26px;
+      padding-block-start: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .button-secondary {
+      color: var(--green-dark);
+      background: #fff;
+      border: 1px solid var(--line-strong);
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .button-secondary:hover { border-color: var(--green); }
+
+    /* כפתור בתוך כרטיס התוצאה הכהה: היפוך צבעים */
+    .human-result-card .button-primary,
+    .button-primary.result-cta {
+      color: var(--green-dark);
+      background: #fff;
+      border: 1px solid #fff;
+    }
+    .human-result-card .button-primary:hover,
+    .button-primary.result-cta:hover { background: #E8F0F7; border-color: #E8F0F7; }
+
+    /* טופס: שדות בשתי עמודות במקום עמודה אחת ארוכה */
+    .field-grid, .advanced-grid { gap: 18px 22px; }
+
+    /* ---------- ניקוי גוני פסטל שנותרו ---------- */
+    .pricing-track.estimate {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid #B07A2B;
+    }
+    .cache-assumption {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid var(--mint);
+    }
+    .about-note {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid var(--green);
+    }
+    .process-auto-estimate {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-inline-start: 3px solid var(--mint);
+      color: var(--ink);
+    }
+    .how-to-use, .advanced-how-to-use, .professional-context, .result-card {
+      background: #fff;
+    }
+    .professional-context, .result-card {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+    .selected-rate {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-style: solid;
+      border-radius: 3px;
+    }
+    /* בטבלה ובתרשים: הגוון יורד, הצבע נשאר רק על העמודה ועל התגית */
+    tbody tr.estimate-row { background: transparent; }
+    tbody tr.estimate-row:hover td { background: #F7FAFC; }
+    .chart-row.is-estimate .chart-track {
+      background: #EEF2F7;
+      border-style: solid;
+      border-color: var(--line);
+    }
+    .chart-row.is-estimate .chart-bar { border-style: solid; }
+    .chart-track { background: #EEF2F7; border-radius: 2px; }
+    .chart-bar { border-radius: 2px; }
+    .preset-button[aria-pressed="true"] {
+      background: #fff;
+      border-color: var(--green);
+      box-shadow: inset 0 0 0 1px var(--green);
+    }
+
+    /* מתג הסקאלה בצבע המותג במקום שחור */
+    .scale-button[aria-pressed="true"] {
+      color: #fff;
+      background: var(--green-dark);
+      border-color: var(--green-dark);
+    }
+
+    .alert-icon { display: none; }
+
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">דלג למחשבון</a>
+  <div class="top-rule" aria-hidden="true"></div>
+
+  <header class="hero shell">
+    <div class="brand-row">
+      <div class="brand">
+        <img class="brand-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAACJCAYAAABpXHdXAABqM0lEQVR4nO29d5ic1X0/+jnnbdO372pVV6istGorkIQQ3QE7GEhxML7XxA5gx9jEeWyT/Pg59uM8bsRxjB1iDPzADUPAN8HGjrEEduBiTFVFvfe+TVumv+Wc+8c737NnRivtyCswvtnv84xGO/POW77n29thUkqMw9sAEgATFR/xEQ9l5+0aXH18Xs7/PxDYOIOMEWQQvoEDYMPEWKJTVvqDcQBMQEgBxhgABlcIGNzWjgthZLY5OwSuByYDGLZZui8JIQFmWBAYZhJWOj+jG/ydrvY/B8zf9w38YYMAcQJjRijAAQQS4Dz8inEg8AU4C9knCAJIAIZpweCjo58B6rxl7xKQDHADwDAA07IAGIDvQfo+JGfglnOa9jgN6KTjMCKMM8hYgRF1CZA0ZkTFoaiGAAMDAxjAzZCRAnAI4cPip8vwSnplACC5Oi+9SwCmAbi+hGEwMHDAsMCYAcZHOPEZzj8OZ4ZxBjkvIBGywbBfIVn4qQQgDY6AMQRCoOgFAGcwLQ7GTUhISI256GxnvAy9M0CwkC0lZxAMMABIATDGAcYReD64VWLa0k955bnG4aww7oOMCcjEIjuFl1iFn/YtAPgSkBIwePiZFwCOMYpEL/24cplkycQyShQf+ID0fJicIWIPn1SMwAlMhq/wDzauUs4C4wwyJhj2QQgkeOlTBgEGr2QSuQLy6PFT2Lf3EAaH0jAMKzSLhFd2DnGaXVT+d/l6CXh+ER3tszH7gmksZodHe64EkwKOY0BqDEJMwfRTjDPIWWGcQcYKpSgW+SKhf8FKLyAAsGnbAbl1+26ksy4cOw7HicD3BTLZLGzHhNAoVpaoVbLTHQhaK3pnCJBwABZ4kMLHBVOn4OKLLkQyAuZ7oT4zTQawkGHC3wCQpXNLpvykcRgZxn2QsYI0QB6zZCVfgpFXAqzfvFfuO3QMg3kJw07Ag4V81gOTHKaTgsdDOiUQKndBDj8b1hqsxBxcQAoGAy5yxRwsDhgwwa04mAnmSSBXFLI2wRkkQuZgItQcOnOE0eZxOAuMB8HHCiyU+kEgw+gRY8hmiwCAo8f75eYtOzGQ9sDNOAJE4UsbMOJgRgxC2hDCRiAs+NKGL20EpRf9za0Eir4BHyayxQCMO2DMAZgNARO+ZDCcGCa3zcSsOe34+cqX5NZdJyXjvMz7YBQx0O57HEaHcQY5DyAlwDmHEIAQQDweQSCBzVt3IoANAQsec+AzCwGzIGFBwISACbJxmORhKFdyABy89J5OZxG1owjcALXJFHzXg+e6MCDhmA4ETDQ1T8RFS9vx4m/XwoeF195Yi4I/7NmEZhVKXDLs74wb16PDuIk1RpAsZAqzhEnfk2A2Qy4n5cFDx8Hj9QiYBVFiCpJInAkwKWBIUcq/D8ebROlfLgHGJbxcGnHHgizkEeUCjAEmE8hk0pi3aC6WXNSKJ//9RVgmh2NweIKhq7sXjtkga2KMccUcJWACUhpvE4b+sGFcg5wHoJwHA8ANwPOBwcE0LDsCCbOkRTgkGARjJZ9DgEOAIYAhBQwZwJCy9B5+xhHAYhJRywACFyY8+MUMbBbAlB7mzJqB9vZW/PwXG5Csa0DODXBqKIt4shZHj3fBtliFISUAFsa1JCv3fcZhZBhnkDFCEMiS9ggltGEwCF9iYCiDeDyJUD8wSMYhSraOZD7AAoBRiLf0YqVXKXvCpIDwXRimRDIeweBAH1KxCOAXMbGlDsuXTsVvf7sZ2UIB2XwRsXgK3LDh+QJDmSwsC5odVR6OVknGtwFHf8gwziBjAAnAFQUAAlIG8P3QOY9EGDzPQ8H1AYSMIRhJbVFiDheC+ZBMlD6n/AmHZFxJeDsSQa5YwKnBPkyYMAG+8NA6uRVXXz0HL7+8FflcAYMDWRSLHopeAMNy4EvAsaPIFc5C/3Jcg1QD4z7ImECAc0AgAGMi1B7CB7gJzjn8wIU0I9rxEmA+IH0AAcBKNVkwAZRML8mVCQYY8IWAFYnCdyUKvoeJU6bg6ssvwGNPvADBOaQZQyqVggRHoVBATTwG4ebQ138KkYheXkzn5MokHIfRYVyDjAk4LMOB63uQUoLxUHMIARiGAdsKmYNLwBAChvTBZJgKFAxhfRazIJgFwXjJN6A8fKlyV0owFr6aW1tw8fIL8LOVG1GUHEJacP0A+XwRiUQKthOF6wUwDAO1tSkEAbRwLgdgQjIqeB+HamBcg4wRBDhsMwYDPqQIYNs2AgYYpg1fCFWhZcIDJe0kAwRzIGGAsSh8z0MkaiGfS8MyASYDMBFqIdcrIJFIYsLUC7Bg4WQ8//xmnOztQ21NE9JDWXCTIRKJYHAoHYaaIeALD25RwOBhAWOY5TdVGQyAks4ah9FgXJScN+BgkimiE4yVsuIcHIAhAFMIGBJgkkPCgIQJ3/dh2zaGBgaRSiTBIWAZHKbhw4CLproUfNfFpRdPxm9f2oK+gUHEokkEgsP1A9ASilIQQAJh1hyyLLJLzDHcOCUA+G8Pav6AYVyDvI1wulMswjyH6yISiUFKDgYHnAtIWUCxmMHUhhZceVkn/vPpdfA9gMkIRMAwONSLRE0CwgsDAePw1sA4Zt9SCLPjopT/UHVWqhAxzIM4tgHIABY3UMjlgUBACh8d8+bioiWz8IuV6xD4Er4HeJ5AwfWQqEnAdQu/v0f7HwLjDDJGGFYKoixbXZmMo7/1HhHBAEgPBvcQi1jo6T6BmmQcTAKtra3o7JyON97YhsHBNIrFMBBgmQ4s04br+jAM6+170P+hMM4g5wE4cJa4KQ/tf2IURj5D+CPT5Cjmc8jnBtDcmELgFdDc0oBr3jUXr76yA/v3HQLnJkyTwxNemDfhDAwGhFBXH4e3CMZ9kLcMqLvwLEdIBrfgIhF1YBhAoTCAKVOn4KorZuE//vMNSAlEnVrYZgQD6X440TiKbg7cjMDgEfiBG8aQz3qVcRgLjIufMQBDiT4rQIBMq5HQG5aTUAGhY0UAIRH4LurqU7jyillY+exGGIaJQl6AMQuZXB6xRAJFrwBucTAuEUiAlUYGjcNbB+MaZIwQThgpcUkgACu0pYIggGmaKLoSQgrYlgGIAFIEMLmBvFeEYRjwAw+peAzJVA2uvGoefvHL1RgcyMA2kzAMA0IyMMOC5/kwTTNkPsGgaw3GWGnaCQNjDJxxcM5Vv/o4/O4wjsK3ACTCDHgQeGBcIhK1MTg4AMcy4fsuGEKGsUyO+toEfN/HVVfNw29e3IqB/nQp5CvhBS4E1WqpkhSSaaG7L2VQ1oorpYQQInwfrycZM4xrkPMFkqbFlSaXGAaklDAMA/l8HolYBK5XgGUwMOnDNAwUi3nUtU7Fuy6/AE/9fAN8T4DzBFxXIpMdQE1dHVyX8hxmyW7jpXKUACjVCoPx8eKqtwjGNcgYoWzmBR8eHGdZFhgLa7NM0wDnQMTmCPwipPAB38fsWRfgoiUX4OcrNwLSRD4XQAQcuYKP2vpGFNxiiRlK1VnSHJ7ny3yA+aUxpsPmFb3G4fzAOIOcBwh9ABkOcxOiVKzIIKQPIXwwCEQjNnq7u1GfTIJJHxNbm7B40VSsXbsbpwaHkCu48ISAHYnDsqNwPVlqqeIQLCxZCUFo7wISpdnAJfOq/PV7QMb/z2CcQcYISliXqFEIgSAIe9QDz0fUduC6LrJDaTQ11qNYyGFSSwuuvXoOVr++A/sOHAGDCcYYAhlAIIDkDIFkEIEJSLs0iUSUtAaZV2FNlwigfI5xBjn/MO6DnAfQ5z+H5emhiWUYBopuHoloHIbw4BUKmDKxBdf80Tw8+dRvILiNiJMENyyk02k4MQcFPx+O9OERgJkl14KarHw13wqloQ6MBSGXalEsBgbOOVl84zAGGEfheYKgxCaGYcA0gahtImoxRAwJAx4Cv4impgZcfuU8rPz1JkhmIpcvQgqGXK6AaCIKIXxwLiCkD9cvwqatDFhJe8DX2nJLYJjgzITJAIsxWFzA5Aych3xTmUIc7gbRzbZxOBOMY2iMEIjQ3HG9Uuk5N8ABNKUYa0oaqHV8IH8KE5rrcPU1C/DLX2/C8b4MhopAYDjw4INbAr7vlvYP8WEYEqbpw/eHwHkBnPlhwUqZIx42UXmugG1H4RUKcHgAeFnAy2Lh/DkIQJMeAUDAQNgfosYAyfHlHw3GMTRmCJ1l07YgweEFAXzPhwWgY9Z0pPtPYkJzHa6/diF7/vmNKBSLYAaHLwDLjoFzDpOZ4Qt2+GImTMZhMh4mHwMRUrnPh1+luabxSBQDp3rQkIwhlz4FhwvUpeKYPqWR5XJ55YXQRj5q5Pw4VAXjs3nHCIH0wVk40oeBIRABfAGYpoG8C/QNpGVNQxKrfvUauvszKAYSATPBDRuBz2AZ0bNKcn4WR4JDwPNz4CxAIZ/BhMZapAe68e4/ugyzpzUyBsCAgKEbWjL8pZKN4xHhs8K4kz5G4IyXtlULJ6kb3IDBw52fHAuoSSVw5MBx9HR3IVVbj0zegycEuClhRSLIZ7zSREUGyeRp7/BH/pxJBsE8xGyJWNRG0XSQ7j+BW/7vv0DMBivmPcSjFobHw+mbsImKXvVxOBOMa5AxghBC+QVBEA5MkACKRQ/MtGAYoTWU8yGfWfUijh3vQqK2DpYTQdfJPtQk6wAAXHIIJk57N5k54ufhaFIfQwNdaKyvwfx5c9Exp40FfiBrYgYTArA5EJpV5b0qIehb6owzyZlgnEHGCL4fFhECYYEiY2GI1fcFDJMj7wawbAODWV8m4iYLABzrzkvLiYAxBuGHLjSXYY9I5btjGiN+zkux5YZkSOm+F94Ph4RjMTABcIYw4kWh4RGZZJxBzgbjDDJGEGI4WcgYIAOBQAqYZpjD8H0BZoYE2HMqI+vrE6xQKq+yNLo802adKG2BM9L3ABB4InToDQbOABmE0S7OAa/owrJtLSxcOUtxnEFGg3EGOQ/geQF830c06gASCHwfhmUq7ZIr5BGNROEJCc7DeSIFN+xFN0bYpepcgJUIPJfNIBFPIPD90qT5kEl1bpKla+kbQLNxBjkrcCnDqlAhfFD5tD4vlj4HBPL5rPp7cLBfStpd6SwQln0P1wsJIVAoFFSJNn0HAD09PRIAXNeF7/un/R4AisViWTmFDoVCAUIMExudYyzgum7Z+Ss/kwFgMI5oxIFbCO2csFhQlPoxBGIRBwyAxZnKRcRtAyYAA/ysLw4GAxzCDyADAeEH8F1P+x5ID/XLRDwGINRekoWR4XAE0HBkNxyHbajt4QIw+KWaeM/zFE7PBW9ED+EAidPpJCzHH/2l05vvu2V0FwQegsCDlAGKxXzZZ281MN93YRinj8InojQMA0NDQ4hGo7AsC57nhc046jejSx8icrLVASCfz8MwjJK9Hs6G4pxjaGgIqVQKQEiQkUgEUkrFVLFYTN2fYRiKmWKxGIQQ6nx0f2OtbFXbnTGmNIJyxmUY3HWLHoQQiEQdAECxUIATtSGCAHwE3Oom0mj4CwKJQiGHaDSuSkfoOT3PAzdD0yoQYQRNUMkJGE6dGpBBINFzqg/ZbBrJZBKNzU2Ix6NMhj9CxLRQzBcUXun89Myj4U/KAEEQQAgBy7IghFC48X0fljX6YAmd1irB8zx1Dtd1Yds2pJRwXReWZYFXsdf8WIC9/PJLMp/Pw3Ec+CX1DAwvAmMMV155ZegIaoRHN+w40bNegIhKSonXX39dZjIZRCIR+L6PRCKBYrEIIQRs20Y2m8Ull1zCbNtWyCbmIVizZo3s6+srmTRRcM6RTqdhmmHBXzKZxKWXXsrIzDhbHqEaePXVV+WpU6fUeUzTVIvjeR44DFx/w3sVFRVLWsaJVrbDjmRG8aqy2UHJ4Q/P74NzwLJMoDQXOCQwjsHBQblhwwb8+te/xpp1G9Db24v+/n4wxmAYFgIh4HkeEskY5s6fh0XzF+Cy5RfjPde+mxmGoYgbCNctCAI4jnPWe/O8osJ9T0+PfPnllxGJRJSJN5o2ikajiEajqK+vR3NzM2pqahgxWBAE8DwP0WhIY4VCoUw4h+9vrXnI3vWuq+SuXbtgmiaIUYBh6ZHNZvHqq69i9uzZLJfLIRYLu93y+XxJ6lR3g77v47rrrpMHDx5EJpMBEBIbaYGwyI9h//79LBIZHvisS5B8Po+rrrpKdnV1wXVdMMZg2zaEEMjn82hqasKECRPw7LPPMvp8rAxy7bXXyr1796pwLpmJjhNW6QpfYvXq1Zg4cQITQsAoaUkhQq1ilknQSiapjkEAIJ8rwHEccINBipLgsU0UCnk40Qjuu+8++fjjj6O3tzcUHvG4wmtI+BYsx4bwJfKFQqgFOWCAYfKkVtx88834+Mc/zhKJBDzPKxNKZ4OwfiwURqtWrZJ33XVXWL2czSrCPutz5fOIRCJwHAdSSti2jba2NixfvhydnZ245pprGGltXcv5vl8SrJGznH3sYC5ZsgQHDx5UBEqShEyKxsZGHDx4EG1tbYrYGGOKUUazYHK5HDGa3LlzJ4IgQDQaVddzXReRSASWZaGtrQ2WZcH3fbVIlmWpY7PZrDxw4AAcx1FaKJ/PK/MvnU5jcHAQhUIBtm2fl8Yh0hQEZHKRhI1Fo2hubmTqWqU31wugM/oZgZ3dQScBwU0JbobeRL4YCqpcLoNXX31d3n333Thy5Ahqa2shZQDbNpEZGgDnvFRVHE6dz6YLYILBtizYkQRMkyPwfZw8eRIPPvggHnvsMfnYY4+ho6ODkTkzGhBNkGQnCyE0f3iZ/zgStLa2IpfLIZfLKf9027Zt2LFjBwCgUCjIm266CX/6p3+KFStWMMMwEIlEYJpm2bq8VcAXLVqEIAijMMQgRJBBEKC/vx+vv/46bNtGJBJR0qHam4vFYohGo9i9e7dSxaZpIpPJqLxBoVBAJpNBZ2dnqRrWRDQaVczqeR5c18Vvf/tb2LatTDZdjUejUQRBaG6sXr1a+r5/Xpx06rUgbWdZluoW5Jwjl8uht7dXep4HQzMpHMcZAUe/e8TIcRwEQYBsNotYLIbe3l756KOPyo997OPo6+tHIhH2tgs/gBA+6utqkEhGwZmAwSU4C2AxwLFNOLYNBD6yQ2nk81kkk0kUi0WcOnUKN9xwAx555BFp23ZVa0x41s0zAEqrVHY6Vr4OHjyIgYEBGIaBZDKJWCwGwzAUTdq2jaeffhp//dd/jVtuuUUeOXJEDgwMSABV+TdjBb5o0SLo9jo5V2E/AUcsFsPevXsRBAEKhQIYY4jH48o/GQ1I4r766qthYkwIFItFcM6VeWRZFiKRCBYvXgwg1Dp6pMi2bdi2jTVr1sBxHMU0ZOoAw5GlSCSCl19+GaZpnhcE6kQSBIESHsQIiWQMiWSMWY4JMKEkIRiDYVoqglReI8irflmWA88LIETosMfjSbiuj0cffQz33PN1WIaJYr4AGQhwJmFbBkTgo7vrOITvIfBdSOHD5By2xcGZhFcsIHA9cAmY3MDg4CAsy4LjOEgkEvjSl76Eb3/727Ia/JmmCdM01XoahnFapPFsr2nTpqGuLqwmyOVyyOfzCrcksB3HwcDAAA4ePIjLL78cP/vZzxAEAfL5/BhXd3Tgc+fOZYlEApZlhWNlSsQHhFKgWCxi8+bNyuQhKUFIGA1Ixe7atUuZU0IIRCIRZLPZcPRNSQotW7ZMRaosy0IQBCoq5boudu3ahXQ6rSS6ZVnI5/PKLKNAw8aNG8uuPRYgjUb95RSxoYEM2WwWrutKknipVAqccxQK7ugnrwKkDIUMmTCeF+AnP/mJfOCBh2AYBnK5HGpqauC6rvLLLMNEc3MzCvm8ivpQGJdLAYNJGCZDNOao74FQyAwNDaGhoQFf/vKXsWrVqqqSZCT0KMIJQGl6ErRnep06dQq5XA4AFA3qffaE89raWnR3d8O2bfzTP/0THn/8cTlaAOF8AJeSobPzQvi+gOcFylEik8u2bZw6dQr79u2T4cNzBIFELJZANeaCaXIUi3ls2vQm4vEo8vksAAHLMiCErxiktbUVkyZNYuQIE1EI4cM0OYaGBuS6dWuQSiXKYuemyZHPZxGJ2OAccN0C9u/fi6GhARjG2H0QxiSECHvLbduEYTBIGajPDdMGNywYhgXTHLbZoxEbnEFthEOvcwUhAtU4JWWAw4cPynvu+Qo4B3zfRSB9MCOMZkWiUUhwuL6PbK4I04rA9QQCwWDaNgIp4UtAcgZf+pBcouDmkUqFg7ClDGCaHLlcBo5j4Ytf/Ed0dZ2QQvjwvCKkDFR+wvdd0I5VnJsqTB8E4R4pfuAiEB4MM+zNLxQKSqOH/3fg+wKOE0UQSBiGhULBhWnakJLB8wJEIqF5ns/nEQQBkskkCoUCCoUC7rnnHmzcuFFSpBMAstlsGe7ORxKcM8bQ0dGhJDKZWvQibXLgwAF4nqfMpHDxqssAd3d3yxMnTqBQKCj/gTSSEAKJRAIzZsxQeRJdgpAW27lzZ7ihjOuqhSANo5+THP9t27ZJ3Uz7QwXDYCVTIsT1P/3TV9HT0wPLCielRKMO0ulBtLS04OTJkxBCoCZVB9uKgMGAY0dhWxE4dhSOHYXreQBjiMZi6B8YgJQSp06dUrY/tQpLKbF371586UtfUtqL/D4AZTmtswExRiwWQ6FQUP4inYvCuOTDhKkDB5ZlYWBgAK7rIpVKKROftEY6ncbnPvc5FItFZfnE43EAwwni8+GDmlJKLF++HA8//HDJNCgo51hPkm3YsAHvfve7FdECZ+9VIBBC4NChQyrpR9EHShx6XuiILV26VIVRiQnp/FJKvPbaa8q+jUQiysEnTaOHX4UQeOONN7Bs2bIxI+j3DaTRAWD16tXyhRdeCCc2lkxcyhUMDg6ira0NQ0NDGBoagmEY+NCHPoTrrrsOHR0dyunt6enBE088gZUrVyIajSIejyOdTgOggRPhcclkErZt49lnn8XGjRvlnDlzGJlAuo86GigJL8OI2hVXXIFrr70WjhNVObBcLoc9e/bg4MGD2LFjB3K5HKSUSCaTyGbTimmJZkzTRCwWw8aNG/H888/LG2+8kZH5TjgDqqPP0cAEgPnz55eFzYhAiRmklHjzzTeVvXouWWrf9/Hmm28iHo8rJ5ccfGKCfD6P5cuXK4RWPpht23jjjTfUNYmJ9OACSTbLsuC6LtauXTtiZvYPDUiyBkGARx99NNz70LaVfxWJRJSz2tvbi1QqhQsuuACPP/44mpqaTlugWCwm77nnHnbrrbfKv//7v8eGDRuURiY8VpYHPfbYY/ja175Wtt7VhtBTqRRc10UhHyZXFyxYgL/8y79kwPDaUSg7CAKcOHFCPvPMM/jWt76ltIvruipBS8lCy7IQj8fxwx/+EDfeeCNs20axWFR+MlU7jBW4YRhobGxkEyZMUNKKTBYKxfm+jz179sDzPMVEuro96wU4xyuvvKLMNwI6N+Ur5s2bx4joKRSs127t3LlTmVeVppPus1BZyo4dO1Tt1B8yEPEePnxYvvTSSyrSQ4SQTqdVVNG2bcycORNPPfUUSyQSjJ4/CAIMDg5KAEgmk0xKiblz57JHH30US5YsUQRK4VrKMRWLReTzefz617/G0NCQJGImR7pYLI56/xQc0Nef1ggI/QbLstDb2ysNw8DkyZPZHXfcwVavXo2WlpYyhrUsS/k6ZK5t2LABJ06ckGRq6xUg58UHof90dnYqx5weAhgOtfX39+PgwYPyXKUI5xy7du0qy7MAoWaha7S1tSGZTCqtRdKLkLNnzx6pR690P0kvWtRNroGBAezbt+8PvlSZBMlzzz2HoaEhZcMXi0WlRXXB8PjjjyORSKi8FZUHxePxcN58SUu4rouGhgb25S9/GY2NjWo9SJIHQYBEIgHDCMPAv/rVr0C/J6hGQhdKWXv9XkkAcs6V39DY2Mg8z0OhUEA2m0VtbS178MEHy2q8SAjYto2amhrlc7766qvqfug5qklSVgOcCOyyyy5TElsfRBYEgQrNvvHGGyoSUe2IywMHDshsNqtUXqVv4fs+Lr30UvU3MOxckTn30ksvwTAMdT39/3QvdL9CCMRiMQRBgDVr1owZQb9voOdauXKlMitisZjyQUijCiFw9913o66ujhFBAsNCjIIdFA4nSbx48WJ2ww03wHVdJBIJ5d94nodisYhEIgHOOX7605/C8zxlvgDVOerRaFQFY8gCoXUik5uqEigflkwmwTnHwoUL2YoVK9S18vk88vm8ypORWfjGG2+M6JCfDx+EE3EtXLhQRSoAqErbYrGomGLTpk3qh/Rwo8G6devKGK5YLCo7mqTZRRddpMwnHUhCrVu3Ti0GaaLKKBaZgroZtn79+jEj6PcNjDH09fXJnTt3Kj9xYGBAFWpSJbPv+/jrv/7rMu3quq4iaM55WMtVwjmtn+u6+PjHP64CAUNDQ7BtG/X19aqUx/M8HDhwQJlF5xIlyufzStCR1iDTmuiNaq1IswHDvteNN96IfD6vjqEyI9d1kUwm4bouuru7lfagKgfyVcYKnLh55syZjNQWAIXYWCyGwcFBRKNRbN68WSGF1Ful1CfpQuXpu3btUiqWIhBUOkIRk+XLlyufA4CyhylRtGXLFgA4jXmBMLmlhwoJkUEQYPPmzQrh9Fy62j0fYcC3GqQMiyHJF9PD8aFNz5HN5vGnf/rnSKVqGWMGODchBGBZDgBe2suwtCU1N8G5CcOwwFgoqKZOncouvvhipeU55+jt7VUETS0P69evlwAUM1WjQXTfQ9f6lZEmEph0bmLyxYsXq+BQPB5HsVjUIqChP7R//35FX7TOFM0cK3DyCyzLwowZM1TFZGXpuxAChw8fRjqdlp7nKS6u9Fno3XEcMMbw5ptvKglGTp1entDa2or6+nqmI0/PbezZs0d2d3erB6eHJulI8ftMJqMqQqlE5sCBA+ju7pZ6X8L5ct7eTli/fn2Zyas7u4THJUuWABgmuHN5RtM0sWzZMiVgSNrr4X7P87Bjxw6NMd8eAdPc3IxIJKLMM4pgkRXh+z7S6fSITHg+ilXD/SdLyFy6dKly+PQwH4USPc/Drl271CLoJlll7oJK5Xfu3FmWO6HjSIXOmTMH8Xi8LKRMIKXE1q1bkc/nyxx8YJhRyFQgJiSzgbTQpk2byiJvOoOcDwS+1cAYw+uvv66EBpkoJOkZYyq/QMfrvx0NCBdXXXVVWahXX0/C+9q1a8t8z7dD0NTU1DC9HGYkgTw0NDRiAvO8MAjZowBwySWXqOQNIYWQRupv8+bNqgZId9hosXQJtn//fkmmFjVFkd1MxEoFinq/hf73+vXry6pn6Xsqh2lvb1dMTIxBhWzJZBIvvfSS0h668wpUF4X5fUOxWMSRI0cAoIxBCIQQlPtg+mfV2t+kBWbPns2ohUF3xokhDMNQJegE1WbTxwK03mR1kK+pM68efa0UsmMFrmdEFy5cqC5E5goQLlI8Hsfg4CB27NihzBgAZ7wxKSW2bdsGYLi5hfwD/cEuvvjiM/ZbAMBrr72mtIGu1YjZbr31VhUKJLOQSs2LxSLWrl2rFrLynv8Q4NixY5KepTK6SAQ8derUsshepbA5GxBOotEopk6dqn5HfTh0HQA4efIk0ul0WbXt2wX03CM9E62vrlXO171xYFiSNjU1scmTJysTiDiTcg+u6+LNN98EY0yVe1SaPfoDbN68WTETSXaqnaHrzps3D8DpyDZNEydOnJAHDhwoK1vXIx7Nzc249tpr1ULatq2iJpS5P3r0qBoGoTPI+YiRvx2wd+9eAChjCD2JaxgGOjo6yvwBXQuPBoQT3/cxe/bsEc1P+sx1XRw9elRWe+7zAWR96P09pEnpc8qhvRUmn9LDRDDLli0rlVV7ZYvgeR5isRgOHjyI3t7eMoKj3+qFjJ7nqbJzkm76AgdBgOnTp6O2tpYRA+hlI5xzrFmzRjGYXv9FsfOlS5eipqaGtbW1qYZ+Kr2mbsRisajuoxLxfwhw9OhR9TwULqV3IuJZs2aVaYxz0ZR6WdH06dPLkrWEe93XPHDgwNtiWhEMDAxIPRhEjKD7Qo2NjWV/n0/NxnVJIKXEokWL1GLQezabVTF0INQMdDxQPpWCbq5QKGDv3t2KGfTwGyF+wYIFZWYTPRzdE/kfFNrTVTtjDEuWLIFt26pcgjGGRCKhfBC65tatW0+LAP2hmFmDg4PI5XIKb/QcumStr68/rbcfqP4ZSfs2NjYq5qsMuNA6nThx4jQ/6K2E7u7usvA2CUeiIdM0UVdXV9ZHQnBewrxULEjEvWjRYlWn77rD5SGEsCDwsGPHNgzPzqLWx3CmEedAsZjH/v17ZTaXhkQA0yp3GF3XRSyWQGfnhWWjhICwx4F6PDZsWKdKJYbNLK76B+bM6YAQQHv7XDhOFJ4XMiKZVyGSfPzmN/8vGAu3ZdZNincKVPpX+uf79+9XhXikPfVyGwCYPHkyAIxIJKOBlEz1sUyYMEH5cmAC3AC4AXj+cLL4xIkTpV9yVEN/JJT0SSX68xGjU6kMQTo9CCkDFRgQMrwnw2RwvQIC4anS99mzZ6sUwkiph7EAB1A2fWLGjBmstrZWSS0iziAIVHJv8+bNZTYfcaq+gDt3bVeSniQfRaMIcUuWLFEONj0QnXNoaEju3bu3rCxBN7VSqRQ6OjpYqSSh7D70CAfnHHv37sWpU6ckJaHIZHmn+CFnKtthjGFgYEARmF5tS0C93HR85e+ruTZBIpEo+0z3dwj6+/vPSQtTIWUmkyljbvJtaV1zuVzZkItkMgnGWFklRjabRTweRyqVCq0K4alAD9EQ+cQUiRsrKBOLVFdNTQ2mT5+ukKMTHT3gxo0by0LBlccZhoHXXnttxMJDOkcsFsOcOXPU6FNy+EnSHDhwQM100it76RyTJk1CbW0tAGDhwoVqzE9lDgcIF3X//v1lD/5OShhWhsd1c7Onp6csaqjjgLR7Q0PDOYV2K4Gu19DQoK5LUFmB3dXVpQi8Ggbp7+9XfeW0jlQTpjNMPB6HlBIDAwMAhiuQn3/+eWU2J5NJhY+6ujpkMhmYpoklS5Yo+tXTE+cDOFU9ku0fBAEuuugiNdSNisuIUA3DQHd3t4oMEeIqkfXmm28qiUeqn2xk27Yxa9YsFdvWH4bu45VXXkEkElFEoPsmnHN0dnbC8zzVBz5p0qQyh1KPcsRiMaxZs0YtCtnz78Q8SGWofGBg4DTm0f9mjKG2tpaNZKKd6zXr6urUWuqCExjWyj09PedkwpBW8n1fNeNFo9GyPn/SIFJK1NbWquOeeuop9Pb2ltVnUd1ZX18famtr0dnZidbWVkZMS3C+1pbThYFhE4mGJ+gXootT5ahel6VHqTgPJ/ydOHFCMZV+DCV6LrnkkrIMNxE2EcCLL76ork0I0sN7l156qWI+3/exePHiMudRDxhwztWkEyKkd4oPMlLMXjdDyT+k0LuubYDhoRK61qnU/tXcgxACiUSCEQ3oWkq/r3Q6rdalmvMLEXYM0rgk+o0+qCH0SWOl5wrn+W7evFl+7WtfU2XrUjB4bqD8sZaWFgwODuIv//Ivy0pj6Hkq55n9rsBJzRGYponZs2erQjCd+CnLGolEsGHDhrKFIWQwxrBt2zblNFFVKSGbnDGKQNExAJQjWigUcPDgQaUy9aYb0nbt7e3QfYply5apaJleLxSJRJBOp1UkS3/Od2IkS5fOVJ1MjK2HvOlZ9EmYleeoFnTfUfcT6Vz6PZGwqlZTkb8Xj8dhGIZyxKPR6GlCipq0Vq1aJW+66Sa13lT56zgO0uk0bNtGLpfD3Dnz8O53v5vp59H7jM4HmOQz6GUYzc3NbOLEifL48eMQIlAMQsiTUqpQ70gJpdWrV5ctYhAEYFr8PpFIYObMmeo74nx637Jli9S71SpNrEmTJqGhoUFd27Is5ajTNYigKGM/NDSEXbt2yVmz2lnlfb9ToFLYUNWznkPSfRHOhxuOSANXOtjVXJOkNAC1xgzleQXS/CSsgkBUlQ+holWqCAdC7RGLJUoMkUc6nZY7d+7Epk2b8POf/xzHjh1T5j3VARKzxGNJRCIRHDt2DF994qtq5BGA06J752MumknqW3du4vE45s2bh2PHjikzBhguM89ms9i7d28pOUcZ9WGE0gQS3Sk3jbARJxqNoqWlBY2NjYzOCUBFs4LAUw0wpLFIU4SDH2Job29HKpViANT3kydPLuVthiuHycYlX2bdunWYOXO2dq63dq5rtaATsi6tgyCQFI3Rk2NkElFFAzDcmqubmefitNN59ckylclHCtmGa1OdgNHNRQD48Y9/jB/96EfSNO3S+cP8Vi6XU/V1nuchkUiUBSxc11Xl7r29vbjvvvtw0UUXqRGpdBxZBuetJ50eglQfmTSUUddDciQ9IpEIurq6cOLECbWAxOVSSmzatEmZOWRi0XWEEFi8eLGSCEAoUaiIMQgCbNmyRTncpA2oEBEIa8Z0mxsIe63nzJmjIiSEOL2Tcc2aNYoA3mkh3krJTx10wHDBKGlDMjuIaUiznotvoF+ftAhJe9JWpIUpMkj+H611NUD3S6VJ/f39KBaLcF0X/f39yOfzyGQyap3JgadBeGSWkSAQQuCuu+7CbbfdxqhHnZ4DGC6aPW9OOtVb6U04lmVh0aJFZT0htIh6TmTr1q2wLEtN8pZSore3Vx45cqQst0FjWwwjHNvT2dlZloDUka1PMNEjaHp0ZcGCBQoBRPCmaWLWrFlqkfV4O2nItWvXKgkVL00/fyfAmUyhakykSl/qXMPXldprpIik/lkpzFz1BSiwQhqdolDktHueh2QyCdM0kcvlVFEmYwzRaBS5XA7Nzc3K+vjWt76Fz372s+ztCrJwXXLpfsOiRYsYbV5D1bhkbpHEWbduHQCUcfHWrVtVYR1JPN3H8TwPK1asUJKJGISc0YMHD8ru7m71d2XYk3OOCy+8sOwhyF9ZsmSJYgi6FjDcoXj8+HEcOnRIVlb3vlOg8lmr0QS6XzjSec4VRvPN9AhXNVAoFFRTG01xj0Qi6OvrUwGHXD6DQHhI1SRUK20mkwFjYWtuLBbD5z//ebz44ou4+eb/ixUKLgoFt9Qp+daC8kFokjbnXNnt06dPx44d28qcbTretm1s2bJFSYNCIQfTNLFp06bQVnTzijEikQiKhTDeXVtbixkzZqgNbnQHXUqJ3/zmN6ipqVFze/UyeQBoampCS0sL07O5tKidnZ3KTtYZhSqIOefYvHkzZsyY8Y7yQYDTJXm11amVORH9fNUGIsLjTg/pnuk858KAjuOgr68PiXgKtPdIOp1GfX0jBgZOgTGGVE1C1c4xFjLNX/zFX2DBggVYsWIF5s6dy6LRqLoPWrdisTjqBj9jBeWD6CqUiHXp0qUqgqTX3JMDvXfvXiW9bduG67pqHhWpT71EAgDmzZtXtu8EY0zF+ovFIlavXq2SiVSAqDdjUbRKd0bJHp8+fTqLxWLKfKNrp9NpNdh63bp1ShO9UzLpwOnRwMp8x5mANPtIptLvct2RcFL52blEAKWUiEajyGazEELgpptuQm1tLYrFIpLJJBKJBPr6+igPo4Zq33vvvezOO+9kF110EQun1EiEdXhBmb/8VkOZD0JqnSIWl1xySVkVbWXJeV9fH7q6uiRNEqHBDkTYtImKHpvWG6ToeiQRHMdRLbb0HWk3YrBLLrmkrKiNNAtF36ZPn35akstxHJWdpRIYPfLxToRqHc3KHJP+3NU+Hx2nm0+VQRA6b0nwsGqZxLZtJTANw0BjYyNuu+02FAoFJVxTqZSKZAkh0NPTg29+85uSHHzKyREdUffo21F2z/UH1UO6JK1J2lf6DLQg69evVyZQV1eXPHr0aGhSaWYN/Z8xpupmgPKiuGKxiO7ubnn8+HF1PbJRiQHp95V1SbqtTsML6HOqL6Ns7r59+9DV1SX16/++QccDUD69ZTSgQMNIpta5ROp0gTQSc+jh3nMpd8/n86DtNQYGBhAEAT760Y+qYsRMJqM6Vmtra9WUx1/+8peKIfW+o7e7XYHroUMypyg51draympqalRkiAiOmIMxho0bN6oQ5OrVqxVTUAeYYRgI/JDrDcPA9OnTTxvtQlumrV+/XiGBig/pWJJAbW1tjD4jc1D3ZTo6OsqqfnVHnTYAoiTnOwXOZONXwyCVffaVycZqYSTtMdJ96ritNspG1Q00GK6+vp7deOONMM1wJ7FIJIJcLoe+vj6kUikUCgX09PTgwQcflBTq9TxPDbwjv7d6ASDO8jo7cHoIfTFoXq5lWbjwwgvh+36ZZiGpbts23nxzPQCBbDaL3bt3q8ntnJlgMOAWfdTU1OHUqQFccMFMTJ8+g9HmMuECCjiOBSF8vP76q0qVEnPlcgVEo3FkMjksWrQYNTU1auYWSbJsNqsyvUuXXgwhAMOwIOVwKJm2MAME1q9fi+E94X+/oJs3JL1JaDmOw6hRjYiCfED6P/Wr6+fTfbPRQC/yo7wLSW49Q60LRcovVSvF9WQnmfCf/OQnlSDO5XJIJpPKlHccB8ViEU888YQyr+lalHpQU2yAEV8jMoMUAILwJT0ApX3aIbRX+XlG9QIXLVqk8hSVIcUgCHDs2DFkMhnYtq0ShKZpqsEJnIfmVyKRQFtbm2I8AKqKk865Zs0aLaMeajR9mzYqTyFiJ0TV1NSoxZ40aRJrbm5WSSZKOtE5PM/Dm2++Wdak9fuESnOGgKS1vhmpXm5CvyNhQb85V/+jQvtIyj3pAojOR71BlYGXswGdQ2+HYIyhpaWFvf/97y8TEKlUCplMRvWZHzt2DI899pgkE50Etc6s52Ro/Q5W2agUQj4DJXoIeaRxenp6cPjwYen74TYH9LlOfLQpyoUXXqgQT0CaKZPJyJ07d5ZJQDKdqIjxoosuUt+T6VQ5rMBxHMycObOMQPQxMYwxbN++Hblc7h3noVeGWWnfQGIKMm+JOCkCeKaQcDVMoofD9QgRrbFudhmGoQIqOtFXew2dqeLxOD70oQ+pqgEqd9ctGSklfvCDH5RtCUgBoOFKAwFW9gr5QIKrV/m+j0b4YhYAA5KVf1+pd0ZlkPb2djVNvLJQjh5+48aNOH78uOzr61P7h+tj8snHWbp06WlRFipfpql9+mJUDoXr7OwsK6ugLL0+/BgY1np0LtJ8JIEymQz279//jik3IdC1M+dc2eh66J20BGmTUkmGPBd/oxLovFSmQ4Rc6WswxlR/R7WgTCFNMNK6LliwgOlJY2C44JBycd3d3fj5z38u6b7IIqBxs1U9X4lRAu2dXqPBqEfU19ez6dOnK3OlUl3ato21a9di06ZNKvOthxvJZ4lEIpg7d+4Zw4MvvfSSiobpjje919XVoa2tTf2ewrSEfF3K0hhNYFgSk+1Ox7z88svviDBvpdaoZBIKgVIARY8m0t9DQ0Mj+gPV+gh0vcHBwbJqCfpODyPX19efUxBBXyNaS7IKLMvCnXfeqboNbduG5wYQJblFmuORRx5BoZBDsZgvK38fBlHxf3HaXwKhT0HvUv1djqOR9hoeFWigHKl43VwRQmDr1q1444031Oh86iug6AXnHNOnT1cVmpUIdBxH1UkBUOchSWkYBmbPnq2YQm/j1YsYSWvNmTOnzOyg8KVeNk/3+06DSqJuaWk5zffQCRYIzVzyx3T7/Fyv2dPTA2DkIYCEt4kTJ5Y1b1UDpJF0uglxz7FixQp20UUXwfd9DAwMwHEc5b+Stjh8+DBWrlwpKdlL5/Q8Ck6cTsZshG9Guls+iowclUE8z8OSJUtgmqayT0nS0WIcOXJEzW3Vu96EGB62cMkll5SdV5+llU6nsW/fvhEdOiBEhp7fqMwb0Oe0qA0NDWzSpEmKwSoJjDGGffv2nbYr6u8DdK0w0mc0sYRwoWtLOubkyZMAhs2Z3xVoE1Adr7opXQqCKHOvWtDNK9IkejHpLR/8EBLxlNqmjYCCPZxz3H///SWzy0Y6PYhiUa8oHkneD/sklRqB/BQDAJgs/V3py4SvUbFpWRbmzZunbOHKxKJhhKPxDxw4oI4noiSkmKZ5WnUwIR0AduzYIbu6ulSvuOu6qjqYQtBz5swJUVEy2cjsoCgX51yZUrZtY/bs2WV1XnrNGRDu57d3797fv411BiDib2xsLPtbZxCSyjToYCTtfC7XowkqOlRqExrscLZ8yUjPQbkyCvgAw0LyuuuuY21tbWhsbEQmk0E2m1UFizS4/OjRo3j66acllagQw4b+BYV2gdNl/ulOfMlNDxlDnul34W9HZRDf9zFz5kxWV1eHIAhUIpBunD4jbUHIIOYh6b1kyZIyp5gIVsowG0/JokoGoPMuWbIE+Xy+TKKpR9OcP4rhX3TRRWU9DLTQVDZNgYEydJSIgzTlWBzfcwE9PEtAeKBRsLqZAwxHmYQQ2Ldvnyo2BYb3TKnWBCKhcfToUVX8R7ikwAatyfTp089pNm+lBpJSKuGnB08++tGPqt9QMpAEAZnCDzzwQFmLMePmaT6GAikBEUB6LiAFhFuEcIthLkQEQOBDilKH5PDdwnNduMXwOOl7ozMI3dzMmTMRi8XUAlVrv0ejUTQ1NaG+vl5lwPXkj5Rhg5UukXQTgvNwD5HW1lY12ocQTxKUQHfcaMcsAKftK0EOO4021R1SOrf+/vuEqVOnIhKJlJV4kGCisgzakkLKcHYU+YDVROloaqbv+9i2bVuZ30e+Aq2XYRiYMGGCmkZzPoIcVEN3/fXXs5qaGiQSCcRiMWSzWcRiMTVZU0qJo0eP4plnnpHEtEHJm6e7GKYEbd2khPQ8cMsCN00ErgsIAUgJxkyYlg0BoOj6KBQ9GKYN23EASDDDqM5JlzKs7KWyAT1JNxoYhoGZM2eWJbz0xS4UCmqDGCLeyrqiGTNmKMKoLHPXJZRO/MQgtOB0Xd1Peu2118oywnSut6NKtFqYOnWqInY9ekT3bJom3nzzTXW8PlWyGgImoWUYBg4cOFDWRUi/Jxwlk0m0tLQotXE+mpbC1l2ORCKFj370YygWi6q4kRhVLzd5+JGHYJgMQvowOMNZn5BxMMuBX6oEBjMgmQEYVvgCkHMlAgCGbcJ0LEgehoLzBReSseoYhHOOpUuXls0nqla6uq6Liy++uISMcgnt+z6OHTsmu7q6lL8BlOcDyFzSNRcxQaU/RO+MMTQ0NLCmpiZlclEnIZmDlmXhxIkTOHnyZBmO9fDyOwEaGxtZXV3diIKBojyFQgGHDh2SpEVoyn01Wt6yLPT398tsNqsGJegJQsIHRSJpg1S9/m0sQBoqn8/jwx/+MGttbVVlTLSrFFVORCIRbNy4ES+88II0uAEhy4O0OkVKcECGbrlpxxAEHIHkkKaFogTyPpD2AFgMPoB8ABQCIOcCmYIPOxoHYFXng9AoIH0sDDm+o4HnebjsssvKihyBYedtw4YNioD16I2eLLz88stPi9DotjiAMi1BC7x48WLFDHoykSQiYwwbNmxQbZ6VJts7AShsTTko3bTU8bl161a15bKUUu1MXA0YhsHefPNNSRpBT7qWvofv+5g/f75ae+D8mqDUi37LLR+CbUfUXvAU8fIDF0U3D8dxcO+99wIAivmCikqN6GIzBi8AhAEM5jzZn5MyE0D2ZSHTEtK3IdMuZCaATHuQ0gC4DcAyEQDoGcrKUUUMOeG1tbVsypQp8vjx42VmymhqPB6PY9asWSrBp0c1LMvCK6+8UpY111V7uAAMs2fPZvqwBaoJOlu8P5vNYsmSJfjFL35eVvulE5ht21i3bh2uu+66sioBus93AgghcOGFF+Lll19WvhT1RTDGYNvhTIDnn38eN954I4Dh/Rt1c/VMEAQBUqkUXnjhBTWMwXVdxBNR1UMTBAFEEGDRokXnTXPooK/t+9//fnzve99DV1c4JNtxHGQyGcTiw+N/tm3bht++/Ft5xeVXMEBg+G6Gn1WCQTCgKIGTx07JTVt3oad/EJJZyHsCodXFYJsWhAzgFjKIRyMyahtobapH56IFqE3F2agiQA+V0rBpijxUQ0Rz585VG4MC5Z2AxWJRNVjpve66lpk9ezao3ZJU/khJKp0QiIkWLFhQdl6yYykqEwQB1q1bN2JEjK71+wYazkyEWknwVHLx3HPPIZ1Oq0Ft6XS6KhPLMAxks1nlj+nJVF1YJRIJNWwDKN8SYSygZ/FjsRgmTJjA3vve9yKRSKg+IApGUM1WIpHAd7/7XRSKBYxUvi4BCBbW7fYP5eS23fsxVPSRcRl6Mh54tBaBXYPATCDrAx5MOIlaZFyB/kwBh0/0YOOWHQhQRaJQR/KCBQsUUglJowEhlZiKfidlOAGlu7tb9RbrTjcA1dWoLwrZrEB5GLYynBiNRnHBBReUTXGn3hMqawiCANu2bUM+ny/rWqRnPJds9FsFtm1jwYIFjAYf6K3PVLNE9W9PPvmkpO5JGuxdDaxfv1bu379fmVKEG+oItW0bTU1NmDVrFqNyIN3UGgvQ2tTU1Kh1veOOO1Q5SaFQQCqVUsxi2zaGhobw8ssvY/PmzZqEJroZ9kskgG07D2DPgZNomjgDE6fNgjQcCO6gWAgQ+AYELBR9BmbG4LoAt2IoeAw79xzAUC70Ys4KnhfyURBILF++QvUGU/SBcxO+L2AYFlzXB8BhWQ5c14fjRMvyEXpeQ0qJLVu2lBVBEhPR8aZpYu7cuactBP1dmX0mIJOqoaGBzZs3T2kLWnwhhnehKvlBsrJmaDg3MVJ1jlb9GTIjA4B0Ol228NVKWMpbAMM9GQBK8718JJM1uOKKqxSug0CCMQNChLY72evf/va31QA2kv56SzK9U54nxImLf/raV2E7JopuHpZtQCJQppbBLRQLHt71rncpxgnxXtlwVJHJlrz8dYbjaO31KTZTpkxh733vDQC4umYh78JzAxjcQsSJoVjw8ND/eQSFIEAAE0NDudK1BIqFDGTggwHoHyrCiTZi247DcGJ1mDxpKvxCHknTgSUYWGDCthLwXA5uRuF6HL6wIFkcg5kqNAjZsqZpYurUqYy2u9KLCimqRVlvyoS7rouOjo7TKlGJwGmCYmX4VXeq586dC8ZY2Yysc3EOL7roorLgAjESMSpj4cRFksx6NWs1JlaxWMTg4KCkHgaKKunZ+7O9KGJDHY9E8GQK0hzaP/7jP1Z+E+GAIj1BEKgI1D/8wz9I0pR0nD5wWi9Z5xz44aPfl4cOHVJT5ClCSOXnFEl6z3veA2DYJwWGiwnHAsTE+pxlwzBw2223KZz4vq/2BaGpKJFIBL/+9a+xZet2mXddpJIJ5NM5IAjgRBxwHrIvM0wMZgtI1jZg247dSCaTaKyrRbGQg83NUtLYhev6MMwIbCsCCQNuIGCYVTCIbmvG43FccMEFCvH6PoYhwkNCd10XkUgEtbW1mD59OgPKw7AEr7/+ellGmK5DDnhNTQ1mzpzJ9HshqDbUvGLFCiX19Gvr4dKXXnrpNHOqWvMqlUqp7QeIeIgAidnO9iJpT6YSEGoFirbR3pDXXHMNSyaTZWZQ6LQaAAQKhRwKhRyeeea/8PWvf01Gow6CwANjEslkHNlsGoCA77sIAg/p9CB+8pOfyG9+85sYGhqC4ziIxWIqEBBxYohFEzBNEwsWLMDixYsZhZCBMH9xPuZSER4odByJROD7Pjo6Otgf/dEfqanvxPTUnk0Wyfce+S4cK7ynaCIGWUoCgnF4AUpCx8FgdgBO1MKWHZswccpEJGsSYDZQdAswTQNB4MG2w2hZEPhoaKhDJh+gqnQ42f2UD1m9ejVisZjahUp/QD2J2NnZedpAYYqCnDp1Sh4+fFgxFf2e/uacY+7cuQph+kafZD5U44TOnz8fjuMgm82WMSMhXUqJ3bt3q92L9FxMNZDL5fDaa6/JVCql7l33kaoJZJBP5jgO5s2bx3R8UyY5Go3iwx/+ML773e+Cc66mWfq+q+776NGjaGhowIMPPojnnntOfu9738P06dNZoVBAPB5X69Pb2yt/8IMf4OGHH4bnF9W0QwK6Zxre9ld/9VdlldihlikPBf+uQHgmuiEc5vN53H777Xj22ZVwHEdp1Xg8Dtu20dfXh4amRqxcuRKf/vReOW3iNBaLWmCWhWIxDyNiQjKg6BfhxGLIpHOQnKG2vhavrX0Dl118GXbv3ot8Zgh19fXI53xkskOoq0nBLWTR09eNRNKojkEIKZ7n4YorrsC9996rtmfTiY7UpWmaGBoawqWXXnpaZpxU/bZt29QeESTdafwpLRZ1IOo98dWELnVobm5mF1xwgdy+fbtaED1E7XnhtXbt2iUXLVrEKNJV7eJHow5uv/1WZdIQ4yYSCQwMDIw6nC4UeGp/DuzYsUOZmQQUxPjIRz6CJ598UkVzGAungpC/0NDQoOz4ffv2YcWKFZg2bZpcunSpSvBt374dGzZsUNqKHGCS3gxGeE7TQTweRzKZVOHj0DrwSyZh+TT53xWIaUkzZTIZVW6yZMkStmzZMrl9+3aVwCThQc46Myw88tD/wTe/cS/6+4dkXUOCOZEoijKAxTkiERt9PYMwLQfMYsgVskjWJPDKay9jcedSJGrrsGv3btTVpmByB4ViHgaXKLoFWE4VJpZelu44DubPn88sy0Iul1M3S0jS7dwgCLB48WIldXRfBQDWrl2rzk/H6MVrjDF0dnYqVQoMb9BYWXYyGlSOGtJj+WQ2vP766+p4/djRQAiBU6dOIZVKKdOoWCwqqU9DmM/0IoFCEp6kJ1W8+n64gxYAtLS0sI997GNqBkA2m8WUKVPU4DW6bm9vL1KpFEzTxKlTp7By5Ur8+7//Ox599FHs2bNH7eJE19KnhDAWTowngvzMZz6D+vp6RuukB0zOV5RPz6fRtYHQcrnrrrswODioBE06nYYQ4RCOeDQGy2B45pf/hf37D8m6+hQr5POQADwhIUGJbg6mNX4UCgWYdgSHjh5BLBZDU2OjauCiIMaECROQTsvRGYQcVoJYLKY2nK8kUL0eqqmpCRdccIEyt8ipJ4YjBqFrAMMOG+fhELp58+YBGPZJiMHOJT8RBAEuu+wyAOUmD90XacHXXntNLf65NFK5rov6+noAw4V/sVgMrusqzXe2F+UhisWi2pwyGo0qCU/3MjQ0BAD4xCc+wZYtWwYAKt8Ri0cgpA/LNsANoL6hFqf6e2GYDEPpAURjDrgBRKI2im4+NCXqa8CN4XFK+VwR6aHwPsicWrBgAT784Q+zcJ8SHzQlBjh/O3TpoXs9H0ZBgqVLl7KOjo6ySnLSnGF1dh7ZbBrf//73wvXwPAQIGdmTAMDh+wKxaAKBJ8KeEzuKeKIWvT0D2LdvX9hWbjsYGhhETU0SnIda2+RV1GLpiT0gjFwsWrRIqexKc4cYZOLEiWhoaGAAyvyFXC6HQqGA3bt3K01BREp7DpKJMnnyZDXFmxAJDA+rrsbUMgwDnZ2dZfu8kw9DDmk+n8fOnTtDBJfi7dX6D1TASVKdRvuT7zXai/BrGAYGBwfVyBsppZqa6Lqu0iLFYhH3338/Jk+eDN93ldNKpmcQBCqKCIQCbXBwEJxztcsTEEpRyqMAYWCgoaEBnuchl8uhra0NDz30kMI9nU9fj/ORSNUDMwBUyJryULZt47Of/awKTZNPmkgkUHTziMWjME2Op37yH9i9Z6+MJxNgMMBhQAhIBAKxSBSZgUEYjCMRS8B3A2QyOdTV1UP6AbZu2ogZF7Rh4oQJ6D3ZhYjtQPgeLKPKlltgWJI5joOOjg6a26RCsHruQAiB5cuXl9VUAVA1Qhs3bpTkAJLDSaFYchgpa69Lc/p/tc36AGg/O9be3l6mgcgppoXp6+vDjh07pL7vhq76ydSjMCRpND1Lr9+nTvyjvfTzAeWmKjA895hs76lTp7L7778fjY2Nyv8gn5DC4YRvvZ+DGE8fvMdgwDRsDA4Owvd9NDU1IRqN4skn/x/U1tYzzk3QPup6bwYVMAJQgo4CC3pfT7FYVBsYAcMClAIz+vpalqXWVh9Kfemll7JJkyap7LpuIgvfA0OYz/nRj34UPjcAXwoYDMzgQD49hFQ0DouZEG6AVDQJhzvIpXPgYOAiwN6dOzB9ylQ01dYialkoZjPVMwipP/r/1VdfjUKhgFwup+L9VCNEx3V0dJQhgyqBLcvCnj17yh5UJ9x0Oo0gCHDhhReel2I4QnRHR0eZQ0gRLAoUBEGgyl7IJCTip8ABaTEibH1yyu/60s28VCpVRjQU0qX/0+fZbBaLFi1iP/3pz1S3ZyaTUb0V1HBEORZ6BnouwjttaiOEQGNjI6QMt1f+zW9+g8bGRlbN5HSqTCAhGYlEkEwmFf4SiYTyc4Bhi4Qa4kYDShncfffdqhwFGB4Y4nqFEp0IPPWTn+DEiS7pUmEqB+pqUjAh4RWy4L4LuC4yA4MICi5qYglwER4Xs02sX/s6Zk1vQ1AsoKEmhYYERq/FIgeOHiYIAsyaNYuR9CKC0puSkskkli1bBs/zlGqkCJXneXj55ZcVYXiep/aZy+fziMVicBwH7e3t56VgkJJxl1xyieqVoJAhMTY1JJFfRP6BXlYODGsRMo+IgcbyolJvkrYA1MAKPbxNmsG2bdC+LTNmzGA//elP2Yf+8q9QW1MPzw3guQHSQ1n4nkBz0wQUCx7cog9IDtuKwDRsBL5EseDBcwM0NDQgl8vB8zx85jOfwa9//TxraWll0Wi0qkQgOc/EcOl0Wo3scV1XDYIjHNM5qyl0BYbp5s/+7M9Ya2uroiEyJW3Tgm0Z6O8fhOu6+N73vgfLtCCCAAaAmW3TMKGhDg6TiHCBVNRCwjFgMwnpFuDlhpCKO8gM9KG+JoZdOzZj8aK5uGDaREBg9DBvZYaZ5krNmzcPa9asUdGt/v5+1NXVoauri6YgMgrdDg4OoqamRtX3HDp0CK2trTBNE/39fWhpacGpU6cwYcIE9Pf3g3OO5cuXqwrgsQCZMJdeeilqa2vR2NiIwcFBTJkypXSvjuqr2Lhxo1oQkoyxWAwtLS1K6uqtqCHDjO0eOTeVmUQMSKacPjqUfBOyz/XasS9+8YvszjvvlE888QR+9rOfoaenB57n4dixY6itrVXSW9dcRNCcc3z+85/HX/3VX8G2bUYSWk8Anw0oskg7RtXX16tRorFYTJmHNH2GKi100/BswBhTJvj/+l//C3fffTeam5vDPFw+AxGEo2kdpw5+wPD888/j9r++XU5sncKGckU5qy3FpDdL7j98DF3d3fCEh1gsBc8wEPgeks21GOo/iebGJAb7exCNODCCIi6/uINJAGw0LiZppm8XoFfzUs7Asiz09fVJcsxzuRyi0agqnxgaGlKjJWlvudCc4CrOn8lkVOaUzINzcJPOAMMZfD1y1dPTI5uampiUrGy7BrpPHcgcID9Bz8mMlYlpWBuFeQGUZdWB8g1HKysIpByOEFLY9tChQ3LLli3YvXs3jh8/roYfEAFPnToVc+bMwbRp07Bw4UIWXsNVJhdpV6D6nWLJ3wkCT033L4WeZTKZZORzWJajcFpdtHA4EJBOp5FMJlEohGaVkD4ijoWhwbS0nRSzHRu+H8CwGAR8cNgoFgFuAKYJuEF4NssA/ADIu5COA1Z0IWORsMbRAOB5gMkB06iCQYAwxBiPx5Xdrtu0urNGkqGy2jOfz58WRRomLKGiPmRmUPgzPP/YsrVCDEddKiVWeB/lPpBeTk+fVRZaEtGMFMX7XYDMDfI/9CpdACprrt+PEKI0/SOufAtd4xCO9echJtfXR0pZEmJxJQjoPqoRAPp6Uc6Bzq/jZjj5yhXDV1MulMkMqbCzLgjC/7NwAAM34BU5GOeQTACmgBAebG4BMMEkIBkQBBIB8yBhgoMDfLifPQiAQAhELQ7P82GwAJZpVccg+mQ/Al0i69l0PU6uMxQtFiGPrmsY5XVdJFXy+XwponF+NAgwnAAkCRkSyHBmHTg9dHy6xC7ff2OsJd+kNajWiPwLvahSFyxUrav7JpV5ImB4MEalQKAXgDIiJolOmoa+q0ZD6togrPmC2rLZdV0kEgl1Ht8fbp2uTosMr99I2h1SIJ8vwLESkAzgJsLOQ9sMZ/SKUh+R58KMGACCcPyosBFIA34QwLIN1ZWYyw4hEY+BQSJfyI7OIJT6123Nyr3hdIebNAotMiGBwpRk49LnJOFpoSqbp84Xg5AJoEt/0iA6U5MEB4aJszIkeT5MKwI9ikUhc6pmJkceKN+PTxcyIzEoMYGucc50bWC48kFnGJ1xzwZ0v8OMGpwmQHQLgQRStcwHCFXzV7lOUspwaolgYNwAY4DrB7AsBs8LGV34gGFwAD5k4EEaAkICnEUhYUIyBgaGQAQwORD4LgyDgzOOIHBHpz4aVqxLrZGYQy82ozIGvSeCOsII+cMaRSLcIkFCCIAxA4wZ4DwcTUkIIfB9v2wCOX2mM3qxWFThWyGo3omV7F+u+ikYK58QSIxN90iLC4QSj0KiRMgENKGRknr0e71kPpvNlj2HnvMgPy+bzZYVZeqaw3GcspC0TmCEY9IiesGkXslAx1BvjF5DN5JJRL4g/U33TNE2XfOSWciYAc8L1Fr6vgDnJsKfciVE6X7IByPQt3MII3cMth2BYViqNyn0G4Pw/IEENw14vg8wwPeKYOCwrSgK+XCMj+t6CAIOAQucxcFZFJyZMBiHAQbPLcLiBmQQahzOLBSLPgwjWq52f5cXhR+JSIlI9Kpbym3osf+BgQH1/3Q6XXZO13VRLBaVw0i/1feu0DPNZ7pub2+vlFKqPQ+pfIEqe+nl+75yKiufi16UZNPPRxtTUhk2PY/+rGTjE/FS6Jvul5hOfwZ6LjpPLpfD0NBQ2f2SCUU5Gs/z1H1RCLRUJybp/un5Cd90Xbof/d5GWmMdJ/R/Cs/ra0v/p/Prhaz6dzpOdRrR8UXPShsF6WtAuR59TUaiR/2eddzTGtL603F6L0xVPshoQNKOugNJCupmFanwoaEh1Q5KqpKScNT4k0wmVcRCl167du2S06ZNY7FYDPl8Xtmj/f39MpVKMSrXSCaTZeaF7itQWbvu2NJx/f39sra2lumLapomBgYGZF1dHRscHEQQBLK+vr7MNqBnGxwclKX+DZZIJJQmNc1wGDcN3tPNGMJbNpuV9fX1jBaP2mjJH8jn80in09JxHEYZZzL7aO/x48ePy1KijtEwONM0VZgdAAYGBlBbW1sWyiaTrlAoqCQftbtqYXxZV1fHgGH/kMxvwoFeic05h+M42Ldvn4zFYmhubmZ60SklFfUt8nSfpK+vT9bX1zPGGPr7+2UymWTHjh2TpZIYNhzEMbTS/3CM1IQJExiVyPu+j56eHglA1ciR4J01axYzDAO7du2SFPKePHmyKo/inI9dg/i+jwceeEC2t7fLrq4uSZ8VCgUcO3ZMLly4UL7wwgtS/80VV1whv/a1r0nP83DbbbfJ5cuXywULFsi5c+fKzs5OeeGFF8pPfOITUspwtP8TTzwh58+fLydPnixnz54tv/71r0siJJIYmzdvllOmTJG7d++WpCFc18Xf/M3fyDvvvFPqO+eSdLnvvvvk3Llz5eDgoNIqH/nIR+T8+fPlnDlz5Ny5c+WFF14oOzo65Be+8AUppcS9994rr7jiCkmSLpfLoaenR956662ypaVFTp48WS5fvlyuXr1a6hLzO9/5jly6dKnUtcP27dtle3u77O7uliS5dCntui6Ghobw6U9/Wk6ZMkW2tLTIjo4O+a1vfUvhM5/P47XXXpPLli2TEyZMkM3NzfJv//Zv5cmTJ6WuLZcuXSr/+Z//WeraSkqJr3zlK/K6664rW5//+q//kh0dHbK3t1du375ddnR0yPnz55et0axZs+TatWtlPp/H4sWL5Xe/+92yc6xZs0Z2dHTIadOmyWnTpslPf/rTcmBgoEw7XHzxxfL++++XUkpVCfDlL39ZfvCDHyx7vqefflrOnz9fNjU1yVmzZskPfOADkjb/pE5KKSWOHDkiU6mUXLVqlaKPjRs3yokTJ8rJkyfL1tZWOWXKFDlt2jQ5depUeeTIEdnV1SUnTJggZ86cKSdOnCgvvPBC+e1vf1tSVe+YY5SGYWDdunXwfR8bNmxQWqOUF0F3dzds20Zvb68krUFFea7r4o477sBnP/tZfPjDH0ahUMDHP/5xfOUrX8FHPvIRCCGwf/9++dnPfhbXXHMNVq1ahTvuuANf//rX8YMf/EDqIb+DBw+Cc441a9aUbdu2YcMG7N69W2V5yT4XQuCVV15BPp/Hhg0bZCwWQ7FYxKc+9Sl89atfxa233opisYhPfvKTuO+++/Bnf/ZncF0X3d3dyn4mx/GLX/wi1q1bhwceeADPPvss6uvr8fGPfxyZTEYVYHqeh66uLmzbtk3S9XO5nBImVGBIkSQpw9m13/jGN+RTTz2Ff/mXf8EzzzyDu+66Cy+99JJ6hkwmIz/4wQ9i2rRpeOGFF/DAAw/gxRdfxLe//W0Aw4leenbyn8i0GBgYUMOvBwcHAYTZ8YGBAaTTacyePZvdf//9+Nd//VdMmTIFjY2N+Jd/+Rfcf//9mDt3LiPt0d3drQi6v79fvu9970NnZyd+8pOf4Etf+hJWrlyJr371q5Ka16gA8qc//ana5ZYEB/mnruvi2WeflZ/5zGfw3ve+F8899xy++93v4siRI8hms9K2bdi2rXCWy+UwceJEZalYloXJkyfjhRdewIsvvojFixfj6quvxq9+9Sv893//N2praxkVgv7d3/0dnnzySVxxxRX4t3/7Nzz88MPScZzqG6bOBK7r4sCBA3AcBwcOHFARGTK1yLFrbGxkFMZMp9MqKXjxxRczAHjllVfkQw89hCVLlmDx4sWMTKN7770XM2bMwL/+67+ybDaLu+66C/v375ePPvoobr/9dgChCXb48GFEo1Hs2bNHRaIymQxOnTqFYrGowpdE2IODgzh69Cjq6+uxbds2XHbZZSiNCmLt7e1IJBLyvvvuw+WXX67afkn6Ur4hCMKtr1988UXceuutuOaaa1hNTQ0eeeQRefnll+Opp56SH/nIR1g6nYZlWYjH43j22WfR0dEBKcPaK2p3pTwNBUNc10V/f7/80Y9+hHvuuQcf+MAHmBACnZ2duOyyy8JCbs7x+OOPIxaL4fvf/z6zLAuzZ8/Gtm3b5BNPPIG/+7u/k7W1tQwIw640EIIqe4HhHhwq+QHCyGUqlVI+zooVK5hpmnjqqadkb28vrrzySkYJUyEEBgcHVS1XJBLBI488oga8NTU1sSVLlqC3t1d+//vfx9133y2bmppYEATo7++H4zjYsGGDvOSSSxjnHJlMpqys/fvf/z6uvvpqfOUrX2FU2Pr8888rU4nMZMMIJ/2fPHkStbW1arfchoYGRhPpi8WiNAwD7e3t+vhUls/npWVZuPLKK9lll12G3t5e+cgjj+ATn/jE2DVIf3+/3Lt3L6677jq88MILytanvEZNTQ36+/tV0RkhkwiCIlKFQkENCND9ou3bt+PKK6/E4OAg4vE4stksrrrqKpw4cQL79u2TtMhHjhzBrFmzcPz4cWX6HTx4UM6ZMwdHjhxBJpORVB+Uy+Xguq48duwYVqxYgVdffVXVXw0NDaluNRq1Q9Ej8mv0ZqZXX30VnufhT/7kT1BTU4NTp07JxsZGtnjxYrz00ksIgkDZvp2dnfjhD38I0zRVeQ4NaaDqAmpEcxwHu3fvhmVZajYxCZ0LLriAUcTtueeew6WXXgrP8yRl22+55RYUCoWynhvyOQCURZ4IdJxToIAILxKJKD8qm82qejAKtTqOo5q2GGN48cUXsXDhQrS2tjIyRW+44QZks1m88cYbAELLIxaLYdq0aXjppZcUY1JKgDTAkSNH0N7erqKgkUgEkUhEaW/y52zbRqFQQH19Pbq6utRntFbkmyYSCWQyGQDKb5Ku66K5uVnd1wc+8AEMDAxgzZo1o4/9GQ22bduGiRMnYvHixTh58qQKeVJsXJ9DJYRATU2NcuYJ0eSwUVUpmTCHDh2S/f396OzsVPmTeDyOmTNnwvd97NmzRy3ogQMHcOWVV2LTpk0qX7Nnzx40Nzdjzpw52L9/v0JaNBrF6tWrUVdXh8suuwwHDx5UUaxEIgHP85BMJlVkgwiPei9oMRzHwY4dOxCLxTBz5kxWap5ijuOgtbUVhw8fVkgHgPr6ekyfPh1vvPGGpPISmlJCSVRy5Cl3QJ1uugOs14t1dXVh+vTpoMCBaZpoaGhALBbDli1bypKy5IBT+JbeaQs00jBUwAgMCwUqGaKasMqKA9I+xWIRJ0+exMKFC1VOKxKJoLm5GbW1tdi3b1/Z9hJLly7Fr371Kwgh1L4fetsDZfzJ7NTn9NIzAMN9JHoFAp0LQNlElEQiodoWKIikR1Vp2PrRo0erb7mlHxNB0ndr167FjBkzsHDhQpw8eRKHDh2SJFnI/tWHEOhlDPQioFZeqvs6ceIECoUCpk6dWhY7b2hogGVZSlIwFm6wMmvWLABAT0+PlDIcxjB9+nRwzlVHHplJO3bswIwZM9De3o6enh50dXUps4Uka+XACcdxFCGTmdXf34/m5mZ4nqeEABBufnrs2DFlBtA9XHLJJfjv//5v9Sw0IqgycWYYBhYtWsRaWlrwgx/8QN0PEWFJs8ne3l5MnDhRhUgBIJFIsLq6OnR3dyvmGy7PGO4xoXfS9vrAaBIKZC7rjVz6kD/Cl96C3d3djebm5rJsfyqVYvF4HEePHlXEzVg4ub+/vx+7d++WRNykSUzTxMKFC/HUU0+p+6fwK/mYpEkpikX0IOVwT48O9Px6xyZ1cZL/09LSglwuh5MnT1Y39qfy/0QwnHPs2LEDU6ZMQWtrK1KpFI4cOVLWQEPH0W/15il6AL0OisKFAFQGlXa3opBoTU0NI0eSPj9y5AgWLlwIIQT6+/shhMDevXsxZ84cNDc3Kw1C97Z161bMnTsX06ZNQzQaxb59+8qSd0TAo8Hx48cRjUZVoR8JASIC3/eRyWSUtH7f+96Hn/3sZ2phdCFB7yQ1bdvG7bffjueeew5f/OIXJfkKRKCnTp1SJgfhmrYOiEajVW0xR4JPyuF90PXPRgMKRVPpfqFQkJlMBk1NTQCgCJmeZ2hoSDV+UV7o+uuvVzih0aIUabzzzjuRy+Vwyy23yP7+fhkEgapLOx9zufTp8SS4E4kEi0ajYePXaCcgZiBC1jVDEATYsWMHOjo6UF9fz1pbW7F58+YRM8bAMAEQI1R+pucfKPavEy3lFMg2HhgYAGMMhw8flpxztLS0sLa2NjUZZNu2bWhvb8ekSZOUuUNVxOvXr8f8+fNRV1fHJkyYgI0bNyrJQ4jS7/1MkM/nlXlBx1OERkqJwcFBSaU6QRBg/vz5zPd97N27VxKzVko5wollWbjzzjvZrbfeiieeeAK33HKLTKfTkgifnoXaEIixhBDKnxkNRurLIKattpxG5QwQ1kuZpqk6A/XsfDweV62+Or6uv/56/OpXv1JbNujlRhdffDH72te+hl27duHmm2/GgQMHJEXdxloHN9L9U5CJXISqfRBCok7Yvb29sr+/H7NnzwYAzJgxA+vWrVPqmUwUQjb9tjIWT0AqW9cyVBaha6B8Pi/JpGGMKS0mpcS8efOwfft2pNNppNNpTJw4kbW0tKC3t1cxbk9Pj+zt7UV7ezs8z8Ps2bOxcePGsg4+VeszClBSUl9ceg5iMipZodDszTffjB//+MeIxWJlDFJZB0U4+PznP88efPBBrF+/Hn/xF3+BTCYj6XyUV9HL0/UmtdFAr7rWw6zVEh+ZZYQzGj5BSTrGmKqKoO5GvVLYNMPtHQqFAvbv3y9ph1vChxACf/zHf8x++ctfwnVdXH/99Vi7dq2k+x0rWJalgiREn/l8XlVtj8oglepWJ3La42/atGlgjGHevHnYunUrAJxGKLok0at+CXRzi4AiJXQf+kzZYrGomoF6enrQ0NAA27bR1taGw4cP48CBA7KxsVE1SdG2DZ7nYdu2bWpbBikl5s+fj61bt4JClySVqyGSSCSCU6dOlVU7U5JKCIFUKsUI2RSwuP766/HMM8+U1VqdCffUJHXppZeyn//85xgYGMBHPvIRFSbWpTzhhxxuCuWeDYiIaZ2I2XSBNhrox1LEjno26DkoGkghXNISAFBfX8+WLVuGlStXKgddH8xhWRYmTJjAVq1axRYuXIi/+Zu/wYEDB+S5TJ85ExiGwSqtGWJ027ar80FG8iE451i/fj1qa2vR0NDAiEH6+vpw/PhxCQwzgl41SqDPmCU/Qle9Qgi1af3Q0JAiXvqepn4LIdDT04Pm5mYYhoFZs2Zh//792Lt3r3Lam5qacPjwYXUvGzZswMSJE5FMJmHbNtrb23HixAkcPnxY6s5gNb0e8XgcXV1dKrBAEaa+vj6lXSiaQs9PU9JpkgppVB3n9E72Mecc7e3t7B//8R+xZs0abN26Vdq2zSh0TrY+5Wn0WVJnA/3aldq7GhOTwsEkSBsaGlg+n0c2my3zx4BwZ2EqHwLKtfT73vc+PP300yp4QAxLASEpJWKxGB5++GEwxvCf//mfVd3faBAEgSQfjvwoCgLU1dVVb2JVmgGMhbszzZkzRyF16tSpSCaTeOONN5QUqqx8pagOLSZ9Rsik3wghMHnyZFiWhZ07d6r+DQDK4Z4yZQpM08T27dsxbdo0CCHQ1taG3t5e7Ny5E3PmzIGUEpMmTcLg4CAymQwMw8CmTZswe/ZsZU7RRpmbNm1Sz6hH7c4G06dPRyaTQSaTKfNBdu3ahZkzZ6rz6TVpqVQK119/PV588UUlUYGRNQlJUpKqy5YtQ3NzM/bu3YuS36UYjXB+8uRJmc1mMXXq1FHvnxiQnpWCK3qk7mxAWoeeIRqNYvLkydi7d686HwCcOHFCDg0Nob29XX1O+PJ9H8uWLWNAuFc7Of5CiLJOU8YYamtrWVtbGw4cOHBemtUqrRnGGDZt2iRLAql6E0v3G0jC7tu3D3PmzEGxWEQmk0FNTQ1ramrC5s2bla0JDE8BpwSeXk4AlJttxCCGYaC5uZmlUins3r0bwLAJsWnTJliWhTlz5oBzjr1796KhoQGGYcBxHDiOgz179mDq1KlgjGHChAkQQmDfvn1SSokDBw5g5syZKvFVU1ODlpYWNauLTEOSXmeDWbNmwfd97Nu3T1LwgXOO3bt3o62tTZk5tOsTmRfvec97sH37dpWD0E0lnVEikUhZaDKTyWBgYADJZBLJZBJtbW3Yu3dvGT5pzCoN3jsbUDBBrxGj/1czXonMEdI+UkosXLgQO3bsUHmKYrGIgwcPIggCtd89MNymQFrv6quvxsaNG0+b6kJmG30+ODiIhoaGsmDQ7wokvOhahmGoIYLt7e2jTzWhqI5ew2QYBo4fPy5PnjyJmTNnIhqNqnmq06dPx9atW+G6LlpaWlgymcSWLVsU8nft2iUzmYzKbQDlAwJyuZxKihmGgeuuuw6rVq1Cf3+/jEajSKfTWLVqFYVvmed5auADEJa0xONxbNiwQRFIfX09i8ViOHLkCHp7e+Xhw4fR2dmJSCRCY/XZjBkzsGHDBvWslJ+gjD8tKCUJiRgvv/xyRKNRPPbYY8opXr16tezq6sKVV14JAEoaU1m1ZVno7Oxk/f39aqoJMaZum588eVKuX79e6tG973//+4jH41ixYgUDgOuuuw6bNm3Czp07JRVvPv3005gwYQLmz58PoNzUpWga4Xrq1Kk4efIkTp48KalXY8OGDYhEIqDqXd15p9oyPRtPBEwE9+53vxvbtm3Dli1bJD3/M888g9raWlVaRCYhmTOmaeKKK64Ik3MlzRAEAV577TVJUblisYjnn39e7tu3D5dccoky0fTACglzXZvT/ZIAJq2sm/702cqVK+VTTz2F97///eFQ8Go4jMqDKXkDALt27YJhGKquiHIWl156KR544AEYhoFEIoHrrrsOjzzyCKLRqGxra8N3vvMdTJ06FZdffjmA4Y5FkmL19fXqmkIIfOhDH8KqVavwvve9D7fffrt89tlnsXXrVpU8O378uOzv70d7e7vKbs+YMQPd3d2YMmUKo2hXMplEX1+fyi63tbWpJqV4PI45c+bgP/7jPxRSgTBCRcPlaEEBKKlfKjBkt956q3zggQcQjUblxIkT8YMf/AC1tbW46aabmI5HGn9D57jxxhvx4x//WAUjqLwcgJrPe/PNN+Omm26SbW1t2LBhA55//nl89rOfVUT553/+5+yRRx6RN998M/72b/9Wbt++HT/72c/w9a9/HTU1NYwYcmhoCDt37sQ999yj9hn/0pe+xK677jr88z//M2677Tbcdttt8vjx43j88cfxsY99TDEGrTtVIVROusnn82VbPtx0003sG9/4hvzUpz6FW265RR4+fBgPPvggHn74YRXpo52waMxTsVjEe97zHuZ5ntRD+1/+8pfR3Nwsr7zyShw8eBA//elP8Sd/8ie44YYbGNGkXt7EOce9996L73znO5IxhuXLl+N//+//zagxi8qHSGhQkvTee+/Fj370I7lhwwYsWrQI//AP/8AYY6MzCKk23eHL5/M4efIkli9fjunTpzPOuSoFmT17NpYvX45Dhw7JpqYm9rnPfY7Zti1/8YtfIJvNYubMmfj7v/97NDc3s1JSBkEQIJFI4IYbbqANaZBIJMA5x5w5c9gjjzwiv/nNb4KmCT700EO44oorGGm0d73rXWhtbWUk8a+99lo4jqMK/6SUuOaaa1QPw7XXXouZM2cyvWjv4osvxv79+3H06FE5efJklkwmMXfuXFUbRlKttbUVnZ2dKnMOAHfccQfjnMtf/OIXOHLkCG688UZ84QtfYETsQRBg0qRJmD9/vpJmUkrccMMN2LZtW9lYTar14pxj2rRp7NOf/rRcuXIlVq1ahWnTpuFzn/scPvjBDzK6tmVZePLJJ1WFbXNzM77xjW/gfe97H9P9tquuugpdXV3YtWsXgiBQs8iamprY9773Pfntb38b3/nOd5BKpXDzzTfjU5/6lIq+ER20tbWp4XZ0biEELrvsMkydOhWnTp2SdXV1LAgCPPvss7j77rvx0EMPYdKkSfi3f/s3/Pmf/znTTbElS5agoaFBOfpCCHz6059Gb2+vwtsnP/lJPPnkk3jwwQdRX1+Pj33sY7jttttUZyJpBt/3UVdXh7vuukuF1KPRKCZMmKBCuB/96EcVnZIpHI/H2R133KHaAL7whS9gxYoVjIYiluUjzvbyfV9tEknpfvqOut2ohuhs56GH0TvE9F4N/dhCoaD6GaiPgIa+6eehcCjlTPTuOymHu9X0jjXK4gZBUNYRR91klT5XZYchPTeVjBNO6PlpS+bBwcEyHNJ7ZccbDbDWP6NeB7oX6gSk4wqFghqMQPdMOzLRM1JE6UxrQclYun+9v0Jfh8ouR7qHM527ct30jkeqAK58Vvqe3vWuP/04ul8dj3RfFF6n9SW/kM5B0+HpPuj/RD9CCFWhkc/nR2cQPeylf0YX1itw6YHIj9B/k8/nT2t31ImGPqNzEbHTcZXEpx8zEsERk1QyhX4NvVWW7ltfRP07z/MwODh4xkXTn1P/TSXxUwssvVzXLTsX2fi0QDqTUv6H2lz1Z6ZASeW59fPqgoMEARENSV399zo+6Dudeeg7eqb+/v7TcKK3r0opVbSPCFhPdurnpN/prbS0HhT2r3xGfb317whvld8HQaCEHN1bJV2OyiAkqfXPdGlOF0qn06dxfuXFqC5Jl4A64ukGKx+Sjs9kMmUEqhMmEQDZmiMhLJfLqb914qNz03e0eJX3WIkPnYGy2awi4mw2W8bMOjHq0q9SY+rSXBccpBF0RtcJhLQqnYM0i35v+vV1YqkUEPqz6Out18pV4k8/JwkSnUmIQPX70OcH0HEkxUcSalSCX9lxqQu9StxX4lyv9avUzPrzEhN7nnfuLbelXooywqz8vhKB1O2lE60ubSofaKQhALqE8zyv7PcjMRaVC+jnJoTon1dqLupd0c9Xqa4rTZoz4aJSU1aaFaSdiVB1hqGOP/1clfc6MDBwmqlDUSqdgXUBM5K5WCks6D4qe3QocKCfk+7zTEKxUpjqWltnmpGGRVTiSX/2SmFSKWz03+hCmda1Uujrv6Fjfd+vzsTSF1uXZJUXqUS+/vdIKlw3E4gAdYlQeW26LhGAjoSRGIk+1wl8pHxOpQlJn5M0o/NVmiWVBEbH6Yuna9nK56pcNCllmcqnnFGlVtEltk6cOmOPNGVFfxbdD9MJT2cIMl0rCUpnVv05Kk3tSsaj43RNRBq58t4qtbZ+jkr86bjWzTddcBCeKumN8FOZ66Pf/X+mrWvCCwzQQQAAAABJRU5ErkJggg==" alt="ואלור, פתרונות אוטומציה" width="200" height="137" decoding="async">
+        <span class="brand-sep" aria-hidden="true"></span>
+        <span class="brand-name">מחשבון עלויות AI</span>
+      </div>
+    </div>
+
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">אומדן עלות חודשית לתהליך אחד</p>
+        <h1>כמה עולה להריץ תהליך AI בחודש?</h1>
+        <p class="hero-lead">מתארים תהליך עבודה אחד, מזינים כמה פעמים הוא רץ בחודש, ומקבלים אומדן עלות חודשית מול Microsoft Copilot ולצידו החלופות המרכזיות בשוק.</p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="shell" tabindex="-1">
+    <div class="calculator-layout">
+    <form id="calculator-form" novalidate>
+      <section id="simple-workload-view" class="panel quick-start" aria-labelledby="workload-title" hidden style="display:none">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">מתחילים כאן</p>
+            <h2 id="workload-title">מה הכי דומה לשימוש שלך?</h2>
+          </div>
+          <p>הדוגמאות הן נקודת פתיחה בלבד. אפשר לשנות את הכמות עכשיו ולדייק את הנתונים בהמשך.</p>
+        </div>
+
+        <aside class="how-to-use" aria-labelledby="how-to-use-title">
+          <h3 id="how-to-use-title">איך משתמשים במחשבון?</h3>
+          <ol>
+            <li><strong>בוחרים תבנית</strong> שהכי דומה למשימה שלכם.</li>
+            <li><strong>מזיזים את הסליידר</strong> לפי מספר השיחות או המשימות ביום.</li>
+            <li><strong>קוראים את האומדן החודשי</strong> בשקלים ובדולרים, ולצידו את העלות להרצה אחת. לפירוט המחירים והמודלים פותחים את <strong>הפירוט המלא</strong>.</li>
+          </ol>
+        </aside>
+
+        <fieldset class="preset-picker" aria-describedby="preset-status">
+          <legend>1. בוחרים תבנית</legend>
+          <div class="preset-grid">
+            <button class="preset-button" type="button" data-preset="student" aria-pressed="true">
+              
+              <span><span class="preset-title">סטודנט</span><span class="preset-description">סיכום חומר לימוד, מאמר או טיוטה לעבודה.</span></span>
+            </button>
+            <button class="preset-button" type="button" data-preset="creator" aria-pressed="false">
+              
+              <span><span class="preset-title">יוצר תוכן</span><span class="preset-description">פוסטים, כותרות וטקסט לקמפיין. יצירת תמונות אינה כלולה.</span></span>
+            </button>
+            <button class="preset-button" type="button" data-preset="developer" aria-pressed="false">
+              
+              <span><span class="preset-title">מפתח מתחיל</span><span class="preset-description">בוט קטן, הסבר קוד ותיקון תקלות.</span></span>
+            </button>
+          </div>
+          <p id="preset-status" class="micro-note">נבחרה תבנית סטודנט. אפשר לשנות את כמות השיחות בנפרד בלי להחליף תבנית.</p>
+        </fieldset>
+
+        <div class="usage-card">
+          <div class="usage-heading">
+            <label for="daily-runs">2. כמה שיחות כאלה יהיו ביום?</label>
+            <span id="daily-runs-output" class="usage-value">כ־2 שיחות ביום</span>
+          </div>
+          <input id="daily-runs" class="usage-slider" type="range" min="0" max="30" step="1" value="2" dir="ltr" aria-describedby="daily-runs-help daily-runs-monthly">
+          <div class="slider-scale" dir="ltr" aria-hidden="true"><span>0</span><span>15</span><span>30</span></div>
+          <p id="daily-runs-help" class="usage-explanation">במחשבון, שיחה אחת היא הפעלה אחת של המשימה. חודש מחושב כ־30 יום.</p>
+          <p id="daily-runs-monthly" class="usage-explanation"><strong>כ־60 הרצות בחודש</strong></p>
+          <p id="daily-override-note" class="usage-explanation override-note" hidden>מצב הזנה חודשית מדויקת פעיל.</p>
+
+        </div>
+      </section>
+
+      <div class="mode-gate">
+        <div class="mode-tabs" role="tablist" aria-label="בחירת מצב המחשבון">
+          <button id="developer-mode-tab" class="mode-tab" type="button" role="tab" aria-selected="true" aria-controls="developer-workspace results-panel results-details developer-reference">התהליך והעלות</button>
+          <button id="costs-mode-tab" class="mode-tab" type="button" role="tab" aria-selected="false" aria-controls="results-details developer-reference" tabindex="-1">פירוט מלא</button>
+        </div>
+        <input id="developer-mode" class="mode-state-input" type="checkbox" tabindex="-1" aria-hidden="true" aria-controls="developer-workspace results-panel results-details developer-reference" aria-describedby="developer-mode-help">
+        <p id="developer-mode-help" class="mode-help">כאן מזינים את התהליך ומקבלים את העלות החודשית. פירוט המחירים, המודלים וההנחות נמצא במסך הנפרד.</p>
+      </div>
+
+      <div id="developer-workspace" class="developer-workspace" data-developer-content hidden>
+        <aside id="microsoft-comparison-warning" class="critical-alert" tabindex="-1" aria-labelledby="microsoft-warning-title">
+          
+          <details class="alert-body">
+            <summary id="microsoft-warning-title">נתוני Microsoft אינם שקולים למחירי ה־API האחרים. למה זה חשוב</summary>
+            <p>אפשר להשוות כאן את כל האפשרויות, אבל המספר של Microsoft מחושב בשיטה אחרת ולכן אינו השוואת מחיר מדויקת אחד־לאחד.</p>
+            <p><strong>Anthropic, OpenAI ו־Google</strong> מחושבים לפי מחירוני API רשמיים לקלט ולפלט. <strong>Microsoft Copilot</strong> מתומחר בקרדיטים, והמיפוי הרשמי לטוקנים הוא חלקי ומוגבל לכלי GenAI ב־Copilot Studio בלבד: <bdi>Basic 0.1</bdi>, <bdi>Standard 1.5</bdi> ו־<bdi>Premium 10</bdi> קרדיטים לכל 1,000 טוקנים, ללא הפרדה בין קלט לפלט. פעולות שיחה אחרות מחויבות במחיר קבוע לאירוע. <span class="badge badge-partial">מיפוי רשמי חלקי</span></p>
+            <p>ערכי Cowork (<bdi>Light 125</bdi> / <bdi>Medium 500</bdi> / <bdi>Heavy 1,200</bdi> קרדיטים למשימה) מגיעים מקובץ Customer Cowork Estimator של Microsoft. הקובץ מגדיר אותם כהנחות המחשה/כיוון המבוססות על נתוני Frontier מ־27.5.2026, ומניח שימוש ב־<bdi>Anthropic Opus 4.8</bdi>. אין נוסחה ציבורית להמרת משימת Cowork לקרדיטים. <span class="badge badge-estimate">הערכה כיוונית, לא מחירון רשמי</span></p>
+          </details>
+        </aside>
+
+        <aside class="advanced-how-to-use" aria-labelledby="advanced-how-to-use-title">
+          <h2 id="advanced-how-to-use-title">איך עובדים עם המחשבון</h2>
+          <ol>
+            <li><strong>מתארים את התהליך</strong> בשפה חופשית, כולל הקבצים שנכנסים ומה רוצים לקבל.</li>
+            <li><strong>מזינים מחלקה וכמות חודשית.</strong> המחשבון מעריך אוטומטית את היקף הקלט, הפלט ואירועי Microsoft.</li>
+            <li><strong>עוברים לפירוט העלויות</strong> כדי לראות את ההשוואה, ההנחות והסייגים במסך נפרד.</li>
+          </ol>
+        </aside>
+
+        <section class="panel precision-settings" aria-labelledby="precision-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">הזנת נתונים</p>
+              <h2 id="precision-title">תהליך, מחלקה וכמות חודשית</h2>
+            </div>
+          <p>כתבו את התהליך בשפה רגילה. המחשבון יזהה את סוג העבודה ויעריך את היקף השימוש אוטומטית.</p>
+          </div>
+
+          <div class="plain-language-note org-optional-section">
+            
+            <div>
+              <strong>מה זה טוקן?</strong>
+              <p>טוקן הוא חתיכת טקסט שהמערכת סופרת. כלל אצבע בלבד: 1,000 טוקנים הם בערך 750 מילים או 1.5 עמודי Word.</p>
+            </div>
+          </div>
+
+          <div class="human-translation org-optional-section" aria-label="תרגום משוער של הטוקנים לשפה יומיומית">
+            <div class="translation-item"><span>מה שולחים בכל שיחה</span><strong id="input-human-equivalent">—</strong></div>
+            <div class="translation-item"><span>מה מקבלים בחזרה</span><strong id="output-human-equivalent">—</strong></div>
+            <p class="translation-caveat">זו הערכה גסה שמשתנה לפי שפה, עיצוב והמודל.</p>
+          </div>
+
+          <div class="precision-body">
+            <div class="advanced-grid">
+              <div class="field process-field">
+                <label for="process-description">תיאור התהליך</label>
+                <textarea id="process-description" rows="4" placeholder="למשל: לקחת שני קובצי Excel, להשוות ביניהם ולהחזיר דוח מסכם" aria-describedby="process-description-help process-auto-estimate"></textarea>
+                <p id="process-description-help" class="field-help">אין צורך לחשב טוקנים או להכיר מונחים טכניים. התיאור נשאר בדפדפן ואינו נשלח לשום שירות חיצוני.</p>
+              </div>
+
+              <div class="field">
+                <label for="department-name">לאיזו מחלקה שייך התהליך?</label>
+                <input id="department-name" type="text" maxlength="120" placeholder="למשל: כספים, רכש או לוגיסטיקה" aria-describedby="department-name-help">
+                <p id="department-name-help" class="field-help">שם המחלקה משמש להתאמת האומדן ונשאר בדפדפן בלבד.</p>
+              </div>
+
+              <div id="process-auto-estimate" class="process-auto-estimate" aria-live="polite">
+                לאחר הזנת התהליך יוצג כאן האומדן האוטומטי.
+              </div>
+
+              <div class="field org-optional-field">
+                <label for="input-tokens">מה שולחים למודל (קלט)</label>
+                <div class="input-wrap">
+                  <input id="input-tokens" type="number" inputmode="numeric" min="0" max="1000000000" step="1" value="8000" aria-describedby="input-tokens-help input-tokens-error">
+                  <span class="input-suffix">טוקנים</span>
+                </div>
+                <p id="input-tokens-help" class="field-help">השאלה, המסמך וההקשר.</p>
+                <p id="input-tokens-error" class="field-error" aria-live="polite"></p>
+              </div>
+
+              <div class="field org-optional-field">
+                <label for="output-tokens">מה מקבלים בחזרה (פלט)</label>
+                <div class="input-wrap">
+                  <input id="output-tokens" type="number" inputmode="numeric" min="0" max="1000000000" step="1" value="1500" aria-describedby="output-tokens-help output-tokens-error">
+                  <span class="input-suffix">טוקנים</span>
+                </div>
+                <p id="output-tokens-help" class="field-help">התשובה, הסיכום או הטיוטה.</p>
+                <p id="output-tokens-error" class="field-error" aria-live="polite"></p>
+              </div>
+
+              <div class="field">
+                <label for="runs-month">הרצות בחודש</label>
+                <label class="compact-check org-optional-field" for="monthly-override"><input id="monthly-override" type="checkbox" aria-describedby="runs-month-help"> הזנה חודשית מדויקת</label>
+                <div class="input-wrap">
+                  <input id="runs-month" type="number" inputmode="numeric" min="0" max="1000000" step="1" value="60" readonly aria-describedby="runs-month-help runs-month-error">
+                  <span class="input-suffix">הרצות</span>
+                </div>
+                <p id="runs-month-help" class="field-help">כמה פעמים התהליך כולו רץ בחודש.</p>
+                <p id="runs-month-error" class="field-error" aria-live="polite"></p>
+              </div>
+
+              <div class="field org-optional-field">
+                <label for="usd-ils-rate">שער דולר–שקל להמחשה</label>
+                <div class="input-wrap">
+                  <input id="usd-ils-rate" type="number" inputmode="decimal" min="0.1" max="20" step="0.0001" value="2.9860" aria-describedby="usd-ils-rate-help usd-ils-rate-error">
+                  <span class="input-suffix">₪ / $</span>
+                </div>
+                <p id="usd-ils-rate-help" class="field-help">השער היציג האחרון של <a href="https://www.boi.org.il/roles/markets/exchangerates/" target="_blank" rel="noopener noreferrer">בנק ישראל</a> ל־18.8.2026; הקובץ אינו מתעדכן אוטומטית.</p>
+                <p id="usd-ils-rate-error" class="field-error" aria-live="polite"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      <section class="panel providers-panel provider-disclosure" aria-labelledby="providers-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">בחירת מודלים</p>
+            <h2 id="providers-title">מודלים, הנחות ומסלולי Microsoft</h2>
+          </div>
+          <p>החישוב משתמש בברירת מחדל מכל ספק. אפשר להרחיב את ההגדרות רק אם נדרש תרחיש תמחור חריג.</p>
+        </div>
+        <div class="disclosure-body">
+
+        <div class="provider-grid">
+          <fieldset class="provider-card microsoft">
+            <legend class="provider-legend"><span class="provider-dot" aria-hidden="true"></span><span lang="en">Microsoft</span></legend>
+            <p class="provider-subtitle">עלות הקרדיט בחישוב: <bdi>$0.01</bdi> במסלול Pay‑as‑you‑go. חבילת <bdi>$200 / 25,000</bdi> קרדיטים מוצגת כהקשר בלבד.</p>
+
+            <div class="microsoft-split">
+              <section class="pricing-track" aria-labelledby="studio-track-title">
+                <div class="track-heading">
+                  <h3 id="studio-track-title">Copilot Studio, מיפוי GenAI</h3>
+                  <span class="badge badge-partial">מיפוי רשמי חלקי</span>
+                </div>
+                <div class="field org-optional-field">
+                  <label for="microsoft-studio">רמת עיבוד</label>
+                  <select id="microsoft-studio" aria-describedby="studio-selected-rate">
+                    <option value="basic" lang="en" dir="ltr">Basic</option>
+                    <option value="standard" lang="en" dir="ltr" selected>Standard</option>
+                    <option value="premium" lang="en" dir="ltr">Premium</option>
+                  </select>
+                </div>
+                <div id="studio-selected-rate" class="selected-rate"></div>
+
+                <details class="advanced org-optional-section">
+                  <summary>הוספת אירועים קבועים להרצה (אופציונלי)</summary>
+                  <p class="micro-note">אירועים אלה מתומחרים בקרדיטים קבועים ואינם תלויים בטוקנים. ברירת המחדל היא אפס.</p>
+                  <div class="event-grid">
+                    <div class="field org-optional-field">
+                      <label for="classic-events">תשובה קלאסית (Classic)</label>
+                      <div class="input-wrap"><input id="classic-events" type="number" min="0" max="100000" step="1" value="0" aria-label="מספר תשובות קלאסיות; קרדיט אחד לאירוע" aria-describedby="classic-events-error"><span class="input-suffix">× 1</span></div>
+                      <p id="classic-events-error" class="field-error"></p>
+                    </div>
+                    <div class="field org-optional-field">
+                      <label for="generative-events">תשובה גנרטיבית</label>
+                      <div class="input-wrap"><input id="generative-events" type="number" min="0" max="100000" step="1" value="0" aria-label="מספר תשובות גנרטיביות; שני קרדיטים לאירוע" aria-describedby="generative-events-error"><span class="input-suffix">× 2</span></div>
+                      <p id="generative-events-error" class="field-error"></p>
+                    </div>
+                    <div class="field org-optional-field">
+                      <label for="agent-events">פעולת סוכן</label>
+                      <div class="input-wrap"><input id="agent-events" type="number" min="0" max="100000" step="1" value="0" aria-label="מספר פעולות סוכן; חמישה קרדיטים לאירוע" aria-describedby="agent-events-error"><span class="input-suffix">× 5</span></div>
+                      <p id="agent-events-error" class="field-error"></p>
+                    </div>
+                    <div class="field org-optional-field">
+                      <label for="graph-events">עיגון ב־Graph</label>
+                      <div class="input-wrap"><input id="graph-events" type="number" min="0" max="100000" step="1" value="0" aria-label="מספר אירועי עיגון בגרף; עשרה קרדיטים לאירוע" aria-describedby="graph-events-error"><span class="input-suffix">× 10</span></div>
+                      <p id="graph-events-error" class="field-error"></p>
+                    </div>
+                  </div>
+                </details>
+              </section>
+
+              <section class="pricing-track estimate" aria-labelledby="cowork-track-title">
+                <div class="track-heading">
+                  <h3 id="cowork-track-title">Copilot Cowork, אומדן משימה</h3>
+                  <span class="badge badge-estimate">הערכה כיוונית, לא מחירון רשמי</span>
+                </div>
+                <div class="field org-optional-field">
+                  <label for="microsoft-cowork">רמת משימה באומדן</label>
+                  <select id="microsoft-cowork" aria-describedby="cowork-selected-rate">
+                    <option value="light" lang="en" dir="ltr">Light</option>
+                    <option value="medium" lang="en" dir="ltr" selected>Medium</option>
+                    <option value="heavy" lang="en" dir="ltr">Heavy</option>
+                  </select>
+                </div>
+                <div id="cowork-selected-rate" class="selected-rate"></div>
+                <p class="micro-note">הטוקנים שהוזנו אינם משנים את אומדן Cowork; אין מיפוי ציבורי. החישוב מניח שמשימה אחת שווה להרצה אחת ואינו כולל רישיון Microsoft 365 Copilot.</p>
+              </section>
+            </div>
+          </fieldset>
+
+          <fieldset class="provider-card anthropic">
+            <legend class="provider-legend"><span class="provider-dot" aria-hidden="true"></span><span lang="en">Anthropic</span></legend>
+            <p class="provider-subtitle">מחירון API רשמי לקלט ולפלט, בדולר למיליון טוקנים.</p>
+            <div class="field org-optional-field">
+              <label for="anthropic-model">מודל Anthropic</label>
+              <select id="anthropic-model" aria-describedby="anthropic-rate-note"></select>
+            </div>
+            <div id="anthropic-rate-note" class="selected-rate"></div>
+            <fieldset class="toggle-list">
+              <legend class="field-label">תרחיש הנחה ל־Anthropic</legend>
+              <p id="anthropic-discount-help" class="micro-note">אפשר להפעיל אפשרות אחת בלבד; הפעלת אפשרות חדשה מבטלת את הקודמת.</p>
+              <label class="toggle">
+                <input id="anthropic-batch" type="checkbox" data-exclusive-group="anthropic-discount" aria-describedby="anthropic-discount-help">
+                <span>עיבוד אצווה (Batch API), הנחה של 50%<small>חל על קלט ופלט; זמן עיבוד אצווה.</small></span>
+              </label>
+              <label class="toggle">
+                <input id="anthropic-cache" type="checkbox" data-exclusive-group="anthropic-discount" aria-describedby="anthropic-discount-help">
+                <span>קריאת מטמון פרומפט, מחיר 0.1× לקלט<small>חל על שיעור הקלט מהמטמון. עלות כתיבה 1.25×–2× אינה נכללת.</small></span>
+              </label>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="provider-card openai">
+            <legend class="provider-legend"><span class="provider-dot" aria-hidden="true"></span><span lang="en">OpenAI</span></legend>
+            <p class="provider-subtitle">מחירון API רשמי לקלט, קלט במטמון ופלט.</p>
+            <div class="field org-optional-field">
+              <label for="openai-model">מודל OpenAI</label>
+              <select id="openai-model" aria-describedby="openai-rate-note"></select>
+            </div>
+            <div id="openai-rate-note" class="selected-rate"></div>
+            <fieldset class="toggle-list">
+              <legend class="field-label">תרחיש הנחה ל־OpenAI</legend>
+              <p id="openai-discount-help" class="micro-note">אפשר להפעיל אפשרות אחת בלבד; הפעלת אפשרות חדשה מבטלת את הקודמת.</p>
+              <label class="toggle">
+                <input id="openai-batch" type="checkbox" data-exclusive-group="openai-discount" aria-describedby="openai-discount-help">
+                <span>עיבוד אצווה (Batch API), הנחה של 50%<small>חל על קלט ופלט.</small></span>
+              </label>
+              <label id="openai-cache-toggle" class="toggle">
+                <input id="openai-cache" type="checkbox" data-exclusive-group="openai-discount" aria-describedby="openai-discount-help">
+                <span>קלט במטמון, לפי מחיר המודל<small>חל על שיעור הקלט מהמטמון בלבד.</small></span>
+              </label>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="provider-card google">
+            <legend class="provider-legend"><span class="provider-dot" aria-hidden="true"></span><span lang="en">Google</span></legend>
+            <p class="provider-subtitle">מחירון Gemini API רשמי. עיבוד אצווה מוזיל את עלות הקלט והפלט ב־50%; תעריף מטמון אינו נכלל משום שלא סופק לו נתון בר־חישוב.</p>
+            <div class="field org-optional-field">
+              <label for="google-model">מודל Google</label>
+              <select id="google-model" aria-describedby="google-rate-note"></select>
+            </div>
+            <div id="google-rate-note" class="selected-rate"></div>
+            <fieldset class="toggle-list">
+              <legend class="field-label">תרחישי תמחור ל־Google</legend>
+              <label class="toggle">
+                <input id="google-batch" type="checkbox" aria-describedby="google-rate-note">
+                <span>עיבוד אצווה (Batch API), הנחה של 50%<small>חל על עלות הקלט והפלט לפי מחירון Gemini API.</small></span>
+              </label>
+              <label id="google-promo-toggle" class="toggle">
+                <input id="google-post-promo" type="checkbox">
+                <span>תרחיש לאחר סיום המבצע<small>ל־Gemini 3.7/3.6 Flash: החל מ־1.1.2027.</small></span>
+              </label>
+            </fieldset>
+          </fieldset>
+        </div>
+
+        <section class="cache-assumption org-optional-section" aria-labelledby="cache-share-title">
+          <div>
+            <h3 id="cache-share-title">הנחת שיעור קלט מהמטמון</h3>
+            <p>השדה פעיל רק כשנבחר מטמון ב־Anthropic או OpenAI. בכל ספק אפשר לבחור עיבוד אצווה או מטמון, לא שניהם יחד.</p>
+          </div>
+          <div class="field org-optional-field">
+            <label for="cache-share">אחוז מטוקני הקלט</label>
+            <div class="input-wrap">
+              <input id="cache-share" type="number" min="0" max="100" step="1" value="50" disabled aria-describedby="cache-share-error">
+              <span class="input-suffix">%</span>
+            </div>
+            <p id="cache-share-error" class="field-error"></p>
+          </div>
+        </section>
+
+        </div>
+      </section>
+
+        <div class="form-actions">
+          <button id="reset-calculator" class="button-secondary" type="button">איפוס הכל</button>
+        </div>
+      </div>
+    </form>
+
+    <section id="results-panel" class="results-panel result-dock" aria-labelledby="results-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">התוצאה</p>
+          <h2 id="results-title">כמה זה יוצא בחודש?</h2>
+        </div>
+        <p>המחיר מתעדכן בכל שינוי בתיאור התהליך או בכמות ההרצות.</p>
+      </div>
+
+      <div id="validation-banner" class="validation-banner" role="alert">יש לתקן את השדות המסומנים לפני חישוב התוצאות.</div>
+
+      <div class="result-content">
+        <article class="human-result-card" aria-label="עלות חודשית משוערת">
+          <div>
+            <span class="human-result-kicker">אומדן חודשי לתהליך שהוזן</span>
+            <strong id="human-result-title" class="human-result-value">—</strong>
+            <p id="human-result-simple-context" class="human-result-trust">אומדן לפי שלושה מודלי API, לפני מס ועמלות</p>
+            <p id="human-result-anchor" class="human-result-trust">—</p>
+            <button id="goto-details" class="button-primary result-cta" type="button">הצג פירוט מלא</button>
+            <div id="advanced-settings-status" class="advanced-status" hidden>
+              <span>הגדרות מותאמות פעילות.</span>
+              <button id="open-advanced-settings" type="button">בדיקת הגדרות</button>
+              <button id="simple-reset-calculator" type="button">איפוס הכל</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    </div>
+
+    <section id="results-details" class="results-disclosure results-wide" data-developer-content hidden aria-labelledby="results-details-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">פירוט החישוב</p>
+          <h2 id="results-details-title">פירוט העלויות</h2>
+        </div>
+        <p>כאן מופיעים מחיר המקור, המודל שנבחר וכל הנחות החישוב.</p>
+      </div>
+
+      <div class="professional-context" aria-label="הקשר מדויק לתוצאה">
+        <div>
+          <p class="human-result-copy"><span id="human-result-model" dir="auto">—</span><span id="human-result-context">, הזול מבין מודלי ה־API שנבחרו</span>, <span id="human-result-per-run">—</span></p>
+          <p id="human-result-rate" class="human-result-rate">—</p>
+        </div>
+        <div class="human-result-aside">
+          <span id="coffee-comparison-detail" class="coffee-comparison" hidden>—</span>
+          <p>האומדן אינו כולל מס, עמלות המרה ועלויות תשתית נוספות.</p>
+        </div>
+      </div>
+
+      <div class="results-detail-body">
+        <div class="result-cards">
+          <article class="result-card primary">
+            <span id="cheapest-label" class="result-label">הזול ביותר מבין מודלי ה־API שנבחרו</span>
+            <strong id="cheapest-model" class="result-value" dir="auto">—</strong>
+            <span id="cheapest-cost" class="result-meta">—</span>
+          </article>
+          <article class="result-card">
+            <span class="result-label">נפח חודשי להשוואה</span>
+            <strong id="monthly-tokens" class="result-value ltr">—</strong>
+            <span class="result-meta">טוקני קלט + פלט</span>
+          </article>
+          <article class="result-card">
+            <span class="result-label">טווח עלויות API בחודש</span>
+            <strong id="official-range" class="result-value ltr">—</strong>
+            <span class="result-meta">בין המודלים שנבחרו</span>
+          </article>
+        </div>
+
+        <section class="chart-card" aria-labelledby="chart-title">
+          <div class="card-heading">
+            <div>
+              <h3 id="chart-title">עלות חודשית בדולר לפי בחירה</h3>
+              <p id="chart-scale-note">סקאלה לוגריתמית עוזרת לראות פערים של כמה סדרי גודל; המספרים המדויקים מופיעים לצד כל עמודה.</p>
+            </div>
+            <div class="scale-control" role="group" aria-label="בחירת סקאלת תרשים">
+              <button class="scale-button" type="button" data-chart-scale="log" aria-pressed="true">לוגריתמית</button>
+              <button class="scale-button" type="button" data-chart-scale="linear" aria-pressed="false">ליניארית</button>
+            </div>
+          </div>
+          <div id="cost-chart" class="chart" role="img" aria-label="תרשים עלות חודשית בדולר"></div>
+        </section>
+
+        <section class="table-card" aria-labelledby="table-title">
+          <div class="card-heading">
+            <div>
+              <h3 id="table-title">פירוט החישוב בדולר</h3>
+              <p>מחירי המקור והדירוג מחושבים בדולר; ההמרה לשקלים אינה משנה את הדירוג. העיגול מיועד לתצוגה בלבד.</p>
+            </div>
+          </div>
+          <p class="scroll-hint" id="table-scroll-hint">במסך צר אפשר לגלול את הטבלה אופקית.</p>
+          <div class="table-scroll" role="region" aria-label="פירוט מחירים בדולר, אפשר לגלול אופקית" tabindex="0" aria-describedby="table-scroll-hint">
+            <table>
+              <caption>השוואת עלות להרצה ולחודש בין המודלים והמסלולים שנבחרו</caption>
+              <thead>
+                <tr>
+                  <th scope="col">דירוג</th>
+                  <th scope="col">ספק / מודל</th>
+                  <th scope="col">בסיס הנתונים</th>
+                  <th scope="col">תמחור פעיל</th>
+                  <th scope="col">עלות להרצה</th>
+                  <th scope="col">עלות לחודש</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <div id="developer-reference" class="developer-reference" data-developer-content hidden>
+    <section class="info-section" aria-labelledby="caveats-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">הנחות ומגבלות</p>
+          <h2 id="caveats-title">מגבלות, טוקנייזרים והנחות</h2>
+        </div>
+        <p>המחשבון נותן בסיס עקבי להחלטה, אך אינו הצעת מחיר ואינו מחליף בדיקת חוזה או מדידת שימוש בפועל.</p>
+      </div>
+
+      <div class="caveat-grid">
+        <article class="caveat-card">
+          <h3>טוקנים מול קרדיטים</h3>
+          <p>מחירי Anthropic, OpenAI ו־Google מפצלים קלט ופלט. Copilot Studio משתמש באותו תעריף קרדיטים לכל הטוקנים, והמיפוי חל רק על GenAI tools. Cowork נשאר אומדן קבוע למשימה ללא המרה פומבית.</p>
+        </article>
+        <article class="caveat-card">
+          <h3>טוקנייזרים שונים</h3>
+          <p>לפי Anthropic, מודלי Opus 4.7 ומעלה, Fable 5, Mythos 5 ו־Sonnet 5 משתמשים בטוקנייזר שמפיק בערך 30% יותר טוקנים לאותו טקסט. המחשבון אינו מוסיף 30% אוטומטית; לכן השוואת "אותם טוקנים" עלולה להציג את עלות Anthropic כנמוכה מדי ביחס להשוואת אותו טקסט.</p>
+        </article>
+        <article class="caveat-card">
+          <h3>מבצעים וספי הקשר</h3>
+          <p>מחירי Gemini 3.7/3.6 Flash הם מבצע עד 31.12.2026; ניתן להפעיל תרחיש לאחר המבצע. ב־Gemini 3.1 Pro Preview וב־2.5 Pro, קלט מעל 200,000 טוקנים מפעיל את מדרגת המחיר הגבוהה לקלט ולפלט.</p>
+        </article>
+        <article class="caveat-card">
+          <h3>עיבוד אצווה ומטמון</h3>
+          <p>המתגים הם תרחישי מה־אם ורק לספקים עם נתון בר־חישוב. מטמון Anthropic מדמה קריאות בשיעור שנבחר ואינו כולל כתיבה במחיר 1.25×–2×. Google Batch הוא עיבוד אסינכרוני ב־50% מעלות הקלט והפלט, ויכול לחול על מחיר המבצע או על המחיר שאחריו. הנחות אצווה ומטמון אינן נצברות באותו ספק.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-section" aria-labelledby="licenses-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">מחירי מושבים שאינם בחישוב</p>
+          <h2 id="licenses-title">רישיונות ומנויים להשוואת הקשר</h2>
+        </div>
+        <p>מחירים קבועים אינם מתווספים לעלות הטוקנים, כדי לא לערבב מודלי תמחור שונים.</p>
+      </div>
+
+      <div class="license-grid">
+        <article class="license-card">
+          <h3>Microsoft</h3>
+          <ul>
+            <li>Microsoft 365 Copilot: <bdi>$30</bdi> למשתמש לחודש, בחיוב שנתי.</li>
+            <li>Microsoft 365 Copilot Business: <bdi>$18</bdi> מבצע / <bdi>$21</bdi> מחיר רגיל.</li>
+            <li>Copilot Credits: חבילה של <bdi>25,000</bdi> ב־<bdi>$200</bdi> לחודש; העלות האפקטיבית <bdi>$0.008</bdi> לקרדיט רק בניצול מלא.</li>
+          </ul>
+        </article>
+        <article class="license-card">
+          <h3>Anthropic</h3>
+          <ul>
+            <li>Team Standard: <bdi>$20</bdi> למשתמש/חודש בחיוב שנתי או <bdi>$25</bdi> בחיוב חודשי.</li>
+            <li>Team Premium: <bdi>$100</bdi> למשתמש/חודש בחיוב שנתי או <bdi>$125</bdi> בחיוב חודשי.</li>
+            <li>Enterprise: <bdi>$20</bdi> למושב ועוד שימוש בתעריפי API; המחיר הכולל אינו מפורסם במלואו.</li>
+          </ul>
+        </article>
+        <article class="license-card">
+          <h3>OpenAI</h3>
+          <ul>
+            <li>ChatGPT Business: <bdi>$25</bdi> למשתמש/חודש בחיוב שנתי או <bdi>$30</bdi> בחיוב חודשי.</li>
+            <li>ChatGPT Enterprise: המחיר אינו מפורסם; נדרשת פנייה למכירות.</li>
+          </ul>
+        </article>
+        <article class="license-card">
+          <h3>Google</h3>
+          <ul>
+            <li>Workspace Business Starter / Standard / Plus: <bdi>$7 / $14 / $22</bdi> למשתמש/חודש בחיוב שנתי.</li>
+            <li>Gemini כלול במלואו מ־Business Standard; Enterprise אינו מפורסם.</li>
+          </ul>
+          <dl class="simple-plan-grid" aria-label="השוואה פשוטה בין תוכניות Google AI בארצות הברית">
+            <div><dt><bdi lang="en">Plus $4.99</bdi></dt><dd>רמת הכניסה הזולה ביותר.</dd></div>
+            <div><dt><bdi lang="en">Pro $19.99</bdi></dt><dd>רמת ביניים עם מגבלות שימוש גבוהות יותר.</dd></div>
+            <div><dt><bdi lang="en">Ultra $99.99–$199.99</bdi></dt><dd>הרמה הגבוהה ביותר והיקרה ביותר.</dd></div>
+          </dl>
+          <p class="plan-note">אלה מנויים חודשיים לשימוש באפליקציות Google, לא תעריפי API לבוט או למוצר. ההטבות והמגבלות המדויקות משתנות לפי מסלול ומדינה.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-section" aria-labelledby="sources-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">אודות ומקורות</p>
+          <h2 id="sources-title">מחירונים ותיעוד רשמי</h2>
+        </div>
+        <p>מחירי הספקים אומתו ב־<strong>18.8.2026</strong>; שער המט״ח נבדק ב־<strong>18.8.2026</strong>.</p>
+      </div>
+
+      <div class="source-grid">
+        <article class="source-card">
+          <h3>Microsoft</h3>
+          <ul>
+            <li><a href="https://learn.microsoft.com/en-us/power-platform/admin/pay-as-you-go-meters" target="_blank" rel="noopener noreferrer">מונה תשלום לפי שימוש של Power Platform</a></li>
+            <li><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/admin/requirements-messages-management" target="_blank" rel="noopener noreferrer">תעריפי צריכת Copilot Credits</a></li>
+            <li><a href="https://www.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-studio" target="_blank" rel="noopener noreferrer">Microsoft Copilot Studio</a></li>
+            <li><a href="https://www.microsoft.com/en-us/microsoft-365-copilot/pricing" target="_blank" rel="noopener noreferrer">תמחור Microsoft 365 Copilot</a></li>
+            <li><a href="https://adoption.microsoft.com/files/cowork/CustomerCoworkEstimator.xlsx" target="_blank" rel="noopener noreferrer">קובץ Customer Cowork Estimator.xlsx</a></li>
+          </ul>
+        </article>
+        <article class="source-card">
+          <h3>Anthropic</h3>
+          <ul>
+            <li><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer">תמחור Claude API</a></li>
+            <li><a href="https://platform.claude.com/docs/en/build-with-claude/token-counting" target="_blank" rel="noopener noreferrer">ספירת טוקנים וטוקנייזר חדש</a></li>
+            <li><a href="https://platform.claude.com/docs/en/about-claude/models/whats-new-sonnet-5" target="_blank" rel="noopener noreferrer">הערות מודל Sonnet 5</a></li>
+            <li><a href="https://claude.com/pricing" target="_blank" rel="noopener noreferrer">תוכניות ורישיונות Claude</a></li>
+          </ul>
+        </article>
+        <article class="source-card">
+          <h3>OpenAI</h3>
+          <ul>
+            <li><a href="https://openai.com/api/pricing/" target="_blank" rel="noopener noreferrer">תמחור OpenAI API</a></li>
+            <li><a href="https://platform.openai.com/docs/pricing" target="_blank" rel="noopener noreferrer">תיעוד תמחור פלטפורמת OpenAI</a></li>
+            <li><a href="https://openai.com/chatgpt/pricing/" target="_blank" rel="noopener noreferrer">תוכניות ChatGPT</a></li>
+          </ul>
+        </article>
+        <article class="source-card">
+          <h3>Google</h3>
+          <ul>
+            <li><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener noreferrer">תמחור Gemini API</a></li>
+            <li><a href="https://ai.google.dev/gemini-api/docs/batch-api" target="_blank" rel="noopener noreferrer">תיעוד Batch API של Gemini</a></li>
+            <li><a href="https://workspace.google.com/pricing" target="_blank" rel="noopener noreferrer">תמחור Google Workspace</a></li>
+            <li><a href="https://one.google.com/intl/en_us/about/google-ai-plans/" target="_blank" rel="noopener noreferrer">תוכניות Google AI של Google One בארה״ב</a></li>
+            <li><a href="https://one.google.com/intl/ALL_us/about/feeds/pricing_2026_07_28.json" target="_blank" rel="noopener noreferrer">הזנת המחירים הרשמית של Google One בארה״ב</a></li>
+          </ul>
+        </article>
+        <article class="source-card">
+          <h3>המרה לשקלים</h3>
+          <ul>
+            <li><a href="https://www.boi.org.il/roles/markets/exchangerates/" target="_blank" rel="noopener noreferrer">שערי החליפין היציגים של בנק ישראל</a></li>
+            <li><a href="https://www.boi.org.il/PublicApi/GetExchangeRate?key=USD" target="_blank" rel="noopener noreferrer">API רשמי לשער דולר–שקל</a></li>
+            <li><a href="https://edge.boi.gov.il/FusionEdgeServer/sdmx/v2/data/dataflow/BOI.STATISTICS/EXR/1.0/RER_USD_ILS?startperiod=2026-08-18&amp;endperiod=2026-08-18&amp;format=csv" target="_blank" rel="noopener noreferrer">נתון CSV מתוארך ל־18.8.2026</a></li>
+          </ul>
+          <p>ברירת המחדל: <bdi>1 USD = 2.9860 ILS</bdi>, שער יציג ל־18.8.2026. השער היציג הוא אינדיקטור ואינו שער חיוב מחייב.</p>
+        </article>
+      </div>
+
+      <p class="about-note"><strong>סיווג הנתונים:</strong> מחירי Anthropic, OpenAI ו־Google מבוססים על מחירונים רשמיים לקלט ולפלט עבור המודלים המוצגים. מיפוי Copilot Studio הוא רשמי אך חלקי ומוגבל ל־GenAI tools. משקלי Cowork אומתו בקובץ האומדן שמפרסמת Microsoft, אך הקובץ עצמו מגדיר אותם ככיווניים ולהמחשה בלבד, ולכן הם אינם מוצגים באותה רמת ודאות.</p>
+    </section>
+      <div class="developer-end-actions">
+        <button id="close-advanced-settings" type="button">חזרה למצב הארגוני</button>
+      </div>
+    </div>
+
+    <div id="calculation-announcement" class="live-region" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <footer class="footer shell">
+    <p>כל החישובים מתבצעים מקומית בדפדפן. מחירי המקור בדולר ארה״ב; ההמרה לשקלים היא המחשה בלבד ולפני מס, עמלות המרה, התחייבויות חוזיות, מינימום רכישה ועלויות תשתית נלוות.</p>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const DATA = Object.freeze({
+        microsoft: {
+          studio: [
+            { id: "basic", name: "Basic", creditsPer1k: 0.1 },
+            { id: "standard", name: "Standard", creditsPer1k: 1.5 },
+            { id: "premium", name: "Premium", creditsPer1k: 10 }
+          ],
+          cowork: [
+            { id: "light", name: "Light", credits: 125 },
+            { id: "medium", name: "Medium", credits: 500 },
+            { id: "heavy", name: "Heavy", credits: 1200 }
+          ],
+          creditPrice: 0.01,
+          events: { classic: 1, generative: 2, agent: 5, graph: 10 }
+        },
+        anthropic: [
+          { id: "fable-5", name: "Fable 5", input: 10, output: 50, newTokenizer: true },
+          { id: "mythos-5", name: "Mythos 5", input: 10, output: 50, newTokenizer: true },
+          { id: "opus-5", name: "Opus 5", input: 5, output: 25, newTokenizer: true },
+          { id: "opus-4-8", name: "Opus 4.8", input: 5, output: 25, newTokenizer: true },
+          { id: "opus-4-7", name: "Opus 4.7", input: 5, output: 25, newTokenizer: true },
+          { id: "opus-4-6", name: "Opus 4.6", input: 5, output: 25, newTokenizer: false },
+          { id: "opus-4-5", name: "Opus 4.5", input: 5, output: 25, newTokenizer: false },
+          { id: "sonnet-5", name: "Sonnet 5", input: 2, output: 10, newTokenizer: true, stablePrice: true },
+          { id: "sonnet-4-6", name: "Sonnet 4.6", input: 3, output: 15, newTokenizer: false },
+          { id: "sonnet-4-5", name: "Sonnet 4.5", input: 3, output: 15, newTokenizer: false },
+          { id: "haiku-4-5", name: "Haiku 4.5", input: 1, output: 5, newTokenizer: false }
+        ],
+        openai: [
+          { id: "gpt-5-2", name: "GPT-5.2", input: 1.75, cached: 0.175, output: 14 },
+          { id: "gpt-5-2-codex", name: "GPT-5.2-Codex", input: 1.75, cached: 0.175, output: 14 },
+          { id: "gpt-5-2-pro", name: "GPT-5.2 pro", input: 21, cached: null, output: 168 },
+          { id: "gpt-5-1", name: "GPT-5.1", input: 1.25, cached: 0.125, output: 10 },
+          { id: "gpt-5", name: "GPT-5", input: 1.25, cached: 0.125, output: 10 },
+          { id: "gpt-5-pro", name: "GPT-5 pro", input: 15, cached: null, output: 120 },
+          { id: "gpt-5-mini", name: "GPT-5 mini", input: 0.25, cached: 0.025, output: 2 },
+          { id: "gpt-5-nano", name: "GPT-5 nano", input: 0.05, cached: 0.005, output: 0.4 },
+          { id: "gpt-4-1", name: "GPT-4.1", input: 2, cached: 0.5, output: 8 },
+          { id: "gpt-4o", name: "GPT-4o", input: 2.5, cached: 1.25, output: 10 },
+          { id: "o3", name: "o3", input: 2, cached: 0.5, output: 8 }
+        ],
+        google: [
+          { id: "gemini-3-7-flash", name: "Gemini 3.7 Flash", input: 0.75, output: 3.75, promo: { input: 0.75, output: 3.75, afterInput: 1.5, afterOutput: 7.5 } },
+          { id: "gemini-3-6-flash", name: "Gemini 3.6 Flash", input: 0.75, output: 3.75, promo: { input: 0.75, output: 3.75, afterInput: 1.5, afterOutput: 7.5 } },
+          { id: "gemini-3-5-flash", name: "Gemini 3.5 Flash", input: 1.5, output: 9 },
+          { id: "gemini-3-5-flash-lite", name: "Gemini 3.5 Flash-Lite", input: 0.3, output: 2.5 },
+          { id: "gemini-3-1-pro-preview", name: "Gemini 3.1 Pro Preview", tiers: { low: { input: 2, output: 12 }, high: { input: 4, output: 18 } } },
+          { id: "gemini-2-5-pro", name: "Gemini 2.5 Pro", tiers: { low: { input: 1.25, output: 10 }, high: { input: 2.5, output: 15 } } }
+        ]
+      });
+
+      const DAYS_PER_MONTH = 30;
+      const COFFEE_PRICE_ILS = 15;
+      const DEFAULT_USD_ILS_RATE = 2.986;
+      const PRESETS = Object.freeze({
+        student: Object.freeze({
+          label: "סטודנט",
+          process: "סיכום מאמר או חומר לימוד וכתיבת טיוטה לעבודה",
+          inputTokens: 8000,
+          outputTokens: 1500,
+          dailyRuns: 2
+        }),
+        creator: Object.freeze({
+          label: "יוצר תוכן",
+          process: "כתיבת פוסטים, כותרות וטקסט לקמפיין; ללא יצירת תמונות",
+          inputTokens: 3000,
+          outputTokens: 1200,
+          dailyRuns: 5
+        }),
+        developer: Object.freeze({
+          label: "מפתח מתחיל",
+          process: "בניית בוט קטן, הסבר קוד, איתור תקלה וטיוטת פתרון",
+          inputTokens: 12000,
+          outputTokens: 3000,
+          dailyRuns: 3
+        })
+      });
+
+      const providerColors = {
+        microsoft: "#397aa7",
+        anthropic: "#a6543a",
+        openai: "#176b4d",
+        google: "#6a58a6"
+      };
+
+      const pick = (items, id) => items.find((item) => item.id === id) || items[0];
+
+      function apiRunCost(inputTokens, outputTokens, inputRate, outputRate, options = {}) {
+        const cacheShare = options.cache ? Math.min(1, Math.max(0, options.cacheShare || 0)) : 0;
+        const cachedRate = Number.isFinite(options.cachedRate) ? options.cachedRate : inputRate;
+        const uncachedInput = inputTokens * (1 - cacheShare) * inputRate;
+        const cachedInput = inputTokens * cacheShare * cachedRate;
+        const output = outputTokens * outputRate;
+        const subtotal = (uncachedInput + cachedInput + output) / 1_000_000;
+        return options.batch && !options.cache ? subtotal * 0.5 : subtotal;
+      }
+
+      function calculateRows(state) {
+        const totalTokens = state.inputTokens + state.outputTokens;
+        const studio = pick(DATA.microsoft.studio, state.microsoftStudio);
+        const cowork = pick(DATA.microsoft.cowork, state.microsoftCowork);
+        const anthropic = pick(DATA.anthropic, state.anthropicModel);
+        const openai = pick(DATA.openai, state.openaiModel);
+        const google = pick(DATA.google, state.googleModel);
+        const eventCredits =
+          state.events.classic * DATA.microsoft.events.classic +
+          state.events.generative * DATA.microsoft.events.generative +
+          state.events.agent * DATA.microsoft.events.agent +
+          state.events.graph * DATA.microsoft.events.graph;
+
+        const studioTokenCredits = (totalTokens / 1_000) * studio.creditsPer1k;
+        const studioCredits = studioTokenCredits + eventCredits;
+        const studioRun = studioCredits * DATA.microsoft.creditPrice;
+        const coworkRun = cowork.credits * DATA.microsoft.creditPrice;
+        const cacheShare = state.cacheShare / 100;
+        const anthropicRun = apiRunCost(state.inputTokens, state.outputTokens, anthropic.input, anthropic.output, {
+          batch: state.anthropicBatch,
+          cache: state.anthropicCache,
+          cacheShare,
+          cachedRate: anthropic.input * 0.1
+        });
+        const openaiRun = apiRunCost(state.inputTokens, state.outputTokens, openai.input, openai.output, {
+          batch: state.openaiBatch,
+          cache: state.openaiCache && openai.cached !== null,
+          cacheShare,
+          cachedRate: openai.cached
+        });
+
+        let googleInput = google.input;
+        let googleOutput = google.output;
+        let googleTier = null;
+        let googlePromoState = null;
+
+        if (google.tiers) {
+          googleTier = state.inputTokens > 200_000 ? "high" : "low";
+          googleInput = google.tiers[googleTier].input;
+          googleOutput = google.tiers[googleTier].output;
+        }
+
+        if (google.promo) {
+          googlePromoState = state.googlePostPromo ? "after" : "promo";
+          googleInput = state.googlePostPromo ? google.promo.afterInput : google.promo.input;
+          googleOutput = state.googlePostPromo ? google.promo.afterOutput : google.promo.output;
+        }
+
+        const googleRun = apiRunCost(state.inputTokens, state.outputTokens, googleInput, googleOutput, {
+          batch: state.googleBatch
+        });
+        const googlePricePhase = googlePromoState === "promo"
+          ? "מחיר מבצע עד 31.12.2026"
+          : googlePromoState === "after"
+            ? "תרחיש מ־1.1.2027"
+            : "מחיר בסיס";
+        const googleRateLabel = [
+          googlePricePhase,
+          state.googleBatch ? "עיבוד אצווה, 50% הנחה" : "ללא הנחת אצווה"
+        ].join(", ");
+
+        const rows = [
+          {
+            id: "microsoft-studio",
+            providerKey: "microsoft",
+            provider: "Microsoft",
+            model: `Copilot Studio ${studio.name}`,
+            quality: "partial",
+            runCost: studioRun,
+            monthCost: studioRun * state.runsMonth,
+            basis: `${formatNumber(studioCredits, 4)} קרדיטים להרצה`,
+            basisDetail: `${formatNumber(studioTokenCredits, 4)} מטוקנים${eventCredits ? ` + ${formatNumber(eventCredits, 2)} מאירועים` : ""}`,
+            rate: `${formatNumber(studio.creditsPer1k, 2)} קרדיטים / 1K טוקנים`,
+            rateDetail: `$0.01 לקרדיט PAYG`,
+            credits: studioCredits
+          },
+          {
+            id: "microsoft-cowork",
+            providerKey: "microsoft",
+            provider: "Microsoft",
+            model: `Copilot Cowork ${cowork.name}`,
+            quality: "estimate",
+            runCost: coworkRun,
+            monthCost: coworkRun * state.runsMonth,
+            basis: `${formatNumber(cowork.credits, 0)} קרדיטים למשימה`,
+            basisDetail: "משימה אחת = הרצה אחת; ללא קשר לטוקנים",
+            rate: `$0.01 לקרדיט PAYG`,
+            rateDetail: "משקל כיווני מקובץ האומדן",
+            credits: cowork.credits
+          },
+          {
+            id: "anthropic",
+            providerKey: "anthropic",
+            provider: "Anthropic",
+            model: anthropic.name,
+            quality: "official",
+            runCost: anthropicRun,
+            monthCost: anthropicRun * state.runsMonth,
+            basis: `${formatRate(anthropic.input)} קלט / ${formatRate(anthropic.output)} פלט`,
+            basisDetail: "דולר למיליון טוקנים",
+            rate: discountLabel(state.anthropicBatch, state.anthropicCache, state.cacheShare),
+            rateDetail: anthropic.newTokenizer ? "טוקנייזר חדש; ללא התאמת 30% אוטומטית" : "מחירון API רשמי"
+          },
+          {
+            id: "openai",
+            providerKey: "openai",
+            provider: "OpenAI",
+            model: openai.name,
+            quality: "official",
+            runCost: openaiRun,
+            monthCost: openaiRun * state.runsMonth,
+            basis: `${formatRate(openai.input)} קלט / ${formatRate(openai.output)} פלט`,
+            basisDetail: openai.cached === null ? "אין מחיר קלט במטמון שפורסם" : `${formatRate(openai.cached)} קלט במטמון`,
+            rate: discountLabel(state.openaiBatch, state.openaiCache && openai.cached !== null, state.cacheShare),
+            rateDetail: "מחירון API רשמי"
+          },
+          {
+            id: "google",
+            providerKey: "google",
+            provider: "Google",
+            model: google.name,
+            quality: "official",
+            runCost: googleRun,
+            monthCost: googleRun * state.runsMonth,
+            basis: `${formatRate(googleInput)} קלט / ${formatRate(googleOutput)} פלט`,
+            basisDetail: "דולר למיליון טוקנים",
+            rate: googleRateLabel,
+            rateDetail: googleTier ? `מדרגת הקשר ${googleTier === "high" ? "מעל 200K" : "עד 200K"}` : "מחירון API רשמי"
+          }
+        ];
+
+        return rows.sort((a, b) => a.monthCost - b.monthCost || a.runCost - b.runCost || a.model.localeCompare(b.model));
+      }
+
+      function discountLabel(batch, cache, share) {
+        if (cache) return `קריאת מטמון, ${formatNumber(share, 0)}% מהקלט`;
+        if (batch) return "עיבוד אצווה, 50% הנחה";
+        return "ללא הנחה";
+      }
+
+      function formatRate(value) {
+        return `$${formatNumber(value, 3)}`;
+      }
+
+      function formatNumber(value, maxDigits = 2) {
+        return new Intl.NumberFormat("he-IL", {
+          maximumFractionDigits: maxDigits,
+          minimumFractionDigits: 0
+        }).format(value);
+      }
+
+      function formatUsd(value) {
+        const absolute = Math.abs(value);
+        let maximumFractionDigits = 2;
+        let minimumFractionDigits = 2;
+        if (absolute > 0 && absolute < 0.01) {
+          maximumFractionDigits = 8;
+          minimumFractionDigits = 4;
+        } else if (absolute < 1) {
+          maximumFractionDigits = 6;
+        } else if (absolute < 100) {
+          maximumFractionDigits = 4;
+        }
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits,
+          maximumFractionDigits
+        }).format(value);
+      }
+
+      function tokenEquivalent(tokens) {
+        const safeTokens = Number.isFinite(tokens) && tokens > 0 ? tokens : 0;
+        const words = safeTokens * 0.75;
+        return { words, pages: words / 500 };
+      }
+
+      function monthlyRunsFromDaily(dailyRuns) {
+        return Math.max(0, dailyRuns) * DAYS_PER_MONTH;
+      }
+
+      function formatIls(value) {
+        const absolute = Math.abs(value);
+        let minimumFractionDigits = 2;
+        let maximumFractionDigits = 2;
+        if (absolute > 0 && absolute < 0.01) maximumFractionDigits = 4;
+        return new Intl.NumberFormat("he-IL", {
+          style: "currency",
+          currency: "ILS",
+          minimumFractionDigits,
+          maximumFractionDigits
+        }).format(value);
+      }
+
+      function formatExchangeRate(value) {
+        return new Intl.NumberFormat("he-IL", {
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4
+        }).format(value);
+      }
+
+      function coffeeComparison(value, coffeePrice = COFFEE_PRICE_ILS) {
+        if (value <= 0) return "ללא עלות בתרחיש הזה";
+        const cups = value / coffeePrice;
+        if (cups < 0.5) return "פחות מחצי כוס קפה";
+        if (cups < 1) return "פחות מכוס קפה אחת";
+        if (cups < 1.5) return "בערך כמו כוס קפה אחת";
+        return `בערך כמו ${formatNumber(cups, 1)} כוסות קפה`;
+      }
+
+      window.__costCalculator = {
+        DATA,
+        PRESETS,
+        DAYS_PER_MONTH,
+        COFFEE_PRICE_ILS,
+        DEFAULT_USD_ILS_RATE,
+        calculateRows,
+        apiRunCost,
+        formatUsd,
+        formatIls,
+        formatExchangeRate,
+        tokenEquivalent,
+        monthlyRunsFromDaily,
+        coffeeComparison,
+        officialOutcome
+      };
+
+      if (typeof document === "undefined") return;
+
+      const form = document.getElementById("calculator-form");
+      const resultsPanel = document.getElementById("results-panel");
+      const resultsDetails = document.getElementById("results-details");
+      const resultContent = resultsPanel.querySelector(".result-content");
+      const resultsBody = document.getElementById("results-body");
+      const chart = document.getElementById("cost-chart");
+      const announcement = document.getElementById("calculation-announcement");
+      const cacheShareInput = document.getElementById("cache-share");
+      const dailyRunsInput = document.getElementById("daily-runs");
+      const runsMonthInput = document.getElementById("runs-month");
+      const monthlyOverrideInput = document.getElementById("monthly-override");
+      const dailyOverrideNote = document.getElementById("daily-override-note");
+      const developerModeInput = document.getElementById("developer-mode");
+      const developerContents = Array.from(document.querySelectorAll("[data-developer-content]"));
+      const developerWorkspace = document.getElementById("developer-workspace");
+      const developerReference = document.getElementById("developer-reference");
+      const advancedSettingsStatus = document.getElementById("advanced-settings-status");
+      const humanResultCard = document.querySelector(".human-result-card");
+      const simpleWorkloadView = document.getElementById("simple-workload-view");
+      const simpleModeTab = null;
+      const developerModeTab = document.getElementById("developer-mode-tab");
+      const costsModeTab = document.getElementById("costs-mode-tab");
+      const processDescriptionInput = document.getElementById("process-description");
+      const departmentNameInput = document.getElementById("department-name");
+      const processAutoEstimate = document.getElementById("process-auto-estimate");
+      const numericFields = [
+        ["input-tokens", "טוקני הקלט"],
+        ["output-tokens", "טוקני הפלט"],
+        ["runs-month", "מספר ההרצות"],
+        ["usd-ils-rate", "שער הדולר", false],
+        ["classic-events", "מספר התשובות הקלאסיות"],
+        ["generative-events", "מספר התשובות הגנרטיביות"],
+        ["agent-events", "מספר פעולות הסוכן"],
+        ["graph-events", "מספר אירועי העיגון בגרף"],
+        ["cache-share", "שיעור הקלט מהמטמון"]
+      ];
+      let chartScale = "log";
+      let lastRows = [];
+      let renderTimer = null;
+      let activePresetKey = "student";
+      let activeView = "personal";
+      let processInferenceTimer = null;
+      const afterPaint = (callback) => typeof requestAnimationFrame === "function"
+        ? requestAnimationFrame(callback)
+        : setTimeout(callback, 0);
+
+      populateSelect("anthropic-model", DATA.anthropic, "sonnet-5");
+      populateSelect("openai-model", DATA.openai, "gpt-5-2");
+      populateSelect("google-model", DATA.google, "gemini-3-7-flash");
+
+      function populateSelect(id, items, selectedId) {
+        const select = document.getElementById(id);
+        items.forEach((item) => {
+          const option = document.createElement("option");
+          option.value = item.id;
+          option.textContent = item.name;
+          option.lang = "en";
+          option.dir = "ltr";
+          option.selected = item.id === selectedId;
+          select.appendChild(option);
+        });
+      }
+
+      function readValidatedNumber(id, label, integer = true) {
+        const input = document.getElementById(id);
+        const error = document.getElementById(`${id}-error`);
+        if (input.disabled) {
+          input.removeAttribute("aria-invalid");
+          input.removeAttribute("aria-errormessage");
+          if (error) error.textContent = "";
+          return Number(input.value) || 0;
+        }
+
+        const value = input.valueAsNumber;
+        const min = input.min === "" ? -Infinity : Number(input.min);
+        const max = input.max === "" ? Infinity : Number(input.max);
+        let message = "";
+
+        if (!Number.isFinite(value)) message = `${label} חייב להיות מספר.`;
+        else if (value < min) message = min === 0
+          ? `${label} לא יכול להיות שלילי.`
+          : `${label} חייב להיות לפחות ${formatNumber(min, 4)}.`;
+        else if (value > max) message = `${label} חורג מהטווח הנתמך.`;
+        else if (integer && !Number.isInteger(value)) message = `${label} חייב להיות מספר שלם.`;
+
+        if (message) {
+          input.setAttribute("aria-invalid", "true");
+          let containingDetails = input.closest("details");
+          while (containingDetails) {
+            containingDetails.open = true;
+            containingDetails = containingDetails.parentElement?.closest("details") || null;
+          }
+          if (error) {
+            error.textContent = message;
+            input.setAttribute("aria-errormessage", error.id);
+          }
+          return null;
+        }
+
+        input.removeAttribute("aria-invalid");
+        input.removeAttribute("aria-errormessage");
+        if (error) error.textContent = "";
+        return value;
+      }
+
+      function getState() {
+        const values = {};
+        let valid = true;
+        numericFields.forEach(([id, label, integer = true]) => {
+          const value = readValidatedNumber(id, label, integer);
+          values[id] = value;
+          if (value === null) valid = false;
+        });
+
+        if (!valid) return null;
+
+        return {
+          inputTokens: values["input-tokens"],
+          outputTokens: values["output-tokens"],
+          runsMonth: values["runs-month"],
+          usdIlsRate: values["usd-ils-rate"],
+          microsoftStudio: document.getElementById("microsoft-studio").value,
+          microsoftCowork: document.getElementById("microsoft-cowork").value,
+          anthropicModel: document.getElementById("anthropic-model").value,
+          openaiModel: document.getElementById("openai-model").value,
+          googleModel: document.getElementById("google-model").value,
+          anthropicBatch: document.getElementById("anthropic-batch").checked,
+          anthropicCache: document.getElementById("anthropic-cache").checked,
+          openaiBatch: document.getElementById("openai-batch").checked,
+          openaiCache: document.getElementById("openai-cache").checked,
+          googleBatch: document.getElementById("google-batch").checked,
+          googlePostPromo: document.getElementById("google-post-promo").checked,
+          cacheShare: values["cache-share"],
+          events: {
+            classic: values["classic-events"],
+            generative: values["generative-events"],
+            agent: values["agent-events"],
+            graph: values["graph-events"]
+          }
+        };
+      }
+
+      function humanEquivalentText(tokens) {
+        if (!Number.isFinite(tokens) || tokens < 0) return "—";
+        const equivalent = tokenEquivalent(tokens);
+        return `כ־${formatNumber(equivalent.words, 0)} מילים, כ־${formatNumber(equivalent.pages, 1)} עמודים`;
+      }
+
+      function updateHumanInputSummary() {
+        const inputTokens = document.getElementById("input-tokens").valueAsNumber;
+        const outputTokens = document.getElementById("output-tokens").valueAsNumber;
+        const rawRunsMonth = runsMonthInput.valueAsNumber;
+        const runsMonth = Number.isFinite(rawRunsMonth) && rawRunsMonth >= 0 ? rawRunsMonth : null;
+        const dailyAverage = runsMonth === null ? null : runsMonth / DAYS_PER_MONTH;
+
+        document.getElementById("input-human-equivalent").textContent = humanEquivalentText(inputTokens);
+        document.getElementById("output-human-equivalent").textContent = humanEquivalentText(outputTokens);
+        document.getElementById("daily-runs-output").textContent = dailyAverage === null ? "—" : `כ־${formatNumber(dailyAverage, 1)} שיחות ביום`;
+        document.getElementById("daily-runs-monthly").innerHTML = `<strong>${runsMonth === null ? "—" : formatNumber(runsMonth, 0)} הרצות בחודש</strong>`;
+        dailyRunsInput.setAttribute("aria-valuetext", monthlyOverrideInput.checked
+          ? "הסליידר מושבת; מצב הזנה חודשית מדויקת פעיל"
+          : dailyAverage === null
+            ? "ערך חודשי לא תקין"
+            : `${formatNumber(dailyAverage, 1)} שיחות ביום, ${formatNumber(runsMonth, 0)} בחודש`);
+      }
+
+      function setActivePreset(key) {
+        activePresetKey = key && PRESETS[key] ? key : null;
+        document.querySelectorAll("[data-preset]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.preset === key));
+        });
+        const status = document.getElementById("preset-status");
+        status.textContent = key && PRESETS[key]
+          ? `נבחרה תבנית ${PRESETS[key].label}. אפשר לשנות את כמות השיחות בנפרד בלי להחליף תבנית.`
+          : "הערכים נערכו ידנית, זהו עכשיו תרחיש מותאם אישית.";
+      }
+
+      function applyPreset(key) {
+        const preset = PRESETS[key];
+        if (!preset) return;
+        document.getElementById("input-tokens").value = preset.inputTokens;
+        document.getElementById("output-tokens").value = preset.outputTokens;
+        dailyRunsInput.value = preset.dailyRuns;
+        runsMonthInput.value = monthlyRunsFromDaily(preset.dailyRuns);
+        setMonthlyOverride(false, false);
+        setActivePreset(key);
+        render();
+        announcement.textContent = `נבחרה תבנית ${preset.label}. ${announcement.textContent}`;
+      }
+
+      function syncRunsFromDaily() {
+        if (monthlyOverrideInput.checked) return;
+        const dailyRuns = dailyRunsInput.valueAsNumber;
+        runsMonthInput.value = monthlyRunsFromDaily(Number.isFinite(dailyRuns) ? dailyRuns : 0);
+        updateHumanInputSummary();
+      }
+
+      function syncDailyFromRuns() {
+        if (!monthlyOverrideInput.checked) return;
+        updateHumanInputSummary();
+      }
+
+      function setMonthlyOverride(enabled, normalizeOnExit = true) {
+        monthlyOverrideInput.checked = enabled;
+        dailyRunsInput.disabled = enabled;
+        runsMonthInput.readOnly = !enabled;
+        dailyOverrideNote.hidden = !enabled;
+        dailyRunsInput.setAttribute("aria-describedby", enabled
+          ? "daily-runs-help daily-runs-monthly daily-override-note"
+          : "daily-runs-help daily-runs-monthly");
+
+        if (!enabled && normalizeOnExit) {
+          const runsMonth = runsMonthInput.valueAsNumber;
+          const approximateDaily = Number.isFinite(runsMonth) ? Math.round(runsMonth / DAYS_PER_MONTH) : 0;
+          dailyRunsInput.value = Math.min(Number(dailyRunsInput.max), Math.max(Number(dailyRunsInput.min), approximateDaily));
+          runsMonthInput.value = monthlyRunsFromDaily(dailyRunsInput.valueAsNumber);
+        }
+        updateHumanInputSummary();
+      }
+
+      function hasProfessionalSettings() {
+        const eventIds = ["classic-events", "generative-events", "agent-events", "graph-events"];
+        const hasEvents = eventIds.some((id) => Number(document.getElementById(id).value) !== 0);
+        const hasDiscount = [
+          "anthropic-batch",
+          "anthropic-cache",
+          "openai-batch",
+          "openai-cache",
+          "google-batch",
+          "google-post-promo"
+        ].some((id) => document.getElementById(id).checked);
+        const rate = Number(document.getElementById("usd-ils-rate").value);
+
+        return activePresetKey === null
+          || document.getElementById("microsoft-studio").value !== "standard"
+          || document.getElementById("microsoft-cowork").value !== "medium"
+          || document.getElementById("anthropic-model").value !== "sonnet-5"
+          || document.getElementById("openai-model").value !== "gpt-5-2"
+          || document.getElementById("google-model").value !== "gemini-3-7-flash"
+          || hasEvents
+          || hasDiscount
+          || Number(document.getElementById("cache-share").value) !== 50
+          || !Number.isFinite(rate)
+          || Math.abs(rate - DEFAULT_USD_ILS_RATE) > 1e-9;
+      }
+
+      function updateAdvancedSettingsStatus() {
+        advancedSettingsStatus.hidden = developerModeInput.checked || !hasProfessionalSettings();
+      }
+
+      function inferOrganizationalWorkload() {
+        const description = processDescriptionInput.value.trim();
+        const enteredDepartment = departmentNameInput.value.trim();
+        if (!description) {
+          processAutoEstimate.textContent = "לאחר הזנת התהליך יוצג כאן האומדן האוטומטי.";
+          return;
+        }
+
+        const text = `${description} ${enteredDepartment}`.toLowerCase();
+        const includesAny = (terms) => terms.some((term) => text.includes(term));
+        let processType = "עיבוד ויצירת טקסט";
+        let inputTokens = Math.max(2500, Math.round(description.length * 3.2));
+        let outputTokens = 900;
+
+        if (includesAny(["excel", "אקסל", "csv", "טבלה", "גיליון", "השווה", "להשוות"])) {
+          processType = "השוואת נתונים וקבצים";
+          inputTokens = includesAny(["שני", "2 ", "כמה קבצים", "מספר קבצים"]) ? 18000 : 12000;
+          outputTokens = 1500;
+        } else if (includesAny(["סיכום", "לסכם", "מאמר", "מסמך", "חוזה", "דוח"])) {
+          processType = "קריאה וסיכום מסמכים";
+          inputTokens = 8000;
+          outputTokens = includesAny(["דוח", "מפורט", "ניתוח"]) ? 2000 : 1200;
+        } else if (includesAny(["קוד", "באג", "תקלה", "api", "פיתוח"])) {
+          processType = "ניתוח ופיתוח תוכנה";
+          inputTokens = 12000;
+          outputTokens = 3000;
+        } else if (includesAny(["מייל", "דוא", "פוסט", "קמפיין", "לנסח", "לכתוב"])) {
+          processType = "ניסוח ויצירת תוכן";
+          inputTokens = 3500;
+          outputTokens = 1000;
+        }
+
+        let inferredDepartment = enteredDepartment;
+        if (!inferredDepartment) {
+          if (includesAny(["חשבונית", "תקציב", "כספים", "תשלום", "אקסל"])) inferredDepartment = "כספים ותפעול";
+          else if (includesAny(["לקוח", "פנייה", "שירות", "תמיכה"])) inferredDepartment = "שירות לקוחות";
+          else if (includesAny(["קמפיין", "שיווק", "פוסט", "תוכן"])) inferredDepartment = "שיווק";
+          else if (includesAny(["עובד", "גיוס", "קורות חיים", "משאבי אנוש"])) inferredDepartment = "משאבי אנוש";
+          else if (includesAny(["קוד", "api", "פיתוח", "תקלה"])) inferredDepartment = "טכנולוגיה";
+          else inferredDepartment = "מחלקה כללית";
+        }
+
+        const agentEvents = includesAny(["אייג'נט", "agent", "אוטומטי", "אוטומציה", "לבצע פעולה"]) ? 1 : 0;
+        const graphEvents = includesAny(["graph", "sharepoint", "teams", "מיקרוסופט 365"]) ? 1 : 0;
+        const generativeEvents = includesAny(["לנסח", "לכתוב", "לסכם", "סיכום", "דוח", "להחזיר"]) ? 1 : 0;
+
+        document.getElementById("input-tokens").value = inputTokens;
+        document.getElementById("output-tokens").value = outputTokens;
+        document.getElementById("classic-events").value = 0;
+        document.getElementById("generative-events").value = generativeEvents;
+        document.getElementById("agent-events").value = agentEvents;
+        document.getElementById("graph-events").value = graphEvents;
+
+        const specialEvents = [
+          generativeEvents ? "תשובה גנרטיבית" : "",
+          agentEvents ? "פעולת סוכן" : "",
+          graphEvents ? "עיגון Microsoft Graph" : ""
+        ].filter(Boolean);
+        const eventText = specialEvents.length ? specialEvents.join(", ") : "לא זוהו אירועי Microsoft מיוחדים";
+        processAutoEstimate.textContent = `זוהה: ${processType}. מחלקה: ${inferredDepartment}. אומדן השימוש הוכן אוטומטית. ${eventText}.`;
+        setActivePreset(null);
+        updateHumanInputSummary();
+        render(false);
+      }
+
+      function scheduleProcessInference() {
+        clearTimeout(processInferenceTimer);
+        processInferenceTimer = setTimeout(inferOrganizationalWorkload, 350);
+      }
+
+      function updateMobileResultInset() {
+        const isMobile = typeof window.matchMedia === "function" && window.matchMedia("(max-width: 740px)").matches;
+        const height = isMobile && !resultsPanel.hidden && !resultContent.hidden && typeof humanResultCard.getBoundingClientRect === "function"
+          ? Math.ceil(humanResultCard.getBoundingClientRect().height)
+          : 0;
+        document.documentElement.style.setProperty("--mobile-result-height", `${height}px`);
+      }
+
+      function syncModePresentation(view) {
+        activeView = view;
+        const personal = view === "personal";
+        const organizational = view === "organizational";
+        const costs = view === "costs";
+
+        simpleWorkloadView.hidden = true;
+        resultsPanel.hidden = costs;
+        developerWorkspace.hidden = false;
+        resultsDetails.hidden = !costs;
+        developerReference.hidden = !costs;
+        runsMonthInput.readOnly = !organizational;
+
+        simpleModeTab?.setAttribute("aria-selected", "false");
+        developerModeTab.setAttribute("aria-selected", String(organizational));
+        costsModeTab.setAttribute("aria-selected", String(costs));
+        if (simpleModeTab) simpleModeTab.tabIndex = -1;
+        developerModeTab.tabIndex = organizational ? 0 : -1;
+        costsModeTab.tabIndex = costs ? 0 : -1;
+
+        document.body.classList.toggle("developer-mode", !personal);
+        document.body.classList.toggle("costs-mode", costs);
+      }
+
+      function setDeveloperMode(enabled, { force = false, announce = true } = {}) {
+        if (!enabled && !force && !getState()) {
+          developerModeInput.checked = true;
+          syncModePresentation("organizational");
+          resultsPanel.classList.add("is-invalid");
+          resultContent.hidden = true;
+          afterPaint(updateMobileResultInset);
+          announcement.textContent = "אי אפשר לסגור את המצב הארגוני לפני תיקון השדה המסומן.";
+          afterPaint(() => form.querySelector('[aria-invalid="true"]')?.focus());
+          return { changed: false, normalized: false };
+        }
+
+        developerModeInput.checked = enabled;
+        syncModePresentation(enabled ? "organizational" : "personal");
+        updateAdvancedSettingsStatus();
+        const hasCustomSettings = hasProfessionalSettings();
+        afterPaint(updateMobileResultInset);
+
+        if (announce) {
+          announcement.textContent = enabled
+            ? "המצב הארגוני נפתח. אפשר לתעד תהליך, מחלקה והרצות חודשיות; ערכי החישוב לא השתנו."
+            : hasCustomSettings
+              ? "המצב הארגוני נסגר. ההגדרות המותאמות נשמרו ומסומנות בכרטיס התוצאה."
+              : "המצב הארגוני פעיל.";
+        }
+        return { changed: true, normalized: false };
+      }
+
+      function scrollToModeStart() {
+        const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        afterPaint(() => document.querySelector(".mode-gate")?.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" }));
+      }
+
+      function setCostsMode({ announce = true } = {}) {
+        document.querySelector("#microsoft-comparison-warning details")?.setAttribute("open","");
+        developerModeInput.checked = true;
+        syncModePresentation("costs");
+        render(false);
+        scrollToModeStart();
+        if (announce) announcement.textContent = "פירוט העלויות נפתח במסך נפרד.";
+      }
+
+      function qualityBadge(quality) {
+        if (quality === "official") return '<span class="badge badge-official">מחירון API רשמי</span>';
+        if (quality === "partial") return '<span class="badge badge-partial">מיפוי רשמי חלקי</span>';
+        return '<span class="badge badge-estimate">הערכה כיוונית, לא מחירון רשמי</span>';
+      }
+
+      function renderTable(rows) {
+        let displayRank = 1;
+        let previousCost = null;
+        resultsBody.innerHTML = rows.map((row, index) => {
+          if (previousCost !== null) {
+            const tolerance = Math.max(1, Math.abs(previousCost)) * 1e-12;
+            if (Math.abs(row.monthCost - previousCost) > tolerance) displayRank = index + 1;
+          }
+          previousCost = row.monthCost;
+          return `
+          <tr class="${row.quality === "estimate" ? "estimate-row" : ""}">
+            <td class="rank-cell">${displayRank}</td>
+            <th scope="row" class="model-cell"><strong><bdi lang="en">${row.provider}</bdi></strong><span><bdi lang="en">${row.model}</bdi></span></th>
+            <td>${qualityBadge(row.quality)}</td>
+            <td class="basis-cell"><strong>${row.basis}</strong><small>${row.basisDetail}</small></td>
+            <td class="money-cell"><bdi>${formatUsd(row.runCost)}</bdi><small>${row.rate}</small></td>
+            <td class="money-cell"><bdi>${formatUsd(row.monthCost)}</bdi><small>${row.rateDetail}</small></td>
+          </tr>
+        `;
+        }).join("");
+      }
+
+      function renderChart(rows) {
+        const values = rows.map((row) => row.monthCost);
+        const max = Math.max(...values, 0);
+        const positives = values.filter((value) => value > 0);
+        const minPositive = positives.length ? Math.min(...positives) : 0;
+
+        chart.innerHTML = rows.map((row) => {
+          let width = 0;
+          if (max > 0 && row.monthCost > 0) {
+            if (chartScale === "linear") width = (row.monthCost / max) * 100;
+            else {
+              const denominator = Math.log10(1 + max / minPositive);
+              width = denominator ? (Math.log10(1 + row.monthCost / minPositive) / denominator) * 100 : 100;
+            }
+          }
+          const qualityText = row.quality === "estimate" ? "הערכה כיוונית, לא מחירון רשמי" : row.quality === "partial" ? "מיפוי רשמי חלקי" : "מחירון API רשמי";
+          return `
+            <div class="chart-row ${row.quality === "estimate" ? "is-estimate" : ""}">
+              <div class="chart-label"><bdi lang="en">${row.provider} ${row.model}</bdi><small>${qualityText}</small></div>
+              <div class="chart-track" aria-hidden="true"><div class="chart-bar" style="width:${width.toFixed(3)}%;--bar-color:${providerColors[row.providerKey]}"></div></div>
+              <div class="chart-value"><bdi>${formatUsd(row.monthCost)}</bdi></div>
+            </div>`;
+        }).join("");
+
+        chart.setAttribute("aria-label", `עלות חודשית בדולר, בסדר עולה: ${rows.map((row) => {
+          const qualityText = row.quality === "estimate" ? "הערכה כיוונית, לא מחירון רשמי" : row.quality === "partial" ? "מיפוי רשמי חלקי" : "מחירון API רשמי";
+          return `${row.provider} ${row.model}, ${formatUsd(row.monthCost)}, ${qualityText}`;
+        }).join("; ")}`);
+      }
+
+      function officialOutcome(rows, state) {
+        const officialRows = rows.filter((row) => row.quality === "official");
+        const cheapest = officialRows[0];
+        const tolerance = Math.max(1, Math.abs(cheapest.monthCost)) * 1e-12;
+        const tiedRows = officialRows.filter((row) => Math.abs(row.monthCost - cheapest.monthCost) <= tolerance);
+        return {
+          officialRows,
+          cheapest,
+          tiedRows,
+          noMonthlyUsage: state.runsMonth === 0,
+          isTie: state.runsMonth !== 0 && tiedRows.length > 1
+        };
+      }
+
+      function setLocalizedResultText(id, text, language) {
+        const element = document.getElementById(id);
+        element.textContent = text;
+        element.lang = language;
+        element.dir = language === "en" ? "ltr" : "rtl";
+      }
+
+      function renderSummary(rows, state) {
+        const outcome = officialOutcome(rows, state);
+        const { officialRows, cheapest, tiedRows, noMonthlyUsage, isTie } = outcome;
+        const highest = officialRows[officialRows.length - 1];
+        const monthlyIls = cheapest.monthCost * state.usdIlsRate;
+        const runIls = cheapest.runCost * state.usdIlsRate;
+        document.getElementById("human-result-title").textContent = `כ־${formatIls(monthlyIls)} לחודש`;
+        if (noMonthlyUsage) {
+          document.getElementById("human-result-simple-context").textContent = "לא הוזנו הרצות חודשיות";
+          setLocalizedResultText("human-result-model", "לא הוגדר שימוש חודשי", "he");
+          document.getElementById("human-result-context").textContent = ", לכן אין דירוג עלות לחודש";
+          document.getElementById("human-result-per-run").textContent = "המחיר להרצה מופיע בפירוט";
+          document.getElementById("human-result-rate").textContent = "הזינו כמה פעמים התהליך רץ בחודש כדי לקבל אומדן בשקלים.";
+          document.getElementById("cheapest-label").textContent = "אין שימוש חודשי, כל מודלי ה־API בתיקו";
+          setLocalizedResultText("cheapest-model", "כל המודלים שנבחרו", "he");
+          document.getElementById("cheapest-cost").textContent = `${formatUsd(0)} לחודש`;
+        } else if (isTie) {
+          document.getElementById("human-result-simple-context").textContent = "תיקו בעלות הנמוכה בין מודלי ה־API שנבחרו";
+          const tiedNames = tiedRows.map((row) => `${row.provider} ${row.model}`).join(" / ");
+          setLocalizedResultText("human-result-model", tiedNames, "en");
+          document.getElementById("human-result-context").textContent = ", תיקו בעלות החודשית הנמוכה";
+          document.getElementById("human-result-per-run").textContent = `${formatIls(runIls)} להרצה`;
+          document.getElementById("human-result-rate").textContent = `כל המודלים המוצגים בתיקו עולים ${formatUsd(cheapest.monthCost)} לחודש. ההמרה לפי ${formatExchangeRate(state.usdIlsRate)} ₪ לדולר היא להמחשה בלבד.`;
+          document.getElementById("cheapest-label").textContent = "תיקו בעלות החודשית הנמוכה";
+          setLocalizedResultText("cheapest-model", tiedNames, "en");
+          document.getElementById("cheapest-cost").textContent = `${formatUsd(cheapest.monthCost)} לחודש, אותו מחיר ב־${tiedRows.length} מודלים`;
+          setResultAnchor(tiedNames, state);
+        } else {
+          document.getElementById("human-result-simple-context").textContent = "אומדן לפי שלושה מודלי API, לפני מס ועמלות";
+          setLocalizedResultText("human-result-model", `${cheapest.provider} ${cheapest.model}`, "en");
+          document.getElementById("human-result-context").textContent = ", הזול מבין מודלי ה־API שנבחרו";
+          document.getElementById("human-result-per-run").textContent = `${formatIls(runIls)} להרצה`;
+          document.getElementById("human-result-rate").textContent = `שווה ל־${formatUsd(cheapest.monthCost)} לפי שער של ${formatExchangeRate(state.usdIlsRate)} ₪ לדולר. ההמרה משוערת בלבד; מחירי המקור בדולר ומטבע החיוב בפועל תלוי בספק ובאזור.`;
+          document.getElementById("cheapest-label").textContent = "הזול ביותר מבין מודלי ה־API שנבחרו";
+          setLocalizedResultText("cheapest-model", `${cheapest.provider} ${cheapest.model}`, "en");
+          document.getElementById("cheapest-cost").textContent = `${formatUsd(cheapest.monthCost)} לחודש, ${formatUsd(cheapest.runCost)} להרצה`;
+          setResultAnchor(`${cheapest.provider} ${cheapest.model}`, state);
+        }
+        const coffeeText = coffeeComparison(monthlyIls);
+        const coffeeEl = document.getElementById("coffee-comparison");
+        if (coffeeEl) coffeeEl.textContent = coffeeText;
+        document.getElementById("coffee-comparison-detail").textContent = coffeeText;
+        document.getElementById("monthly-tokens").textContent = formatNumber((state.inputTokens + state.outputTokens) * state.runsMonth, 0);
+        document.getElementById("official-range").textContent = `${formatUsd(cheapest.monthCost)}–${formatUsd(highest.monthCost)}`;
+        return outcome;
+      }
+
+      function updateControlNotes() {
+        const studio = pick(DATA.microsoft.studio, document.getElementById("microsoft-studio").value);
+        const cowork = pick(DATA.microsoft.cowork, document.getElementById("microsoft-cowork").value);
+        const anthropic = pick(DATA.anthropic, document.getElementById("anthropic-model").value);
+        const openai = pick(DATA.openai, document.getElementById("openai-model").value);
+        const google = pick(DATA.google, document.getElementById("google-model").value);
+
+        document.getElementById("studio-selected-rate").innerHTML = `<span class="credit-number">${formatNumber(studio.creditsPer1k, 2)} קרדיטים לכל 1,000 טוקנים</span>. ללא פיצול קלט/פלט. <span class="badge badge-partial">Copilot Studio בלבד</span>`;
+        document.getElementById("cowork-selected-rate").innerHTML = `<span class="credit-number">${formatNumber(cowork.credits, 0)} קרדיטים למשימה</span> <span class="badge badge-estimate">הערכה כיוונית, לא מחירון רשמי</span>`;
+
+        let anthropicNote = `קלט <bdi>${formatRate(anthropic.input)}</bdi>, פלט <bdi>${formatRate(anthropic.output)}</bdi> למיליון טוקנים.`;
+        if (anthropic.newTokenizer) anthropicNote += " טוקנייזר חדש עשוי להפיק כ־30% יותר טוקנים לאותו טקסט; לא הוחלה התאמה אוטומטית.";
+        if (anthropic.stablePrice) anthropicNote += " העלאת המחיר שתוכננה ל־1.9.2026 בוטלה.";
+        document.getElementById("anthropic-rate-note").innerHTML = anthropicNote;
+
+        document.getElementById("openai-rate-note").innerHTML = `קלט <bdi>${formatRate(openai.input)}</bdi>, ${openai.cached === null ? "קלט במטמון לא פורסם" : `קלט במטמון <bdi>${formatRate(openai.cached)}</bdi>`}, פלט <bdi>${formatRate(openai.output)}</bdi> למיליון.`;
+        const openaiCache = document.getElementById("openai-cache");
+        if (openai.cached === null) {
+          openaiCache.checked = false;
+          openaiCache.disabled = true;
+        } else {
+          openaiCache.disabled = false;
+        }
+
+        const postPromo = document.getElementById("google-post-promo");
+        const googleBatch = document.getElementById("google-batch").checked;
+        let googleRateNote = "";
+        if (google.promo) {
+          postPromo.disabled = false;
+          const rates = postPromo.checked ? { input: google.promo.afterInput, output: google.promo.afterOutput } : { input: google.promo.input, output: google.promo.output };
+          googleRateNote = `קלט <bdi>${formatRate(rates.input)}</bdi>, פלט <bdi>${formatRate(rates.output)}</bdi> למיליון. ${postPromo.checked ? "תרחיש לאחר המבצע." : "מבצע עד 31.12.2026."}`;
+        } else {
+          postPromo.checked = false;
+          postPromo.disabled = true;
+          if (google.tiers) {
+            const inputTokens = document.getElementById("input-tokens").valueAsNumber || 0;
+            const tier = inputTokens > 200_000 ? google.tiers.high : google.tiers.low;
+            googleRateNote = `קלט <bdi>${formatRate(tier.input)}</bdi>, פלט <bdi>${formatRate(tier.output)}</bdi> למיליון. מדרגה ${inputTokens > 200_000 ? "מעל" : "עד"} 200K טוקני קלט.`;
+          } else {
+            googleRateNote = `קלט <bdi>${formatRate(google.input)}</bdi>, פלט <bdi>${formatRate(google.output)}</bdi> למיליון טוקנים.`;
+          }
+        }
+        googleRateNote += googleBatch
+          ? " <strong>עיבוד אצווה פעיל: העלות המחושבת כוללת הנחה של 50%.</strong>"
+          : " עיבוד אצווה אינו פעיל.";
+        document.getElementById("google-rate-note").innerHTML = googleRateNote;
+
+        const anyCache = document.getElementById("anthropic-cache").checked || openaiCache.checked;
+        cacheShareInput.disabled = !anyCache;
+        if (!anyCache) {
+          cacheShareInput.removeAttribute("aria-invalid");
+          cacheShareInput.removeAttribute("aria-errormessage");
+          document.getElementById("cache-share-error").textContent = "";
+        }
+      }
+
+
+      // שורת עוגן מתחת למספר הראשי. בלעדיה המספר מוצג בלי מודל, בלי שער ובלי תאריך,
+      // וכל הסייגים יושבים במסך שהמשתמש אינו פותח.
+      function setResultAnchor(modelText, state) {
+        const el = document.getElementById("human-result-anchor");
+        if (!el) return;
+        const parts = [];
+        if (modelText) parts.push(`המודל הזול מבין השלושה: ${modelText}`);
+        parts.push(`לפי שער ${formatExchangeRate(state.usdIlsRate)} ₪ לדולר, שער יציג 18.8.2026`);
+        parts.push("לא כולל רישיונות מושב ולא כולל את מסלולי Microsoft");
+        el.textContent = parts.join(", ");
+      }
+      function render(announceUpdate = true) {
+        updateHumanInputSummary();
+        updateControlNotes();
+        updateAdvancedSettingsStatus();
+        const state = getState();
+        if (!state) {
+          resultsPanel.classList.add("is-invalid");
+          resultContent.hidden = true;
+          resultsDetails.hidden = true;
+          afterPaint(updateMobileResultInset);
+          if (announceUpdate) announcement.textContent = "יש שגיאה באחד משדות הקלט.";
+          return;
+        }
+
+        resultsPanel.classList.remove("is-invalid");
+        resultContent.hidden = false;
+        resultsDetails.hidden = activeView !== "costs";
+        afterPaint(updateMobileResultInset);
+        lastRows = calculateRows(state);
+        const outcome = renderSummary(lastRows, state);
+        renderChart(lastRows);
+        renderTable(lastRows);
+
+        if (announceUpdate) {
+          const { cheapest, tiedRows, noMonthlyUsage, isTie } = outcome;
+          if (noMonthlyUsage) {
+            announcement.textContent = "החישוב עודכן. לא הוגדר שימוש חודשי, ולכן כל מודלי ה־API מוצגים בעלות חודשית אפס וללא זוכה.";
+          } else if (isTie) {
+            const tiedNames = tiedRows.map((row) => `${row.provider} ${row.model}`).join(", ");
+            announcement.textContent = `החישוב עודכן. יש תיקו בין ${tiedNames}, בעלות משוערת של ${formatIls(cheapest.monthCost * state.usdIlsRate)} לחודש.`;
+          } else {
+            announcement.textContent = `החישוב עודכן. ${cheapest.provider} ${cheapest.model} הוא הזול מבין מודלי ה־API שנבחרו, בעלות משוערת של ${formatIls(cheapest.monthCost * state.usdIlsRate)} לחודש, שהם ${formatUsd(cheapest.monthCost)}.`;
+          }
+        }
+      }
+
+      function scheduleRender() {
+        clearTimeout(renderTimer);
+        renderTimer = setTimeout(() => render(false), 90);
+      }
+
+      document.querySelectorAll("[data-preset]").forEach((button) => {
+        button.addEventListener("click", () => applyPreset(button.dataset.preset));
+      });
+
+      dailyRunsInput.addEventListener("input", syncRunsFromDaily);
+      runsMonthInput.addEventListener("input", syncDailyFromRuns);
+      monthlyOverrideInput.addEventListener("change", () => {
+        const previousRuns = runsMonthInput.valueAsNumber;
+        setMonthlyOverride(monthlyOverrideInput.checked, true);
+        if (!monthlyOverrideInput.checked && Number.isFinite(previousRuns)) {
+          monthlyOverrideInput.dataset.interactionMessage = previousRuns === runsMonthInput.valueAsNumber
+            ? "מצב הסליידר חזר לפעול ללא שינוי בכמות החודשית."
+            : `ההזנה החודשית המדויקת בוטלה: ${formatNumber(previousRuns, 0)} שיחות הותאמו ל־${formatNumber(runsMonthInput.valueAsNumber, 0)} לפי הסליידר.`;
+        }
+      });
+      function activateMode(enabled, focusTarget) {
+        developerModeInput.checked = enabled;
+        const modeChange = setDeveloperMode(enabled);
+        if (modeChange.changed) {
+          render(false);
+          scrollToModeStart();
+          afterPaint(() => focusTarget?.focus());
+        }
+      }
+
+      
+      developerModeTab.addEventListener("click", () => activateMode(true, developerModeTab));
+      document.getElementById("goto-details")?.addEventListener("click", () => {
+        setCostsMode();
+        afterPaint(() => costsModeTab.focus());
+      });
+
+      costsModeTab.addEventListener("click", () => {
+        setCostsMode();
+        afterPaint(() => costsModeTab.focus());
+      });
+      const modeTabs = [developerModeTab, costsModeTab].filter(Boolean);
+      modeTabs.forEach((tab, index) => {
+        tab.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+            event.preventDefault();
+            const direction = event.key === "ArrowLeft" ? 1 : -1;
+            const next = modeTabs[(index + direction + modeTabs.length) % modeTabs.length];
+            next.focus();
+            next.click();
+          }
+        });
+      });
+      developerModeInput.addEventListener("change", () => {
+        const modeChange = setDeveloperMode(developerModeInput.checked);
+        if (modeChange.changed) render(false);
+      });
+      document.getElementById("open-advanced-settings").addEventListener("click", () => {
+        setCostsMode();
+        afterPaint(() => costsModeTab.focus());
+      });
+      document.getElementById("close-advanced-settings").addEventListener("click", () => {
+        activateMode(true, developerModeTab);
+      });
+      processDescriptionInput.addEventListener("input", scheduleProcessInference);
+      departmentNameInput.addEventListener("input", scheduleProcessInference);
+      ["input-tokens", "output-tokens"].forEach((id) => {
+        document.getElementById(id).addEventListener("input", () => setActivePreset(null));
+      });
+
+      form.addEventListener("input", (event) => {
+        if (event.target.id === "process-description" || event.target.matches("select, input[type='checkbox']")) return;
+        scheduleRender();
+      });
+      form.addEventListener("change", (event) => {
+        clearTimeout(renderTimer);
+        const input = event.target;
+        if (input.id === "developer-mode") return;
+        let interactionMessage = "";
+        if (input.id === "monthly-override") {
+          interactionMessage = input.checked
+            ? "מצב הזנה חודשית מדויקת הופעל והסליידר הושבת."
+            : input.dataset.interactionMessage || "מצב הסליידר חזר לפעול.";
+          delete input.dataset.interactionMessage;
+        }
+        if (input.matches("input[type='checkbox'][data-exclusive-group]") && input.checked) {
+          const group = input.dataset.exclusiveGroup;
+          form.querySelectorAll(`input[data-exclusive-group="${group}"]`).forEach((other) => {
+            if (other !== input && other.checked) {
+              other.checked = false;
+              interactionMessage = "אפשר להפעיל הנחה אחת בכל ספק; האפשרות הקודמת בוטלה.";
+            }
+          });
+        }
+        render();
+        if (interactionMessage) announcement.textContent = `${interactionMessage} ${announcement.textContent}`;
+      });
+
+      document.querySelectorAll("[data-chart-scale]").forEach((button) => {
+        button.addEventListener("click", () => {
+          chartScale = button.dataset.chartScale;
+          document.querySelectorAll("[data-chart-scale]").forEach((candidate) => {
+            candidate.setAttribute("aria-pressed", String(candidate === button));
+          });
+          document.getElementById("chart-scale-note").textContent = chartScale === "log"
+            ? "סקאלה לוגריתמית עוזרת לראות פערים של כמה סדרי גודל; המספרים המדויקים מופיעים לצד כל עמודה."
+            : "סקאלה ליניארית מציגה יחס ישיר לעלות הגבוהה ביותר; תוצאות קטנות מאוד עשויות להיראות כקו דק.";
+          renderChart(lastRows);
+        });
+      });
+
+      function resetCalculator({ focusPreset = true } = {}) {
+        form.reset();
+        document.getElementById("anthropic-model").value = "sonnet-5";
+        document.getElementById("openai-model").value = "gpt-5-2";
+        document.getElementById("google-model").value = "gemini-3-7-flash";
+        document.getElementById("usd-ils-rate").value = DEFAULT_USD_ILS_RATE.toFixed(4);
+        dailyRunsInput.value = PRESETS.student.dailyRuns;
+        runsMonthInput.value = monthlyRunsFromDaily(PRESETS.student.dailyRuns);
+        setMonthlyOverride(false, false);
+        setActivePreset("student");
+        setDeveloperMode(true, { force: true, announce: false });
+        document.querySelectorAll("details[open]").forEach((details) => { details.open = false; });
+        render();
+        announcement.textContent = "המחשבון אופס לברירות המחדל.";
+        if (focusPreset) document.getElementById("process-description")?.focus();
+      }
+
+      document.getElementById("reset-calculator").addEventListener("click", () => resetCalculator());
+      document.getElementById("simple-reset-calculator").addEventListener("click", () => resetCalculator());
+
+      if (typeof ResizeObserver === "function") {
+        new ResizeObserver(updateMobileResultInset).observe(humanResultCard);
+      }
+      window.addEventListener("resize", updateMobileResultInset);
+      window.addEventListener("pageshow", () => {
+        setDeveloperMode(developerModeInput.checked, { announce: false });
+        updateMobileResultInset();
+      });
+
+      setMonthlyOverride(false, false);
+      setActivePreset("student");
+      setDeveloperMode(true, { force: true, announce: false });
+      render();
+    })();
+  </script>
+</body>
+</html>
