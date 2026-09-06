@@ -1,79 +1,386 @@
-# תרגול והתקנת סקילים ל-Copilot · ואלור Toolkit
+# סקילים מותאמים ב-Copilot · פרקטיקה
 
-מדריך מעשי להתקנה ושימוש ב־7 הסקילים שבתיקיית [`skills/`](skills/).
+**מצב: נכתב 1.9.2026.** כל מה שמסומן ✅ אומת חי באותו יום בטננט של ואלור
+(‏`Guy.Cohen@valorsolution.com`, ‏M365 Copilot Premium), כולל הפעלה מוצלחת של סקיל בדיקה.
+מה שמסומן ⚠️ מבוסס על תיעוד רשמי בלבד ולא נבדק אצלנו. מה שמסומן ❓ אינו מתועד בשום מקור.
 
-> **למה קובץ זה קיים:** קישורי Pages ל־`*/SKILL.md` החזירו 404 כי GitHub Pages מריץ Jekyll כברירת מחדל. בריפו נוסף קובץ ריק [`.nojekyll`](.nojekyll) בשורש — אחרי פרסום מחדש, קבצי Markdown (כולל `SKILL.md`) אמורים להיחשף כקבצים סטטיים.
+**§6 הוא ממצא מקורי** — התנהגות סקילים במצב העריכה של Copilot, שאין לה תיעוד רשמי, נבדקה חי ואומתה בשלוש בדיקות: סקיל שעונה, סקיל שמוסיף שקף, וסקיל שמתקן פריסת RTL במצגת עברית.
 
-## הורדה מהירה
+הפיצ'ר יצא ל-GA **בסוף יולי 2026** (Message Center **MC1434582**), מופעל כברירת מחדל,
+ללא צורך בפעולת אדמין. סקילים ב-Excel יצאו ביוני 2026, ב-PowerPoint באוגוסט 2026.
 
-- **חבילה אחת:** [`skills/office-skills.zip`](skills/office-skills.zip) — כל תיקיות הסקילים + `install.py` + `validate.py` + כלי RTL + `README.md`
-- **תיקיית המקור:** [`skills/`](skills/)
-- **תיעוד מפורט:** [`skills/README.md`](skills/README.md)
+---
 
-## שבעת הסקילים
+## 1. הפורמט הוא תקן פתוח — נוצר ב-Anthropic, מיושם ב-46 כלים
 
-| סקיל | אפליקציה | תפקיד קצר |
-| --- | --- | --- |
-| `deck-review` | PowerPoint | ביקורת מצגת — מדווח בלי לשנות |
-| `decision-slide` | PowerPoint | מוסיף שקף "מה אני מבקש להחליט" |
-| `slide-diet` | PowerPoint | מדלל שקפים עמוסי טקסט |
-| `speaker-notes-he` | PowerPoint | הערות דובר בעברית |
-| `rtl-hebrew-repair` | PowerPoint | יישור RTL ותיקון רווחים בלועים |
-| `variance-analysis` | **Excel** | תקציב מול ביצוע וחריגות |
-| `exec-email` | **Excel** | טיוטת מייל להנהלה מתוך ממצאים |
+**‏Agent Skills הוא מפרט חוצה-יצרנים:** [agentskills.io/specification](https://agentskills.io/specification).
+ה-`README.md` שקופיילוט עצמו שותל בתיקיית הסקילים מפנה אליו במפורש.
 
-## התקנה בפקודה אחת (מומלץ)
+**מקור, בציטוט מהריפו הרשמי** ([github.com/agentskills/agentskills](https://github.com/agentskills/agentskills)):
 
-1. הורידו ופרקו את [`skills/office-skills.zip`](skills/office-skills.zip), או שיבטו את הריפו.
-2. צרו פעם אחת את תיקיית הסקילים מתוך האפליקציה:
-   - ב־PowerPoint / Excel: חלונית Copilot → `...` → `Manage skills` → `Custom skills` → `Create OneDrive folder`
-3. מתוך תיקיית `skills/` (אחרי הפריקה):
+> "The Agent Skills format was **originally developed by Anthropic**, released as an
+> **open standard**, and has been adopted by a growing number of agent products."
 
-```bash
-python install.py                  # תצוגה מקדימה בלבד
-python install.py --apply          # התקנה/עדכון
-python install.py --apply --prune  # גם מחיקת סקילים ישנים שלא בריפו
+רישוי: קוד ב-Apache 2.0, תיעוד ב-CC-BY-4.0.
+הריפו יושב תחת ארגון **`agentskills`** — לא תחת `anthropics`. כלומר Anthropic
+יצרה את הפורמט ואז **העבירה אותו לארגון ניטרלי**, וזה מה שאפשר לשאר לאמץ.
+
+### מי מיישם — 46 כלים, לפי [רשימת הלקוחות הרשמית](https://agentskills.io/clients)
+
+| קבוצה | דוגמאות |
+|---|---|
+| **Anthropic** | Claude · Claude Code |
+| **OpenAI** | ChatGPT & Codex |
+| **Google** | Gemini CLI · AI Edge Gallery |
+| **Microsoft** | GitHub Copilot · VS Code |
+| **ספקי ענן ונתונים** | Databricks Genie · Snowflake Cortex · AWS Kiro · Pulumi Neo |
+| **עורכים וסוכנים** | Cursor · JetBrains Junie · Roo Code · Amp · Goose (Block) · TRAE (ByteDance) · OpenHands · Tabnine · Factory · OpenCode |
+| **פריימוורקים** | Spring AI · Laravel Boost · Letta · fast-agent · Mistral Vibe |
+
+**זו הנקודה המסחרית:** סקיל שנכתב פעם אחת רץ אצל **מתחרים ישירים** —
+‏OpenAI אימצה תקן של Anthropic, וגוגל ומיקרוסופט לצידה.
+זו לא נעילת ספק; זה npm של הוראות.
+
+> ### ⚠️ ‏GitHub Copilot ≠ Microsoft 365 Copilot
+>
+> ברשימה הרשמית מופיעים **GitHub Copilot** ו-**VS Code** — כלי מפתחים.
+> ‏**M365 Copilot (Excel / PowerPoint / Word) אינו מופיע שם** — ובכל זאת
+> ה-README שהוא עצמו שותל בתיקיית הסקילים מפנה למפרט. כלומר הוא מאמץ
+> שטרם נרשם בתצוגה.
+>
+> **זה לא פרט טכני.** אלה שני מוצרים, שתי תיקיות, שני רישיונות.
+> "‏Copilot תומך בסקילים" אינו משפט שאפשר להגיד ללקוח בלי לציין איזה Copilot.
+
+זה אומר ש-`SKILL.md` שנכתב נכון הוא **נייד בין המוצרים**. הפורמט זהה,
+לא דומה. מה ששונה זה **איפה הקובץ יושב ומי טוען אותו**:
+
+| מערכת | איפה הסקיל יושב | מי מפעיל |
+|---|---|---|
+| **Copilot ב-PowerPoint** | ‏`OneDrive/מסמכים/Copilot/Microsoft PowerPoint/skills` | הכלי, עם Refresh |
+| **Copilot ב-Excel** | ‏`.../Copilot/Microsoft Excel/skills` — **תיקייה נפרדת** | הכלי, עם Refresh |
+| **Claude Code** | `~/.claude/skills/` | ה-CLI |
+| **M365 Copilot Chat** (BizChat) | ❌ אין סקילים כאלה | Declarative Agents / Agent Builder |
+| **Copilot Studio** | ענן Power Platform | סוכן ארגוני — מנגנון אחר לגמרי |
+
+> **תיקון לגרסה קודמת של המסמך הזה (2.9.2026):** כתבנו כאן שהדמיון בפורמט
+> הוא "צירוף מקרים של תעשייה, לא תאימות". **זו הייתה טעות.** זהו תקן משותף
+> מוצהר. הטעות התגלתה כשקופיילוט יצר את תיקיית ה-Excel ושתל בה README
+> שמפנה למפרט — כלומר מיקרוסופט תיעדה את זה, ואנחנו לא קראנו לפני שקבענו.
+
+### מה שהמפרט מחייב, ומעבר למה שידענו
+
+| שדה | חובה | מגבלה |
+|---|---|---|
+| `name` | ✅ | עד 64 תווים · **רק** `a-z`, `0-9`, מקפים · לא בתחילה/סוף · **בלי מקף כפול** · זהה לשם התיקייה |
+| `description` | ✅ | עד 1024 תווים, לא ריק |
+| `license` · `compatibility` · `metadata` · `allowed-tools` | ❌ | אופציונליים |
+
+**תיקיות מוסכמות:** `scripts/` · `references/` · `assets/`.
+**גודל מומלץ:** גוף ה-`SKILL.md` מתחת ל-500 שורות; מה שארוך — לפצל ל-`references/`.
+
+**המלכודת האמיתית לא הייתה הפורמט — היא הייתה המיקום.**
+ב-31.8–1.9.2026 סוכן חיצוני כתב לנו סקיל **תקני לחלוטין**, והמליץ להעתיק אותו
+אל `~/.claude/skills/`. הסקיל עצמו נשאר בקונטיינר מבודד שנמחק בסוף הסשן.
+הפורמט היה נכון; הוא פשוט מעולם לא הגיע לדיסק שלנו.
+**השאלה הנכונה אינה "באיזה פורמט" אלא "איפה הקובץ נוחת אצלי".**
+
+---
+
+## 2. איפה זה יושב ✅
+
+```
+OneDrive → Documents → מסמכים → Copilot → Microsoft PowerPoint → skills
 ```
 
-4. בכל אפליקציה: `Manage skills` → `Custom skills` → **`Refresh`** (אין צורך לסגור את האפליקציה).
-5. אימות: הקלידו `@` בחלונית Copilot — הסקיל אמור להופיע.
-
-`install.py` מנתב אוטומטית: `variance-analysis` ו־`exec-email` → Excel; השאר → PowerPoint. ניתן לדרוס עם `<!-- app: excel -->` בתוך `SKILL.md`.
-
-## התקנה ידנית (בלי Python)
-
-1. צרו את תיקיית OneDrive מהאפליקציה (כמו למעלה).
-2. העתיקו **את תיקיית הסקיל כולה** (לא רק את הקובץ) לתיקיית האפליקציה הנכונה:
+נתיב מלא כפי שאומת ב-SharePoint REST:
 
 ```
-OneDrive → Documents / מסמכים → Copilot → Microsoft PowerPoint → skills
-OneDrive → Documents / מסמכים → Copilot → Microsoft Excel → skills
+/personal/<user>/Documents/מסמכים/Copilot/Microsoft PowerPoint/skills
 ```
 
-3. `Refresh` בחלונית Custom skills.
+**התיקייה לא נוצרת מעצמה.** יוצרים אותה מתוך הכלי:
+`Copilot pane → Settings → Manage skills → Custom skills → Create OneDrive folder`
 
-⚠️ סקיל של Excel שיושב בתיקייה של PowerPoint **לא ייטען ובלי הודעת שגיאה**.
+אצלנו ההורה ותיקיית `skills` נוצרו **בהפרש שנייה אחת** (14:14:56Z ו-14:14:57Z) —
+חתימה של יצירת שלד אוטומטית בלחיצה אחת. ‏`Modified` נשאר זהה ל-`Created` עד שהוכנס תוכן.
 
-## אימות מקומי
+**תיקייה נלווית:** ‏`Copilot/נוצר` היא המקום שאליו Copilot שומר קבצים שהוא מייצר
+(אצלנו 10 קובצי `.pptx`). ⚠️ ההתנהגות עקבית בפועל אבל **אינה מתועדת רשמית** —
+נציג Microsoft בפורום נתן תשובה אחרת. אל תבנו עליה חוזה.
 
-```bash
-python validate.py
+---
+
+## 3. מבנה הסקיל ✅
+
+כל סקיל הוא **תיקייה**, ובתוכה `SKILL.md`:
+
+```
+skills/
+└── vat-report/
+    └── SKILL.md
 ```
 
-למדידת RTL אמיתית על קובץ מצגת (לא רק דיווח עצמי של הסקיל):
+```markdown
+---
+name: vat-report
+description: מכין דוח מע"מ תקופתי מתוך גיליון תנועות, ומסמן שורות חסרות אסמכתא.
+---
 
-```bash
-python rtl-fingerprint.py deck.pptx
-python rtl_repair.py deck.pptx --in-place
+כשמפעילים אותי:
+1. זהה את עמודות התאריך, הסכום ושיעור המע"מ.
+2. ...
 ```
 
-## כללי פורמט שמפילים סקילים
+### ארבעה כללים שאסור לפספס
 
-1. שם הקובץ חייב להיות **`SKILL.md`** (רישיות חשובה לפרסר).
-2. שם התיקייה זהה ל־`name` שב־front matter.
-3. Front matter נפתח **וגם** נסגר ב־`---`.
-4. UTF-8 בלי BOM, שורות LF (`install.py` ממיר CRLF→LF).
+| # | כלל | מה קורה אם מפרים |
+|---|---|---|
+| 1 | **שם הקובץ `SKILL.md` — באותיות גדולות** | הודעת שגיאה: *"Required skill information is missing"* |
+| 2 | **שם התיקייה זהה ל-`name` שב-frontmatter** | קופיילוט מדלג על הסקיל בשקט |
+| 3 | ‏`---` פותח **וסוגר** את ה-frontmatter | הסקיל לא נטען |
+| 4 | בלי BOM, שורות LF | לא אומת אצלנו, אבל זה מה שעבד |
 
-## הערת פרסום Pages
+### קבצים נתמכים בתיקיית הסקיל ⚠️
 
-עדכוני GitHub Pages (כולל `.nojekyll` וחבילת ה־zip) **לא חיים** עד שמתבצע publish/deploy ל־`gh-pages` / Actions של האתר. בדיקה מקומית בלבד אומתה בסביבה זו.
+**נתמך:** ‏`md` · `txt` · `csv` · `json` · `xml` · `html` · `svg` · `py` · `js`
+**לא נתמך:** ‏`png` · `pdf` · zip מקונן
+
+---
+
+## 4. מלכודת הרישיות — נתפסה בפועל ✅
+
+זו הייתה התקלה האמיתית אצלנו, והיא לא אינטואיטיבית.
+
+```
+skills/test-skill/skill.md   ← נדחה. "Required skill information is missing.
+                                Check that the package contains a SKILL.md file"
+skills/test-skill/SKILL.md   ← נטען
+```
+
+**התוכן היה זהה בייט-בבייט** (222 בייטים, אותו frontmatter, בלי BOM).
+‏Windows ו-SharePoint אינם מבחינים ברישיות — **הפרסר של קופיילוט כן.**
+לכן רואים את הקובץ בתיקייה, והוא "לא קיים" מבחינת הכלי.
+
+**שינוי שם דורש שני שלבים**, כי SharePoint לא מבצע rename שנבדל רק ברישיות:
+
+```
+skill.md  →  _tmp_skill.md  →  SKILL.md
+```
+
+---
+
+## 5. הפעלה ✅
+
+1. `Choose skills` בחלונית Copilot — הסקיל מופיע תחת **Custom skills**
+2. או בפרומפט: `@שם-הסקיל`
+
+**הרשאות והיקף** ⚠️
+- דורש רישיון Microsoft 365 Copilot
+- הסקילים **אישיים בלבד** — רק החשבון שיצר אותם רואה אותם. אין שיתוף ואין הפצה ארגונית.
+
+### ‏Refresh — ולא הפעלה מחדש ✅
+
+**בזבזנו על זה זמן.** אחרי הוספה או שינוי שם של סקיל **אין צורך לסגור את האפליקציה**:
+
+```
+Copilot → Manage skills → Custom skills → Refresh
+```
+
+התיעוד של מיקרוסופט אומר את זה במפורש. אנחנו הפעלנו מחדש את PowerPoint שלוש
+פעמים לפני שקראנו את ה-README שקופיילוט עצמו שתל בתיקייה.
+
+### כיבוי סקיל בלי למחוק אותו ✅
+
+לכל סקיל יש מתג **enable/disable** ב-`Custom skills`. סקיל מכובה עדיין עובד
+בקריאה מפורשת `@שם-הסקיל` — הוא רק מפסיק לפעול אוטומטית.
+
+ולהוצאה מהרשימה לגמרי, בלי למחוק: **להוסיף `.example` לשם התיקייה.**
+קופיילוט מדלג על כל תיקייה ששמה אינו תואם ל-`name` שבתוכה — וזו בדיוק
+המוסכמה שמיקרוסופט משתמשת בה בדוגמה שהיא שותלת (`make-calendar.example`).
+
+---
+
+## 6. סקילים במצב הסוכן — נבדק אצלנו ✅
+
+**זה ממצא מקורי. אין לו תיעוד רשמי בשום מקור שמצאנו.**
+
+### ראשית — אין "Agent Mode" בשם הזה ב-PowerPoint
+
+בחלונית Copilot של PowerPoint דסקטופ אין מתג בשם "Agent Mode". מה שיש:
+
+| בורר | אפשרויות |
+|---|---|
+| **מודל** | ‏Auto (ברירת מחדל) · Claude · GPT · ורמת מאמץ: Faster / Balanced / Smarter |
+| **רמת אוטונומיה** | **`Allow editing`** — *"Copilot can edit your presentation directly"*<br>**`Chat only`** — *"Copilot will respond in chat only"* |
+| **תפריט `...`** | ‏Send feedback · **Manage skills** · **All agents** |
+
+‏**`Allow editing` הוא המצב האגנטי** — שם Copilot פועל על המסמך עצמו.
+זו התשובה למי שמחפש "Agent Mode" ב-PowerPoint: הוא נקרא אחרת.
+
+### הבדיקה והתוצאה
+
+בוצע 1.9.2026 על טננט ואלור, PowerPoint דסקטופ, ‏`Allow editing` **פעיל**:
+
+1. בחלונית Copilot הוקלד `@test` → ‏**`test-skill` הופיע ברשימה** עם התיאור העברי שלו
+2. נבחר ונשלח
+3. ‏Copilot החזיר `Reasoned in 1 step` ואת המשפט **`הסקיל נטען בהצלחה.`** — מילה במילה כפי שה-`SKILL.md` דרש
+4. המצגת **לא** נערכה (הכותרת נשארה `Saved`) — התנהגות נכונה, הסקיל ביקש תשובה בלבד
+
+**מסקנה: סקילים מותאמים נטענים ומתבצעים כשמצב העריכה פעיל.**
+לא רק מופיעים ברשימה — התשובה חזרה מדויקת, וזו הבדיקה שמפרידה בין "נטען" ל"רץ".
+
+### בדיקה שנייה — סקיל ש**עורך** את המצגת ✅
+
+הבדיקה הראשונה הוכיחה שסקיל *עונה*. זו מוכיחה שסקיל *מבצע*.
+
+**הסקיל** (`add-test-slide`) — הוראות שאפשר לאמת חד-משמעית:
+
+```markdown
+---
+name: add-test-slide
+description: Adds one clearly-marked test slide at the end of the presentation.
+---
+
+When invoked, perform EXACTLY this and nothing else:
+1. Add ONE new slide at the very END of the presentation.
+2. Set its title to exactly: SKILL-EDIT-OK
+3. Add exactly three bullet points: bullet alpha / bullet beta / bullet gamma
+4. Do NOT modify, reorder, restyle or delete any existing slide.
+5. After you finish, reply with exactly: added one slide titled SKILL-EDIT-OK
+```
+
+**הרצה** על מצגת בדיקה נקייה בת 3 שקפים, ‏`Allow editing` פעיל:
+
+| מה נבדק | תוצאה |
+|---|---|
+| שקף נוסף | ✅ שקף 4 נוצר |
+| כותרת מדויקת | ✅ `SKILL-EDIT-OK` |
+| שלוש הנקודות ובסדר | ✅ `bullet alpha` · `bullet beta` · `bullet gamma` |
+| שקפים 1–3 לא נגעו | ✅ ללא שינוי |
+| נוסח התשובה | ✅ `added one slide titled SKILL-EDIT-OK` |
+| עומק הריצה | `Reasoned in **3** steps` (מול step 1 בסקיל שרק עונה) |
+
+**מסקנה: סקיל מותאם מבצע עריכות אמיתיות במסמך, ומכבד גם את הגבולות שהוגדרו לו.**
+ההוראה "אל תיגע בשקפים קיימים" קוימה — לא רק החלק שמוסיף.
+
+> **מלכודת שנתפסה:** ‏`AutoSave` היה **כבוי**. העריכה בוצעה באפליקציה, אבל
+> **הקובץ בדיסק נשאר בן 3 שקפים** עד שמירה ידנית. סקיל שעורך אינו שומר בשבילכם —
+> אם מריצים על קובץ מקומי, לוודא שמירה. עם AutoSave דלוק (קובץ ב-OneDrive) השמירה מיידית,
+> וזו בדיוק הסיבה **לא** להריץ סקיל עריכה לראשונה על מצגת אמיתית.
+
+### בדיקה שלישית — סקיל עריכה על מצגת עברית RTL ✅
+
+**זו הבדיקה שהפריכה הנחה שלנו.**
+
+**המצגת:** 5 שקפים בעברית, שבורים בכוונה — 20 פסקאות מיושרות לשמאל,
+בלי `rtl` כלל, ושני רווחים בלועים (`567בפועל`, `125למשימה`).
+**הסקיל:** ‏`rtl-fix-experimental`, שנוסח כך שהתשובה השימושית תהיה דווקא
+"לא הצלחתי" — כדי לא לעודד דיווח כוזב.
+
+**התוצאה, שתי ריצות עצמאיות, זהות:**
+
+```
+rtl="1"            0 →  20
+algn="r"           0 →  20
+רווחים בלועים      2 →   0
+בלוקי טקסט        20 →  20   (2 שינויים — בדיוק המבוקשים)
+```
+
+| טענה | מצב |
+|---|---|
+| ‏Copilot לא שולט בעיצוב פסקה | ❌ **הופרך.** 20/20, פעמיים |
+| הסקיל מחק רווחים | ❌ **הופרך.** כל הגבולות מכילים `U+0020` תקין |
+
+**Copilot כן עורך עיצוב פסקה.** ההחלטה הקודמת להוריד את הסקיל העורך
+מהספרייה התבססה על הנחה שלא נמדדה — בדיוק הכשל שהספרייה נועדה למנוע.
+‏`rtl-fingerprint.py` נבנה כדי לתפוס דיווח **הצלחה** כוזב, ותפס דיווח **כישלון** כוזב.
+
+### הארטיפקט שנשאר, ומה באמת פותר אותו
+
+אחרי התיקון, מילה באנגלית עדיין נראית דבוקה לעברית בהצגת המצגת —
+`CoPilot בתוך` מוצג `CoPilotבתוך` — **למרות שהרווח קיים בקובץ.**
+זו התנהגות bidi של PowerPoint, לא באג של Copilot: שחזרנו אותה
+ב-python-pptx בלי שום מעורבות של Copilot.
+
+שלוש גרסאות נבנו ורונדרו דרך המרנדר של PowerPoint עצמו:
+
+| גרסה | ספרה↔עברית | אנגלית↔עברית |
+|---|---|---|
+| A · רווח רגיל (פלט Copilot) | ❌ | ❌ |
+| B · רווח קשיח `U+00A0` | ✅ | ❌ |
+| C · **סימון שפה ברמת run** | ✅ | ✅ |
+
+**הסיבה:** ספרה היא `EN` בסיווג bidi — חלשה, ורווח קשיח לידה מקבל כיוון יציב.
+אות לטינית היא `L` — חזקה, והרצף `L → רווח → R` נשבר בשני המקרים.
+רק סימון `lang` לכל מקטע מפריד את הכיוונים ברמה שהמרנדר מכבד.
+
+המימוש: [`copilot-skills/rtl_repair.py`](copilot-skills/rtl_repair.py) —
+אידמפוטנטי, אומת מול המרנדר של PowerPoint.
+
+### מה עדיין לא ידוע ❓
+
+| שאלה | מצב |
+|---|---|
+| האם Copilot יכול לסמן `lang` ברמת run | לא נבדק — לכן זה בכלי ולא בסקיל |
+| כמה סקילים מותר, ומה הגודל המרבי | לא מתועד |
+| האם `Copilot/נוצר` הוא חוזה יציב | לא מתועד |
+
+---
+
+## 7. המרת סקיל לסוכן ב-Copilot Studio
+
+סקיל של PowerPoint הוא אישי ומקומי. כשצריך **סוכן ארגוני** — עוברים ל-Copilot Studio,
+וזו לא העתקה אלא המרה. השיטה אומתה מקצה לקצה ב-24.8.2026 על סקיל מע"מ עם חמש מלכודות.
+
+**הכלי:** [`skill-to-copilot-studio.html`](skill-to-copilot-studio.html) בריפו הזה.
+דוגמת המרה מלאה יושבת בשלב 5 של מעבדת ההנחיות, [`copilot-prompt-lab.html`](copilot-prompt-lab.html).
+
+### ארבעת כללי ההמרה
+
+1. **להסיר:** שורות ספציפיות לקלוד קוד, קריאות Agent/Task, spawn של תת-סוכן,
+   ‏`model:`, פקודות סלאש, הפניות לכלים ולנתיבי קבצים, ואת ה-frontmatter.
+2. **לשמור:** פרסונה, כללי עבודה, שלבים, פורמט תשובה, הבהרות משפטיות.
+3. **לפצל לשלוש שכבות:** *הוראות* להתנהגות · *מקורות ידע* לנתונים שמשתנים
+   (שיעורים, ספים, מועדים) · *actions* לחישוב ודאי ולחיבורי API.
+4. **לסמן במפורש מה לא עובר:** ריצת סבבים אוטומטית ותת-סוכנים.
+
+### שלושה עקרונות מחייבים
+
+- **חישוב ודאי לא נשאר במודל** — הוא הופך ל-action. המודל אוסף ומסביר, ה-action מחשב.
+- **מספרים שמשתנים לא מקובעים בהוראות** — הם מקור ידע או חיפוש חי.
+- **declarative הוא סבב יחיד.** מה שדורש איטרציה לא יעבור.
+
+### מגבלות שאומתו
+
+- שדה ההוראות: כ-**8,000 תווים**
+- עד כ-**100** קבצים / תיקיות / אתרים לסוכן
+
+> **על מקורות ידע:** להצביע על **הרשימות והאתרים שמחזיקים את הנתונים**, לא על עמוד `.aspx`
+> שמציג אותם. עמוד תצוגה מחזיר HTML של מעטפת — כותרות ותפריטים — ולא את הרשומות.
+
+---
+
+## 8. צ'קליסט אימות
+
+לפני שמכריזים "הסקיל עובד":
+
+- [ ] הקובץ נקרא **`SKILL.md`** — לפתוח את התיקייה ולקרוא את השם, לא להניח
+- [ ] שם התיקייה **זהה** ל-`name` שב-frontmatter
+- [ ] ‏`---` פותח וסוגר
+- [ ] הסקיל **מופיע** ברשימת `Choose skills`
+- [ ] הרצה בפועל מחזירה את מה שהסקיל מבטיח — לא רק "נטען"
+
+**הכלל שמאחורי כל השורות:** לפתוח ולהסתכל, לא לנחש.
+ביום אחד נתקלנו בשלוש תקלות שנראו כמו "ה-AI לא עובד" והיו פרט טכני קטן וניתן לאימות:
+סקיל שנשמר בקונטיינר מבודד · מתקן טקסט שרץ על מצגת תמונות ודיווח "62 מתוך 62" ·
+וקובץ ברישיות שגויה. **בכל השלושה, פתיחת התיקייה נתנה את התשובה בפחות מדקה.**
+
+---
+
+## מקורות
+
+- [Use custom skills with Copilot in PowerPoint — Microsoft Support](https://support.microsoft.com/en-us/powerpoint/copilot/copilot-in-powerpoint-skills)
+- Message Center **MC1434582** — ‏OneDrive-stored user-defined custom skills, 21.7.2026
+- [Get started with Word, Excel and PowerPoint Agents — Microsoft Support](https://support.microsoft.com/en-us/topic/get-started-with-word-excel-and-powerpoint-agents-in-microsoft-365-copilot-76691f5e-bb19-4029-a34d-33a00e0a0c4f)
+- [What's New in Microsoft 365 Copilot — June 2026](https://techcommunity.microsoft.com/blog/microsoft365copilotblog/what%E2%80%99s-new-in-microsoft-365-copilot--june-2026/4529572)
+- אימות חי: טננט ואלור, 31.8–1.9.2026

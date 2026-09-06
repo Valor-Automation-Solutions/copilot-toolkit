@@ -11,11 +11,11 @@
   .pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0A5654;background:#E7EEEE;border-radius:999px;padding:3px 10px;margin-bottom:10px}
   h1{font-size:clamp(24px,4vw,32px);margin:0 0 8px}
   h2{font-size:18px;margin-top:1.4em;color:#0A5654}
-  h3{font-size:16px}
   .role{color:#3E5058;margin:0 0 18px}
   pre{background:#E7EEEE;padding:12px;border-radius:6px;overflow:auto;direction:ltr;text-align:left;font-size:13px}
   .actions a{display:inline-block;margin:8px 8px 0 0;padding:10px 14px;background:#0F7A78;color:#fff;text-decoration:none;border-radius:6px;font-weight:700}
   .actions a.secondary{background:#fff;color:#0F7A78;border:1px solid #CFDCDC}
+  .source{margin-top:18px;font-size:13px;color:#6B7D85}
 </style>
 </head>
 <body>
@@ -37,6 +37,7 @@ algn=&quot;r&quot;          0 → 20
 רווחים בלועים     2 →  0     ← איתר אותם בעצמו, בלי שנאמר לו איפה
 בלוקי טקסט       20 → 20     2 שינויים בלבד, שאר 18 ללא נגיעה</code></pre><p><strong>אבל זה לא מספיק לתצוגה נכונה.</strong> רווח בין מילה <strong>לטינית</strong> למילה עברית</p><p>ימשיך להיראות בלוע בהצגת המצגת — `CoPilot בתוך` יוצג `CoPilotבתוך` —</p><p>למרות שהרווח קיים בקובץ.</p><p>הסיבה: הרווח הוא תו ניטרלי בגבול כיוונים. הפתרון היחיד שנמדד כעובד הוא</p><p><strong>סימון שפה ברמת ה-run</strong> (`lang=&quot;he-IL&quot;` / `lang=&quot;en-US&quot;` לכל מקטע לפי הכתב).</p><p>רווח קשיח (`U+00A0`) פותר <strong>רק</strong> את הגבול מול ספרות, ולא מול אותיות.</p><p>לסגירה מלאה, הרץ אחרי הסקיל:</p><pre><code>python rtl_repair.py deck.pptx --in-place</code></pre><p>הכלי מבצע את שני המעברים, אידמפוטנטי, ואומת מול המרנדר של PowerPoint עצמו.</p>
   </article>
+  <p class="source">מקור: Valor-Automation-Solutions/ai-cost-calculator → copilot-skills (עותק מקומי מסונכרן)</p>
 </div>
 </body>
 </html>
