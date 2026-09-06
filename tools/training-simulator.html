@@ -375,6 +375,22 @@
         }
 
 
+        
+        .chat-input-area { align-items: stretch; }
+        .input-actions { display: flex; flex-direction: column; gap: 0.5rem; min-width: 140px; }
+        .btn-example {
+            background-color: transparent;
+            color: var(--accent-teal);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 0.65rem 0.75rem;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .btn-example:hover { background: rgba(0,173,181,0.12); }
+        .btn-example:disabled { opacity: 0.45; cursor: not-allowed; }
+
         .chat-input-area.locked { display: none; }
         .welcome-panel {
             flex: 1;
@@ -495,7 +511,10 @@
 
             <div class="chat-input-area locked" id="chat-input-area">
                 <textarea class="prompt-input" id="prompt-input" placeholder="כתבו פרומפט עם מטרה · הקשר · מגבלות · מקור" disabled readonly></textarea>
-                <button class="btn-submit" id="btn-submit" type="button" disabled>בדוק</button>
+                <div class="input-actions">
+                    <button class="btn-example" id="btn-example" type="button" disabled>הצג דוגמה מצוינת</button>
+                    <button class="btn-submit" id="btn-submit" type="button" disabled>בדוק</button>
+                </div>
             </div>
         </div>
     </div>
@@ -563,305 +582,19 @@
 
     <script>
         const scenarios = [
-            { id: 'proc1', category: 'רכש', app: 'Word', title: 'הפרת חוזה (Contract Breach)', desc: 'נסח מכתב לספק שירותי ניקיון המפר את סעיף 4 בחוזה ההתקשרות (איחור בהגעה).', keywords: { goal: ['מכתב', 'נסח', 'כתוב'], context: ['ספק', 'ניקיון', 'הפרה', 'איחור'], scope: ['רשמי', 'קצר', 'טון'], source: ['חוזה', 'סעיף 4', 'מסמך התקשרות'] } },
-            { id: 'proc2', category: 'רכש', app: 'Excel', title: 'השוואת מחירים (Vendor Price)', desc: 'צור טבלת השוואת מחירים בין 3 ספקים עבור רכישת 100 מחשבים ניידים.', keywords: { goal: ['טבלה', 'השוואה', 'נתח'], context: ['ספקים', 'מחשבים', 'רכישה'], scope: ['עמודות', 'שורות', 'הדגש'], source: ['קובץ', 'הצעות מחיר', 'נתונים'] } },
-            { id: 'proc3', category: 'רכש', app: 'Copilot Studio', title: 'בדיקת חשבונית (Invoice Audit)', desc: 'בדוק האם חשבונית מס\' 8849 תואמת להזמנת הרכש (PO) המקורית.', keywords: { goal: ['בדוק', 'השווה', 'אמת'], context: ['חשבונית', 'הזמנת רכש', 'PO'], scope: ['פערים', 'חריגות', 'דו"ח'], source: ['חשבונית 8849', 'מערכת ERP'] } },
-            { id: 'fin1', category: 'כספים', app: 'Excel', title: 'חריגת תזרים (Cashflow Variance)', desc: 'נתח את דו"ח תזרים המזומנים של הרבעון הקודם ומצא חריגות של מעל 10%.', keywords: { goal: ['נתח', 'מצא', 'זהה'], context: ['תזרים מזומנים', 'חריגה', 'רבעון'], scope: ['10%', 'מעל', 'טבלה'], source: ['דו"ח תזרים', 'אקסל'] } },
-            { id: 'fin2', category: 'כספים', app: 'Copilot Studio', title: 'תשלום כפול (Double Payment)', desc: 'אתר תשלומים כפולים לאותו ספק בחודש אוקטובר.', keywords: { goal: ['אתר', 'מצא', 'סנן'], context: ['תשלום כפול', 'ספק', 'אוקטובר'], scope: ['רשימה', 'הדגש'], source: ['כרטסת ספקים', 'מערכת הנהלת חשבונות'] } },
-            { id: 'fin3', category: 'כספים', app: 'Teams', title: 'הקצאת תקציב (Budget)', desc: 'בקש מצוות הנהלת חשבונות לעדכן את הקצאות התקציב לשנה הבאה בהתבסס על ישיבת ההנהלה.', keywords: { goal: ['בקש', 'עדכן', 'הודעה'], context: ['הקצאת תקציב', 'הנהלה', 'צוות'], scope: ['דחוף', 'תמציתי', 'פעולה'], source: ['סיכום ישיבה', 'מסמך תקציב'] } },
-            { id: 'log1', category: 'לוגיסטיקה', app: 'Excel', title: 'מעקב SLA (SLA Delivery)', desc: 'הפק דו"ח של כל המשלוחים שלא עמדו ב-SLA של 48 שעות.', keywords: { goal: ['דו"ח', 'הפק', 'סנן'], context: ['משלוחים', 'SLA', 'חריגה'], scope: ['48 שעות', 'רשימה', 'אדום'], source: ['קובץ מעקב', 'לוגיסטיקה'] } },
-            { id: 'log2', category: 'לוגיסטיקה', app: 'Outlook', title: 'תביעת עיכוב מכס (Customs Claim)', desc: 'כתוב דוא"ל לעמיל המכס בבקשה לשחרר את מכולה MSK123 שעוכבה בנמל.', keywords: { goal: ['דוא"ל', 'מייל', 'כתוב'], context: ['עמיל מכס', 'שחרור', 'מכולה MSK123', 'עיכוב'], scope: ['רשמי', 'דחוף'], source: ['מסמכי שילוח', 'רשימון'] } },
-            { id: 'log3', category: 'לוגיסטיקה', app: 'Copilot Studio', title: 'אופטימיזציית שילוח (Freight)', desc: 'הצע מסלול שילוח חלופי וזול יותר להובלה מסין לישראל.', keywords: { goal: ['הצע', 'מסלול', 'חלופה'], context: ['שילוח', 'סין', 'ישראל', 'עלות'], scope: ['זול', 'מהיר', 'השוואה'], source: ['מחירון חברות ספנות'] } },
-            { id: 'hr1', category: 'משאבי אנוש', app: 'Word', title: 'מדיניות חברה (Policy Lookup)', desc: 'סכם את מדיניות העבודה מהבית (מודל היברידי) עבור עובד חדש.', keywords: { goal: ['סכם', 'תמצת', 'כתוב'], context: ['מדיניות', 'עבודה מהבית', 'היברידי', 'עובד חדש'], scope: ['נקודות', 'קצר', 'ברור'], source: ['ספר נהלים', 'פורטל ארגוני'] } },
-            { id: 'hr2', category: 'משאבי אנוש', app: 'Copilot Studio', title: 'סינון קורות חיים (Shortlisting)', desc: 'סנן קורות חיים וזהה מועמדים עם לפחות 3 שנות ניסיון ב-Python.', keywords: { goal: ['סנן', 'זהה', 'רשימה'], context: ['קורות חיים', 'מועמדים', 'ניסיון', 'Python'], scope: ['3 שנים', 'טבלה'], source: ['תיקיית מועמדים', 'CVs'] } },
-            { id: 'hr3', category: 'משאבי אנוש', app: 'Outlook', title: 'תביעת הטבות (Benefits Claim)', desc: 'נסח תשובה מנומסת לעובד שבקשת החזר ההוצאות שלו נדחתה.', keywords: { goal: ['נסח', 'תשובה', 'מייל'], context: ['עובד', 'החזר הוצאות', 'דחייה'], scope: ['מנומס', 'אמפתי', 'סיבה'], source: ['נהלי החזר', 'פניית העובד'] } },
-            { id: 'gen1', category: 'פרודוקטיביות כללית', app: 'Teams', title: 'סיכום ישיבה (Action Items)', desc: 'הפוך את התמלול של ישיבת ההנהלה לרשימת משימות לביצוע (Action Items).', keywords: { goal: ['הפוך', 'רשימה', 'חלץ'], context: ['ישיבה', 'הנהלה', 'משימות', 'לביצוע'], scope: ['Bullet points', 'טבלה', 'שיוך לאדם'], source: ['תמלול', 'Transcript'] } },
-            { id: 'gen2', category: 'פרודוקטיביות כללית', app: 'Outlook', title: 'ניסוח דוא"ל (Email Drafting)', desc: 'כתוב דוא"ל עדכון שבועי לצוות על התקדמות פרויקט X.', keywords: { goal: ['כתוב', 'דוא"ל', 'נסח'], context: ['עדכון שבועי', 'צוות', 'פרויקט X'], scope: ['קצר', 'מעודד', 'נקודות עיקריות'], source: ['תוכנית עבודה', 'Gantt'] } },
-            { id: 'gen3', category: 'פרודוקטיביות כללית', app: 'Word', title: 'מתווה מצגת (Presentation Outline)', desc: 'הכן ראשי פרקים למצגת סוף שנה להנהלה הבכירה בנושא חסכון בעלויות.', keywords: { goal: ['הכן', 'מתווה', 'ראשי פרקים'], context: ['מצגת', 'סוף שנה', 'הנהלה', 'חסכון בעלויות'], scope: ['שקפים', '5-7 שקפים', 'מבנה'], source: ['דו"ח כספי', 'סיכומי שנה'] } }
+            { id: "proc1", category: "רכש", app: "Word", title: "הפרת חוזה (Contract Breach)", desc: "נסח מכתב לספק שירותי ניקיון המפר את סעיף 4 בחוזה ההתקשרות (איחור בהגעה).", example: "כתוב מכתב רשמי וקצר (עד 180 מילים) לספק שירותי הניקיון על הפרת סעיף 4 בחוזה ההתקשרות בגלל איחור בהגעה. שמור על טון מקצועי אך תקיף, וסיים בבקשה לתיקון לוח הזמנים. הסתמך על מסמך החוזה וסעיף 4 בלבד — אל תמציא סעיפים.", keywords: { goal: ["מכתב", "נסח", "כתוב", "טיוטה"], context: ["ספק", "ניקיון", "הפרה", "איחור", "סעיף"], scope: ["רשמי", "קצר", "טון", "פורמט", "עד", "מילים", "מבנה"], source: ["חוזה", "סעיף 4", "התקשרות", "מסמך"] } },
+            { id: "proc2", category: "רכש", app: "Excel", title: "השוואת מחירים (Vendor Price)", desc: "צור טבלת השוואת מחירים בין 3 ספקים עבור רכישת 100 מחשבים ניידים.", example: "צור בגיליון טבלת השוואת מחירים בין 3 ספקים לרכישת 100 מחשבים ניידים. עמודות: ספק, מחיר יחידה, הנחה, סה״כ, זמן אספקה. הדגש את ההצעה הזולה ביותר בשורה נפרדת לסיכום. הסתמך רק על קובץ הצעות המחיר שסופק — אל תמציא מחירים.", keywords: { goal: ["טבלה", "השוואה", "צור", "בנה"], context: ["ספקים", "מחשבים", "רכישה", "100"], scope: ["עמודות", "שורות", "הדגש", "פורמט", "סיכום"], source: ["קובץ", "הצעות מחיר", "נתונים", "גיליון"] } },
+            { id: "proc3", category: "רכש", app: "Excel", title: "בדיקת חשבונית (Invoice Audit)", desc: "בדוק האם חשבונית מס' 8849 תואמת להזמנת הרכש (PO) המקורית.", example: "בדוק האם חשבונית 8849 תואמת להזמנת הרכש (PO) המקורית. הצג טבלת פערים/חריגות (פריט, כמות, מחיר, סה״כ) ורק ממצאים מאומתים. הסתמך על נתוני החשבונית וההזמנה במערכת ERP — אל תנחש שורות חסרות.", keywords: { goal: ["בדוק", "השווה", "אמת", "סרוק"], context: ["חשבונית", "הזמנת רכש", "PO", "8849"], scope: ["פערים", "חריגות", "דוח", "דו\"ח", "רשימה", "טבלה"], source: ["חשבונית", "ERP", "הזמנה", "מערכת"] } },
+            { id: "fin1", category: "כספים", app: "Excel", title: "חריגת תזרים (Cashflow Variance)", desc: "נתח את דו\"ח תזרים המזומנים של הרבעון הקודם ומצא חריגות של מעל 10%.", example: "נתח את דו\"ח תזרים המזומנים לרבעון הקודם באקסל וזהה חריגות מעל 10% מהתקציב. הצג טבלה: סעיף, תקציב, בפועל, אחוז חריגה, והוסף סיכום קצר ל-3 החריגות הגדולות. הסתמך רק על הגיליון שסופק.", keywords: { goal: ["נתח", "מצא", "זהה", "סמן"], context: ["תזרים", "חריגה", "רבעון", "מזומנים"], scope: ["10%", "מעל", "טבלה", "אחוז", "סיכום"], source: ["דוח", "דו\"ח", "אקסל", "גיליון", "תזרים"] } },
+            { id: "fin2", category: "כספים", app: "Excel", title: "תשלום כפול (Double Payment)", desc: "אתר תשלומים כפולים לאותו ספק בחודש אוקטובר.", example: "אתר תשלומים כפולים לאותו ספק בחודש אוקטובר. הצג רשימה/טבלה עם ספק, מספר חשבונית, תאריכים וסכום, והדגש כפילויות. הסתמך על כרטסת הספקים / קובץ הנהלת החשבונות בלבד.", keywords: { goal: ["אתר", "מצא", "סנן", "זהה"], context: ["תשלום", "כפול", "ספק", "אוקטובר"], scope: ["רשימה", "הדגש", "טבלה", "כפילות"], source: ["כרטסת", "הנהלת חשבונות", "קובץ", "גיליון"] } },
+            { id: "fin3", category: "כספים", app: "Teams", title: "הקצאת תקציב (Budget)", desc: "בקש מצוות הנהלת חשבונות לעדכן את הקצאות התקציב לשנה הבאה בהתבסס על ישיבת ההנהלה.", example: "כתוב הודעת Teams תמציתית ודחופה לצוות הנהלת החשבונות: בקשה לעדכן הקצאות תקציב לשנה הבאה לפי החלטות ישיבת ההנהלה. ציין פעולה נדרשת ותאריך יעד. הסתמך על סיכום הישיבה / מסמך התקציב — בלי מספרים שלא הופיעו שם.", keywords: { goal: ["בקש", "עדכן", "הודעה", "כתוב"], context: ["תקציב", "הנהלה", "צוות", "הקצאות"], scope: ["דחוף", "תמציתי", "פעולה", "קצר", "נקודות"], source: ["סיכום ישיבה", "ישיבה", "מסמך תקציב", "פרוטוקול"] } },
+            { id: "log1", category: "לוגיסטיקה", app: "Excel", title: "מעקב SLA (SLA Delivery)", desc: "הפק דו\"ח של כל המשלוחים שלא עמדו ב-SLA של 48 שעות.", example: "הפק דו\"ח/טבלה של כל המשלוחים שלא עמדו ב-SLA של 48 שעות. הדגש באדום שורות חריגה וסכם לפי ספק. הסתמך על קובץ המעקב הלוגיסטי שסופק בלבד.", keywords: { goal: ["דוח", "דו\"ח", "הפק", "סנן", "הצג"], context: ["משלוחים", "SLA", "חריגה", "אספקה"], scope: ["48", "רשימה", "טבלה", "אדום", "הדגש"], source: ["קובץ מעקב", "מעקב", "לוגיסטיקה", "גיליון"] } },
+            { id: "log2", category: "לוגיסטיקה", app: "Outlook", title: "תביעת עיכוב מכס (Customs Claim)", desc: "כתוב דוא\"ל לעמיל המכס בבקשה לשחרר את מכולה MSK123 שעוכבה בנמל.", example: "כתוב מייל רשמי ודחוף לעמיל המכס בבקשה לשחרר מכולה MSK123 שעוכבה בנמל. טון מנומס אך בהול, עד 120 מילים. הסתמך על מסמכי השילוח והרשימון — אל תמציא מספרי אסמכתא.", keywords: { goal: ["דוא\"ל", "מייל", "כתוב", "נסח"], context: ["עמיל", "מכס", "שחרור", "מכולה", "MSK123", "עיכוב"], scope: ["רשמי", "דחוף", "קצר", "טון"], source: ["שילוח", "רשימון", "מסמכי", "מכולה"] } },
+            { id: "log3", category: "לוגיסטיקה", app: "Excel", title: "אופטימיזציית שילוח (Freight)", desc: "הצע מסלול שילוח חלופי וזול יותר להובלה מסין לישראל.", example: "הצע מסלול שילוח חלופי וזול יותר להובלה מסין לישראל. הצג טבלת השוואה (עלות, זמן, יתרונות/חסרונות) בין האפשרויות. הסתמך על מחירון חברות הספנות / הקובץ שסופק בלבד.", keywords: { goal: ["הצע", "מסלול", "חלופה", "השווה"], context: ["שילוח", "סין", "ישראל", "עלות", "הובלה"], scope: ["זול", "מהיר", "השוואה", "טבלה", "יתרונות"], source: ["מחירון", "ספנות", "נתונים", "קובץ"] } },
+            { id: "hr1", category: "משאבי אנוש", app: "Word", title: "מדיניות חברה (Policy Lookup)", desc: "סכם את מדיניות העבודה מהבית (מודל היברידי) עבור עובד חדש.", example: "סכם בקצרה ובנקודות ברורות את מדיניות העבודה מהבית (מודל היברידי) עבור עובד חדש. עד חצי עמוד, בלי לפרש מעבר לנוהל. הסתמך על ספר הנהלים / הפורטל הארגוני בלבד.", keywords: { goal: ["סכם", "תמצת", "כתוב", "הכן"], context: ["מדיניות", "עבודה מהבית", "היברידי", "עובד חדש"], scope: ["נקודות", "קצר", "ברור", "תבליטים", "מייל"], source: ["נהלים", "פורטל", "ספר נהלים", "מסמך"] } },
+            { id: "hr2", category: "משאבי אנוש", app: "Excel", title: "סינון קורות חיים (Shortlisting)", desc: "סנן קורות חיים וזהה מועמדים עם לפחות 3 שנות ניסיון ב-Python.", example: "סנן קורות חיים וזהה מועמדים עם לפחות 3 שנות ניסיון ב-Python. הצג טבלה: שם, שנות ניסיון, הערת התאמה. הסתמך רק על תיקיית המועמדים/ה-CV שסופקה — אל תמציא מועמדים.", keywords: { goal: ["סנן", "זהה", "רשימה", "מצא"], context: ["קורות חיים", "מועמדים", "ניסיון", "Python"], scope: ["3 שנים", "טבלה", "רשימה", "סף"], source: ["תיקייה", "מועמדים", "CV", "קבצים"] } },
+            { id: "hr3", category: "משאבי אנוש", app: "Outlook", title: "תביעת הטבות (Benefits Claim)", desc: "נסח תשובה מנומסת לעובד שבקשת החזר ההוצאות שלו נדחתה.", example: "נסח מייל מנומס ואמפתי לעובד שבקשת החזר ההוצאות שלו נדחתה. הסבר את הסיבה בקצרה לפי הנוהל והצע צעד הבא אפשרי. הסתמך על נהלי ההחזר ועל פניית העובד בלבד.", keywords: { goal: ["נסח", "תשובה", "מייל", "כתוב"], context: ["עובד", "החזר", "הוצאות", "דחייה"], scope: ["מנומס", "אמפתי", "סיבה", "קצר", "טון"], source: ["נהלי", "נוהל", "החזר", "פנייה"] } },
+            { id: "gen1", category: "פרודוקטיביות כללית", app: "Teams", title: "סיכום ישיבה (Action Items)", desc: "הפוך את התמלול של ישיבת ההנהלה לרשימת משימות לביצוע (Action Items).", example: "הפוך את תמלול ישיבת ההנהלה לרשימת משימות לביצוע בטבלה: משימה, אחראי, תאריך יעד. בלי להוסיף משימות שלא הופיעו בתמלול. הסתמך על התמלול/Transcript בלבד.", keywords: { goal: ["הפוך", "רשימה", "חלץ", "הפק"], context: ["ישיבה", "הנהלה", "משימות", "לביצוע"], scope: ["נקודות", "טבלה", "שיוך", "אחראי", "תאריך"], source: ["תמלול", "Transcript", "הקלטה", "סיכום"] } },
+            { id: "gen2", category: "פרודוקטיביות כללית", app: "Outlook", title: "ניסוח דוא\"ל (Email Drafting)", desc: "כתוב דוא\"ל עדכון שבועי לצוות על התקדמות פרויקט X.", example: "כתוב מייל עדכון שבועי קצר ומעודד לצוות על התקדמות פרויקט X, במבנה נקודות: מה הושלם, מה בתהליך, חסמים. הסתמך על תוכנית העבודה/סטטוס הפרויקט — בלי להמציא אחוזי התקדמות.", keywords: { goal: ["כתוב", "דוא\"ל", "מייל", "נסח"], context: ["עדכון", "שבועי", "צוות", "פרויקט"], scope: ["קצר", "מעודד", "נקודות", "מבנה"], source: ["תוכנית עבודה", "Gantt", "סטטוס", "לוח זמנים"] } },
+            { id: "gen3", category: "פרודוקטיביות כללית", app: "Word", title: "מתווה מצגת (Presentation Outline)", desc: "הכן ראשי פרקים למצגת סוף שנה להנהלה הבכירה בנושא חסכון בעלויות.", example: "הכן מתווה ראשי פרקים למצגת סוף שנה להנהלה הבכירה על חסכון בעלויות — מבנה של 5 עד 7 שקפים עם כותרת ומסר לכל שקף. הסתמך על דוח כספי ועל סיכומי שנה בלבד.", keywords: { goal: ["הכן", "מתווה", "ראשי פרקים", "בנה"], context: ["מצגת", "סוף שנה", "הנהלה", "חסכון", "עלויות"], scope: ["שקפים", "5", "7", "מבנה", "כותרות"], source: ["דוח", "דו\"ח", "כספי", "סיכומי שנה", "סיכומי", "נתונים"] } },
         ];
-
-        let currentScenario = null;
-        let completedScenarios = new Set();
-        const scenarioScores = {};
-
-        function el(tag, className, text) {
-            const node = document.createElement(tag);
-            if (className) node.className = className;
-            if (text != null) node.textContent = text;
-            return node;
-        }
-
-        function clearNode(node) {
-            while (node.firstChild) node.removeChild(node.firstChild);
-        }
-
-        function appendBotMessage(container, lines) {
-            const msg = el('div', 'message bot');
-            lines.forEach((line, idx) => {
-                if (idx > 0) msg.appendChild(document.createElement('br'));
-                if (typeof line === 'string') {
-                    msg.appendChild(document.createTextNode(line));
-                } else {
-                    msg.appendChild(line);
-                }
-            });
-            container.appendChild(msg);
-            return msg;
-        }
-
-        function appendUserMessage(container, text) {
-            const msg = el('div', 'message user', text);
-            container.appendChild(msg);
-            return msg;
-        }
-
-        function init() {
-            const container = document.getElementById('scenarios-container');
-            clearNode(container);
-            const categories = [...new Set(scenarios.map(s => s.category))];
-
-            categories.forEach(category => {
-                container.appendChild(el('h3', 'category-title', category));
-                const list = el('ul', 'scenario-list');
-                scenarios.filter(s => s.category === category).forEach(scenario => {
-                    const li = el('li', 'scenario-item', scenario.title);
-                    li.id = 'item-' + scenario.id;
-                    li.addEventListener('click', () => selectScenario(scenario.id));
-                    list.appendChild(li);
-                });
-                container.appendChild(list);
-            });
-
-            const history = document.getElementById('chat-history');
-            clearNode(history);
-            history.style.display = 'none';
-            document.getElementById('welcome-panel').classList.remove('hidden');
-            lockPrompt(true);
-
-            document.getElementById('feedback-text').textContent = 'אחרי בחירת תרחיש ובדיקת פרומפט — הציון יופיע כאן.';
-            document.getElementById('btn-submit').addEventListener('click', evaluatePrompt);
-            document.getElementById('prompt-input').addEventListener('keydown', (e) => {
-                if (document.getElementById('prompt-input').disabled && e.key !== 'Tab') {
-                    e.preventDefault();
-                }
-            });
-
-            document.getElementById('cert-btn').addEventListener('click', openCertificateModal);
-            document.getElementById('cert-cancel').addEventListener('click', closeCertificateModal);
-            document.getElementById('cert-print').addEventListener('click', printCertificate);
-        }
-
-
-        function lockPrompt(locked) {
-            const area = document.getElementById('chat-input-area');
-            const input = document.getElementById('prompt-input');
-            const btn = document.getElementById('btn-submit');
-            const welcome = document.getElementById('welcome-panel');
-            const history = document.getElementById('chat-history');
-            const hint = document.getElementById('pick-hint');
-            if (locked) {
-                area.classList.add('locked');
-                input.disabled = true;
-                input.readOnly = true;
-                input.value = '';
-                btn.disabled = true;
-                welcome.classList.remove('hidden');
-                history.style.display = 'none';
-                if (hint) hint.textContent = 'שלב 1: בחרו תרחיש מהרשימה';
-            } else {
-                area.classList.remove('locked');
-                input.disabled = false;
-                input.readOnly = false;
-                btn.disabled = false;
-                welcome.classList.add('hidden');
-                history.style.display = 'flex';
-                if (hint) hint.textContent = 'שלב 2: כתבו פרומפט למטה';
-                input.focus();
-            }
-        }
-
-        function selectScenario(id) {
-            document.querySelectorAll('.scenario-item').forEach(node => node.classList.remove('active'));
-            document.getElementById('item-' + id).classList.add('active');
-
-            currentScenario = scenarios.find(s => s.id === id);
-
-            document.getElementById('scenario-title').textContent = currentScenario.title;
-            document.getElementById('scenario-desc').textContent = currentScenario.desc;
-            document.getElementById('app-mode').textContent = 'אפליקציה: ' + currentScenario.app;
-
-            document.getElementById('feedback-panel').classList.remove('visible');
-            lockPrompt(false);
-            document.getElementById('prompt-input').value = '';
-
-            const history = document.getElementById('chat-history');
-            clearNode(history);
-            const strong = el('strong', null, currentScenario.title);
-            const msg = el('div', 'message bot');
-            msg.appendChild(document.createTextNode('תרחיש: '));
-            msg.appendChild(strong);
-            msg.appendChild(document.createElement('br'));
-            msg.appendChild(document.createTextNode(currentScenario.desc));
-            msg.appendChild(document.createElement('br'));
-            msg.appendChild(document.createTextNode('עכשיו כתבו פרומפט למטה (מטרה · הקשר · מגבלות · מקור) ולחצו בדוק.'));
-            history.appendChild(msg);
-        }
-
-        function evaluatePrompt() {
-            if (!currentScenario) return;
-
-            const promptText = document.getElementById('prompt-input').value;
-            if (!promptText.trim()) return;
-
-            const chatHistory = document.getElementById('chat-history');
-            appendUserMessage(chatHistory, promptText);
-
-            const scores = {
-                goal: calculateDimensionScore(promptText, currentScenario.keywords.goal),
-                context: calculateDimensionScore(promptText, currentScenario.keywords.context),
-                scope: calculateDimensionScore(promptText, currentScenario.keywords.scope),
-                source: calculateDimensionScore(promptText, currentScenario.keywords.source)
-            };
-
-            const totalScore = scores.goal + scores.context + scores.scope + scores.source;
-            updateFeedbackUI(scores, totalScore);
-            generateSimulatedResponse(totalScore);
-
-            if (totalScore >= 70) {
-                completedScenarios.add(currentScenario.id);
-                scenarioScores[currentScenario.id] = totalScore;
-                updateGamification();
-            }
-
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        }
-
-        function calculateDimensionScore(text, keywords) {
-            if (!keywords || keywords.length === 0) return 10;
-            let matches = 0;
-            const lowerText = text.toLowerCase();
-            keywords.forEach(kw => {
-                if (lowerText.includes(kw.toLowerCase())) matches++;
-            });
-            const ratio = matches / Math.min(keywords.length, 2);
-            return Math.min(25, Math.floor(ratio * 25));
-        }
-
-        function updateFeedbackUI(scores, total) {
-            document.getElementById('feedback-panel').classList.add('visible');
-            document.getElementById('total-score').textContent = String(total);
-            document.querySelector('.score-circle').style.borderColor = getScoreColor(total);
-            document.getElementById('total-score').style.color = getScoreColor(total);
-
-            updateBar('goal', scores.goal);
-            updateBar('context', scores.context);
-            updateBar('scope', scores.scope);
-            updateBar('source', scores.source);
-
-            let feedback;
-            if (total >= 90) {
-                feedback = 'מצוין לפי רשימת מילות המפתח. הפרומפט מכסה מטרה, הקשר, מגבלות ומקור. זה לא מבטיח דיוק של Copilot — רק שהמבנה מלא.';
-            } else if (total >= 70) {
-                feedback = 'טוב לפי רשימת המילים. ניתן לשפר ממדים נמוכים (פורמט פלט או הפניה מדויקת למסמך). הציון אינו משוב AI.';
-            } else {
-                feedback = 'נדרש שיפור לפי רשימת המילים. נסו: מטרה + הקשר + מגבלות + מקור מידע. זה תרגול מקומי בלבד.';
-            }
-            document.getElementById('feedback-text').textContent = feedback;
-        }
-
-        function updateBar(id, score) {
-            document.getElementById('score-' + id).textContent = score + '/25';
-            const bar = document.getElementById('bar-' + id);
-            bar.style.width = ((score / 25) * 100) + '%';
-            bar.style.backgroundColor = getScoreColor(score * 4);
-        }
-
-        function getScoreColor(score) {
-            if (score >= 80) return 'var(--accent-emerald)';
-            if (score >= 60) return 'var(--accent-cyan)';
-            if (score >= 40) return '#F59E0B';
-            return 'var(--accent-red)';
-        }
-
-        function generateSimulatedResponse(score) {
-            const chatHistory = document.getElementById('chat-history');
-            let lines;
-            if (score >= 80) {
-                lines = [
-                    'סימולציית מבנה מוצלח (בדיקת מילות מפתח):',
-                    'הפרומפט כולל מספיק רמזים בכל ארבעת הממדים. בתרגול אמיתי ב-Copilot עדיין חובה לבדוק את התוצר.',
-                    '[הכלי מכין, אדם שולח]'
-                ];
-            } else if (score >= 50) {
-                lines = [
-                    'סימולציית מבנה חלקי:',
-                    'חסרים רמזי מילות מפתח (פורמט או מקור). דייקו את הפרומפט והריצו שוב את הבדיקה המקומית.'
-                ];
-            } else {
-                lines = [
-                    'סימולציית מבנה חלש:',
-                    'הפרומפט קצר או כללי מדי לפי רשימת המילים של התרחיש. הוסיפו מטרה, הקשר, מגבלות ומקור.'
-                ];
-            }
-            appendBotMessage(chatHistory, lines);
-        }
-
-        function updateGamification() {
-            const total = 15;
-            const completed = completedScenarios.size;
-
-            document.getElementById('progress-text').textContent = completed + '/' + total + ' הושלמו';
-            document.getElementById('overall-progress').style.width = ((completed / total) * 100) + '%';
-
-            const categoriesCompleted = { 'רכש': 0, 'כספים': 0, 'לוגיסטיקה': 0, 'משאבי אנוש': 0, 'פרודוקטיביות כללית': 0 };
-            completedScenarios.forEach(id => {
-                const s = scenarios.find(x => x.id === id);
-                categoriesCompleted[s.category]++;
-            });
-
-            if (categoriesCompleted['רכש'] === 3) document.getElementById('badge-proc').classList.add('earned');
-            if (categoriesCompleted['כספים'] === 3) document.getElementById('badge-fin').classList.add('earned');
-            if (categoriesCompleted['לוגיסטיקה'] === 3) document.getElementById('badge-log').classList.add('earned');
-            if (categoriesCompleted['משאבי אנוש'] === 3) document.getElementById('badge-hr').classList.add('earned');
-            if (categoriesCompleted['פרודוקטיביות כללית'] === 3) document.getElementById('badge-prod').classList.add('earned');
-
-            if (completed === total) {
-                document.getElementById('badge-master').classList.add('earned');
-                document.getElementById('cert-btn').style.display = 'block';
-            }
-        }
-
-        function averageCompletedScore() {
-            const vals = Object.values(scenarioScores);
-            if (!vals.length) return 0;
-            return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
-        }
-
-        function openCertificateModal() {
-            document.getElementById('cert-modal').classList.add('visible');
-            document.getElementById('cert-name').focus();
-        }
-
-        function closeCertificateModal() {
-            document.getElementById('cert-modal').classList.remove('visible');
-        }
-
-        function printCertificate() {
-            const nameInput = document.getElementById('cert-name');
-            const name = nameInput.value.trim() || 'משתתף/ת';
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('he-IL', { year: 'numeric', month: 'long', day: 'numeric' });
-            const avg = averageCompletedScore();
-
-            document.getElementById('print-name').textContent = name;
-            document.getElementById('print-date').textContent = 'תאריך: ' + dateStr;
-            document.getElementById('print-score').textContent = 'ציון ממוצע (מילות מפתח): ' + avg + '% · תרחישים שהושלמו: ' + completedScenarios.size + '/15';
-
-            closeCertificateModal();
-            window.print();
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
