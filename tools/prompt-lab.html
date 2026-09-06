@@ -1,9 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>מעבדת ההנחיות של Copilot</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
   color-scheme:light;
@@ -46,16 +43,16 @@
 html{background:var(--paper);-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Rubik","Segoe UI",Arial,sans-serif;font-size:16.5px;line-height:1.7;
+  font-family:system-ui,"Segoe UI",Arial,sans-serif;font-size:16.5px;line-height:1.7;
   -webkit-font-smoothing:antialiased;
 }
 .doc{direction:rtl;text-align:right}
-h1,h2,h3,h4{font-family:"Rubik",Arial,sans-serif;font-weight:700;margin:0;line-height:1.32;
+h1,h2,h3,h4{font-family:system-ui,Arial,sans-serif;font-weight:700;margin:0;line-height:1.32;
   text-wrap:balance;color:var(--ink);letter-spacing:-.01em}
 p{margin:0}
 a{color:inherit}
 :focus-visible{outline:2.5px solid var(--focus);outline-offset:3px;border-radius:4px}
-.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.mono{font-family:ui-monospace,ui-monospace,monospace;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .skip{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);margin:-1px;
   background:var(--focus);color:#fff;text-decoration:none;z-index:99}
@@ -83,9 +80,9 @@ nav a .dot{width:9px;height:9px;border-radius:99px;background:var(--accent,var(-
 nav a[aria-current="page"]{background:var(--accent,var(--ink));color:var(--on-accent);font-weight:600}
 nav a[aria-current="page"] .dot{background:var(--on-accent);opacity:.85}
 nav a[aria-current="page"] .c{color:var(--on-accent);opacity:.8}
-nav .c{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+nav .c{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--muted)}
 nav .lbl{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--muted);padding:16px 11px 7px}
-nav a .k{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);width:9px;text-align:center}
+nav a .k{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--muted);width:9px;text-align:center}
 nav a[aria-current="page"] .k{color:var(--on-accent);opacity:.8}
 
 /* ---------- sheet ---------- */
@@ -125,7 +122,7 @@ nav a[aria-current="page"] .k{color:var(--on-accent);opacity:.8}
 .tbl td{color:var(--ink-2)}
 .tbl td:first-child{font-weight:600;color:var(--ink);padding-inline-end:22px}
 .tbl tr:last-child td{border-block-end:0}
-.tbl .n{font-family:"IBM Plex Mono",monospace;width:4.5rem;color:var(--ink)}
+.tbl .n{font-family:ui-monospace,monospace;width:4.5rem;color:var(--ink)}
 .tbl .sw{width:2.2rem}
 .tbl .sw i{display:block;width:11px;height:11px;border-radius:99px;background:var(--accent);margin-block-start:7px}
 
@@ -133,13 +130,13 @@ nav a[aria-current="page"] .k{color:var(--on-accent);opacity:.8}
 .rail{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-block-start:26px}
 .rail a{text-decoration:none;display:flex;flex-direction:column;gap:7px;padding-block-end:2px}
 .rail a .b{height:7px;border-radius:99px;background:var(--accent)}
-.rail a .k{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--accent);font-weight:500}
+.rail a .k{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--accent);font-weight:500}
 .rail a .t{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.35}
 .rail a:hover .t{color:var(--accent)}
 
 /* ---------- chapter head ---------- */
 .chap{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:baseline}
-.chap .k{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:500;color:var(--on-accent);
+.chap .k{font-family:ui-monospace,monospace;font-size:13px;font-weight:500;color:var(--on-accent);
   background:var(--accent);padding:4px 11px;border-radius:8px}
 .chap h2{font-size:clamp(25px,3.4vw,35px)}
 
@@ -192,13 +189,13 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
 
 /* ---------- template, example, candidates ---------- */
 .tmpl{margin-block-start:16px;padding:18px 20px;background:var(--sunk);border-radius:12px}
-.tmpl pre{margin:0;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:2.1;
+.tmpl pre{margin:0;font-family:ui-monospace,monospace;font-size:12.5px;line-height:2.1;
   color:var(--ink-2);white-space:pre-wrap;direction:rtl;text-align:right}
 .ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-block-start:18px}
 .ba > div{background:var(--sunk);border-radius:12px;padding:18px 20px}
 .ba h4{font-size:12px;font-weight:600;letter-spacing:.07em;color:var(--muted);margin-block-end:10px}
 .ba .before{font-size:15.5px;color:var(--ink-2);line-height:1.7}
-.ba .after{font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.95;color:var(--ink-2);
+.ba .after{font-family:ui-monospace,monospace;font-size:12.5px;line-height:1.95;color:var(--ink-2);
   white-space:pre-wrap;direction:rtl;text-align:right;margin:0}
 .cand{padding-block:22px;border-block-end:1px solid var(--rule-2)}
 .cand:last-of-type{border-block-end:0;padding-block-end:0}
@@ -240,7 +237,7 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
 .checks li{counter-increment:c;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
   padding-block:15px;border-block-end:1px solid var(--rule-2);font-size:16px;color:var(--ink-2);max-width:none}
 .checks li:last-child{border-block-end:0}
-.checks li::before{content:counter(c);font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;
+.checks li::before{content:counter(c);font-family:ui-monospace,monospace;font-size:12px;font-weight:500;
   color:var(--on-accent);background:var(--ink);width:23px;height:23px;border-radius:99px;
   display:grid;place-items:center;margin-block-start:4px}
 .task{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;padding-block:20px;border-block-end:1px solid var(--rule-2)}
@@ -276,7 +273,7 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
 .profile > summary::before{content:"◂";font-size:10px;color:var(--muted)}
 .profile[open] > summary::before{content:"▾"}
 .profile > summary:hover{background:var(--rule-2)}
-.profile .done{margin-inline-start:auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+.profile .done{margin-inline-start:auto;font-family:ui-monospace,monospace;font-size:11.5px;
   font-weight:500;color:var(--muted)}
 .profile .in{padding:2px 13px 14px;display:flex;flex-direction:column;gap:11px}
 .profile .why{font-size:12.5px;color:var(--muted);line-height:1.5}
@@ -293,7 +290,7 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
   padding-block-start:6px;margin-block-start:2px;border-block-start:1px solid var(--rule);max-width:none}
 .profile .grp:first-of-type{border-block-start:0;padding-block-start:0;margin-block-start:0}
 .profile label{display:flex;align-items:baseline;gap:7px}
-.profile .reach{margin-inline-start:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+.profile .reach{margin-inline-start:auto;font-family:ui-monospace,monospace;font-size:10.5px;
   font-weight:400;color:var(--muted)}
 .profile .why b{font-weight:700;color:var(--ink-2)}
 .spec .how{display:block;margin-block-start:6px;font-size:13px;color:var(--muted)}
@@ -3141,21 +3138,24 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
 <section class="view sess" id="v-session" aria-labelledby="h-session" hidden>
   <p class="eyebrow">מפגש השעתיים · פרק 9</p>
   <h2 id="h-session" tabindex="-1">מבנה המפגש</h2>
-  <p class="lede">מסלול 1, יסודות העבודה עם קופיילוט. מפגש אחד של שעתיים, עד עשרים משתתפים. כל משתתף יוצא עם שלוש משימות מהעבודה היומיומית שלו, אחת שכבר ביצע ואחת שקבע למחר.</p>
+  <p class="lede">מסלול 1, יסודות העבודה עם קופיילוט. מפגש אחד של שעתיים, עד עשרים משתתפים. שפה פשוטה למשתמשים — בלי ז׳רגון Work IQ ובלי צלילה לתמחור. תמחור, מכסות והטמעה שייכים למסלול למובילי AI.</p>
 
   <div class="card">
-    <h3>שבעה מקטעים</h3>
-    <p style="color:var(--ink-2);margin-block-start:10px">חצי שעה מתוכם היא תרגול. בבלוק ההוא המסמך הזה הוא מקור הנוסחים.</p>
+    <h3>אג׳נדה עם זמנים קשיחים · 120 דקות</h3>
+    <p style="color:var(--ink-2);margin-block-start:10px">לכל כלי: <strong>יכולות → מגבלות</strong> (כולל מגבלות רישוי שרלוונטיות לעובדים) → <strong>דוגמה משותפת</strong>. לפני כל הדגמה — שקף שלבים 1–4, ואז עושים ביחד. כל הדגמה ≤10 דקות. תרגול מצטבר כולל ~20 דקות מקרים אישיים בסוף.</p>
     <table class="tbl" style="margin-block-start:18px">
-      <thead><tr><th class="n">זמן</th><th>מקטע</th><th>השאלה שנשאלת בחדר</th></tr></thead>
+      <thead><tr><th class="n">זמן</th><th>מקטע</th><th>מה קורה בחדר</th></tr></thead>
       <tbody>
-                <tr><td class="n mono">0:00<br>0:10</td><td>פתיחה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">העובדים כבר משתמשים ב־AI, רק לא בכלי שהארגון משלם עליו ולא בסביבה שבה הדאטה נשאר בפנים.</span></td><td>מי מכם פתח את קופיילוט השבוע?</td></tr>
-        <tr><td class="n mono">0:10<br>0:25</td><td>ההדגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">איכות התשובה תלויה במידע שצירפתם אליה. כשאין לו מידע הוא משלים את החסר בעצמו.</span></td><td>למה קופיילוט לפעמים עונה לכם תשובה בטוחה ושגויה?</td></tr>
-        <tr><td class="n mono">0:25<br>0:45</td><td>מה כבר יש, ומה עוד לא<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">בלי המפה הזו משתמש מנסה משהו שהכלי לא יכול לעשות אצלו, ואחרי כישלון אחד הוא מפסיק לנסות.</span></td><td>מה קופיילוט שלכם יכול לעשות היום, ומה לא?</td></tr>
-        <tr><td class="n mono">0:45<br>1:15</td><td>תרגול<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">אחרי כל תוצאה עוצרים וקוראים אותה. מה שיוצא מהכלי הוא טיוטה שצריך לעבור עליה.</span></td><td>איזו משימה חוזרת אצלכם שהכי הייתם שמחים להוריד מהיום?</td></tr>
-        <tr><td class="n mono">1:15<br>1:30</td><td>מה לא מוסרים לכלי<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">הכלל שיוצא מהדיון: הכלי מכין, אדם שולח.</span></td><td>מה לא הייתם מוסרים לאף מערכת, גם אם הייתה עובדת מושלם?</td></tr>
-        <tr><td class="n mono">1:30<br>1:50</td><td>שלוש המשימות<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">המשימה של מחר נכתבת עם תאריך.</span></td><td>אילו שלוש משימות קבועות שלכם מתאימות לכלי?</td></tr>
-        <tr><td class="n mono">1:50<br>2:00</td><td>סגירה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">אם אף אחד לא יבדוק בעוד שבועיים מי ביצע את המשימה של מחר, היא לא תבוצע.</span></td><td>מי יבדוק בעוד שבועיים אם המשימה של מחר בוצעה?</td></tr>
+        <tr><td class="n mono">0:00<br>0:10</td><td>פתיחה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">מטרות, אג׳נדה, מה מקבלים, וגבולות ברמת משתמש — לא תמחור עמוק.</span></td><td>מי פתח את קופיילוט השבוע? מה יוצאים איתו היום?</td></tr>
+        <tr><td class="n mono">0:10<br>0:20</td><td>שיטה ובקשה ראשונה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">משימה, מקור, מבנה, בדיקה. התאמה קצרה לתפקיד.</span></td><td>איך משפרים בקשה כללית לבקשה שניתן לבדוק?</td></tr>
+        <tr><td class="n mono">0:20<br>0:30</td><td>Excel · יכולות → מגבלות → דוגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">שקף שלבים 1–4, ואז עושים ביחד. ≤10 דקות.</span></td><td>חריגות בתקציב שעות — עם בדיקה ידנית של שורה אחת.</td></tr>
+        <tr><td class="n mono">0:30<br>0:40</td><td>Word · יכולות → מגבלות → דוגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">סיכום / ניסוח מחדש לפי קהל.</span></td><td>מסמך דמה → סיכום או ניסוח רשמי שנבדק.</td></tr>
+        <tr><td class="n mono">0:40<br>0:50</td><td>PowerPoint · יכולות → מגבלות → דוגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">בניית מצגת קצרה מהבקשה.</span></td><td>מבנה שקפים + מסר לכל שקף.</td></tr>
+        <tr><td class="n mono">0:50<br>1:00</td><td>Email / Outlook · יכולות → מגבלות → דוגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">סיכום מייל ונקודות פעולה.</span></td><td>שרשור דמה → סיכום + טיוטת תשובה שאדם מאשר.</td></tr>
+        <tr><td class="n mono">1:00<br>1:10</td><td>Teams · יכולות → מגבלות → דוגמה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">סיכום שיחה / פגישה לפי מה שזמין בחשבון.</span></td><td>מה אפשר לסכם, ומה דורש רישוי מתקדם יותר.</td></tr>
+        <tr><td class="n mono">1:10<br>1:15</td><td>חיפוש OneDrive / SharePoint<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">יכולת פרימיום: מראים מה אפשר, ומבהירים שלא לכולם יש רישיון.</span></td><td>איפה זה עוזר בעבודה היומיומית, ומה לבקש מהארגון.</td></tr>
+        <tr><td class="n mono">1:15<br>1:40</td><td>בדיקה, אחריות, ערכה ועדכונים<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">הכלי מכין — אדם בודק ושולח. להישאר מעודכנים.</span></td><td>מה לא מוסרים; איך בודקים; מה נשאר אחרי הסדנה.</td></tr>
+        <tr><td class="n mono">1:40<br>2:00</td><td>מקרים אישיים וסגירה<br><span style="font-weight:400;color:var(--muted);font-size:13.5px">~20 דקות על מקרים שהמשתתפים הביאו. יצירת קשר.</span></td><td>משימה אחת מהעבודה שלכם עכשיו + פרטי קשר להמשך.</td></tr>
       </tbody>
     </table>
   </div>
@@ -3168,15 +3168,17 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
         <li>תפריט משימות, שש עד שמונה, לפי התפקידים בחדר.</li>
         <li>שני צילומי מסך לגיבוי ההדגמה.</li>
         <li>קובץ דמה עם נתונים סינתטיים, אם הארגון לא מרשה קבצים אמיתיים בחדר.</li>
-        <li>בירור מול איש ה־IT יום לפני: האם קופיילוט פתוח למשתתפים, ובאיזו רמת רישוי.</li>
+        <li>בירור מול איש ה־IT יום לפני: האם קופיילוט פתוח למשתתפים, ובאיזו רמת רישוי — בלי להפוך את המפגש לדיון רישוי.</li>
       </ul>
     </div>
   </div>
 
   <div class="card">
     <h3>הרצה פנימית</h3>
-    <p style="color:var(--ink-2);margin-block-start:10px">מריצים את המתווה במלואו בבית לפני שהוא יוצא, ובודקים שלושה דברים: האם השעתיים מספיקות, האם ההדגמה עובדת, והאם תפריט המשימות רלוונטי למי שיושב מולנו.</p>
+    <p style="color:var(--ink-2);margin-block-start:10px">מריצים את המתווה במלואו בבית לפני שהוא יוצא, ובודקים שלושה דברים: האם השעתיים מספיקות עם זמנים קשיחים, האם ההדגמה עובדת בכל כלי, והאם תפריט המשימות רלוונטי למי שיושב מולנו.</p>
   </div>
+</section>
+
 </section>
 
 <section class="view sess" id="v-access" aria-labelledby="h-access" hidden>
@@ -3311,7 +3313,7 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
 <section class="view sess" id="v-next" aria-labelledby="h-next" hidden>
   <p class="eyebrow">מפגש השעתיים · פרק 15</p>
   <h2 id="h-next" tabindex="-1">מה לא נכנס למפגש</h2>
-  <p class="lede">שלושה נושאים נשארו בכוונה מחוץ למפגש הזה. הם דורשים החלטות ארגוניות ולא תרגול אישי, ולכן מקומם במסלול 2 או בשיחה נפרדת.</p>
+  <p class="lede">שלושה נושאים נשארו בכוונה מחוץ למפגש היסודות. הם דורשים החלטות ארגוניות ולא תרגול אישי, ולכן מקומם במסלול ההטמעה למובילי AI או בשיחה נפרדת — לא בקהל היסודות.</p>
 
   <div class="card">
     <table class="tbl">
@@ -3334,7 +3336,7 @@ mark.ph{background:none;color:var(--accent);font-weight:600;padding:0}
         </tr>
       </tbody>
     </table>
-    <p style="color:var(--muted);font-size:14.5px;margin-block-start:16px">שלושתם נמצאים במסמך הזה, בחלק המסלול. הם פשוט לא נכנסים לשעתיים של מסלול 1.</p>
+    <p style="color:var(--muted);font-size:14.5px;margin-block-start:16px">שלושתם נמצאים במסמך הזה, בחלק מסלול ההטמעה למובילי AI. הם פשוט לא נכנסים לשעתיים של סדנת היסודות.</p>
   </div>
 </section>
 

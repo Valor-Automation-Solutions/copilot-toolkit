@@ -1,5 +1,7 @@
 # ספריית סקילים ל-Copilot · ואלור Toolkit
 
+**קישורים מהירים:** [מדריך התקנה ותרגול](../copilot-skills-practice.md) · [הורדת כל הסקילים (ZIP)](office-skills.zip) · [README מלא למטה](#תחזוקה-שוטפת--התקנה-בפקודה-אחת)
+
 ספריית סקילים מותאמים ל-**Copilot ב-PowerPoint וב-Excel**, בנויה לארגונים ישראליים.
 כל סקיל כאן נכתב לפי הכללים שאומתו חי בטננט של ואלור ב-1.9.2026 — ראו
 [`../copilot-skills-practice.md`](../copilot-skills-practice.md) לפרקטיקה המלאה.

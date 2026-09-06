@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Copilot לארגונים — ממצאי שטח</title>
+<title>הרצאת לקוח 60 דקות (נפרדת) — Copilot לארגונים</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root{
@@ -124,20 +124,41 @@ th{color:var(--navy);font-weight:600;font-size:.9rem}
   box-shadow:0 4px 16px rgba(22,24,26,.12);border-radius:4px;display:block;margin:0 auto;background:#fff}
 .cap{font-size:1.04rem;color:var(--mid);margin-top:1rem;text-align:right;line-height:1.55}
 .cap b{color:var(--ink)}
+
+/* ===== באנר: הרצאה נפרדת מסדנת היסודות ===== */
+.sep-banner{
+  position:fixed;top:0;right:0;left:0;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  background:#0A192F;color:#E8F0F0;
+  padding:.55rem 6vw;font-size:.82rem;line-height:1.45;
+  border-bottom:2px solid #2e6fa7;
+  font-family:'Segoe UI','Segoe UI Hebrew',Arial,sans-serif;
+}
+.sep-banner strong{color:#fff}
+.sep-banner a{color:#85a6cb;font-weight:600;text-decoration:none;white-space:nowrap}
+.sep-banner a:hover{text-decoration:underline;color:#c5d8ec}
+body.has-sep-banner .slide{padding-top:calc(5.2vh + 2.6rem)}
+
 </style>
 </head>
-<body>
+<body class="has-sep-banner">
+
+<div class="sep-banner" role="note">
+  <span><strong>הרצאת לקוח 60 דקות (נפרדת)</strong> — 31 שקפים. זו אינה סדנת היסודות של שעתיים.</span>
+  <a href="../foundations/">לסדנת יסודות ←</a>
+</div>
+
 
 <!-- 1 -->
 <section class="slide on">
   <div class="top">
-    <div class="eyebrow">ה ר צ א ה</div><div class="dot"></div>
+    <div class="eyebrow">ה ר צ א ת   ל ק ו ח   6 0   ד ק ו ת</div><div class="dot"></div>
     <div class="logo"></div>
   </div><div class="top-rule"></div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
     <h1>‏Copilot לארגונים:<br>מה <span class="lt">באמת</span> מקבלים, כמה זה עולה,<br>ואיפה הגבולות</h1>
-    <p class="lead">כל מספר בהרצאה נמדד חי על טננט אמיתי ב-30–31 באוגוסט 2026, או מגובה בתיעוד רשמי של מיקרוסופט. אפס הערכות.</p>
-    <p class="small">גיא כהן · ואלור, פתרונות אוטומציה · 1.9.2026</p>
+    <p class="lead">הרצאת לקוח של כ־60 דקות (31 שקפים) — נפרדת מסדנת היסודות של שעתיים. כל מספר נמדד חי על טננט אמיתי ב-30–31 באוגוסט 2026, או מגובה בתיעוד רשמי של מיקרוסופט.</p>
+    <p class="small">גיא כהן · ואלור, פתרונות אוטומציה · 1.9.2026 · <a href="../foundations/" style="color:var(--blue)">לסדנת יסודות</a></p>
   </div>
 </section>
 
