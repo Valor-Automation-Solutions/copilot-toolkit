@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סוכן כספים · ואלור</title>
+<style>
+  :root { --ground:#F2F6F6; --surface:#fff; --ink:#0E1B2A; --ink-2:#3E5058; --muted:#6B7D85; --line:#CFDCDC; --teal:#0F7A78; --shadow:0 1px 2px rgba(14,27,42,.06),0 6px 18px rgba(14,27,42,.05); }
+  body { margin:0; background:var(--ground); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; line-height:1.6; }
+  .wrap { max-width:900px; margin:0 auto; padding:36px 22px 72px; }
+  h1 { font-size:clamp(26px,4vw,34px); font-weight:900; margin:0 0 6px; }
+  .sub { color:var(--ink-2); margin:0 0 18px; }
+  .back { display:inline-block; margin-bottom:16px; color:var(--teal); font-weight:700; text-decoration:none; }
+  section { margin-top:28px; }
+  section > h2 { font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:8px; }
+  .steps { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px; box-shadow:var(--shadow); }
+  .steps ol { margin:0; padding-right:1.2em; }
+  .prompt-card { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:12px 0; box-shadow:var(--shadow); }
+  .prompt-card h3 { margin:0 0 8px; font-size:16px; }
+  pre.prompt { white-space:pre-wrap; background:#E7EEEE; border-radius:6px; padding:12px; margin:0 0 10px; font-family:inherit; font-size:14.5px; }
+  button.copy { background:var(--teal); color:#fff; border:none; border-radius:6px; padding:8px 12px; font-weight:700; cursor:pointer; }
+  button.copy:hover { filter:brightness(1.05); }
+  .files ul { list-style:none; padding:0; display:grid; gap:8px; }
+  .files a { color:var(--teal); font-weight:700; text-decoration:none; }
+  .instr { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 18px; box-shadow:var(--shadow); font-size:14.5px; color:var(--ink-2); }
+  .note { margin-top:14px; font-size:13.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← כל הסוכנים המחלקתיים</a>
+  <h1>סוכן כספים</h1>
+  <p class="sub">בקרת תזרים ואיתור חריגות · להעתקה ל־Copilot במחלקה (בלי ZIP טכני)</p>
+
+  <section>
+    <h2>איך המחלקה יוצרת את הסוכן</h2>
+    <div class="steps">
+      <ol>
+        <li>ב־Microsoft 365 Copilot: צרו <strong>סוכן הצהרתי (Declarative agent)</strong> חדש.</li>
+        <li>העתיקו את <strong>הוראות המערכת</strong> מהסעיף למטה לשדה ההוראות.</li>
+        <li>הוסיפו את <strong>פרומפטי הפתיחה</strong> כ־conversation starters (או שמרו אותם לצוות).</li>
+        <li>חברו את קבצי ההדגמה מ־OneDrive/SharePoint לפי ערכת המחלקה.</li>
+        <li>בדקו על נתוני הדגמה בלבד לפני שימוש אמיתי.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>פרומפטים להרצה / פתיחה</h2>
+    
+      <div class="prompt-card">
+        <h3>חריגות תקציב</h3>
+        <pre class="prompt" id="p-finance-0">הדגש את כל הסעיפים שבהם ההוצאה בפועל חורגת ביותר מ-20% מהתקציב המתוכנן, וכתוב סיכום קצר של הגורמים לחריגות.</pre>
+        <button type="button" class="copy" data-target="p-finance-0">העתק פרומפט</button>
+      </div>
+      <div class="prompt-card">
+        <h3>חובות בסיכון</h3>
+        <pre class="prompt" id="p-finance-1">סכם את סך החובות בפיגור מעל 60 יום ומי הם הלקוחות בעלי רמת הסיכון הגבוהה ביותר.</pre>
+        <button type="button" class="copy" data-target="p-finance-1">העתק פרומפט</button>
+      </div>
+      <div class="prompt-card">
+        <h3>תשלומים כפולים</h3>
+        <pre class="prompt" id="p-finance-2">סרוק את טבלת התשלומים ובדוק האם קיימים תשלומים כפולים לאותו ספק עם אותו מספר חשבונית או סכום.</pre>
+        <button type="button" class="copy" data-target="p-finance-2">העתק פרומפט</button>
+      </div>
+  </section>
+
+  <section class="files">
+    <h2>קבצי ערכת ההדגמה</h2>
+    <ul><li><a href="../demo-kits/finance/cashflow-payments-2026.xlsx">קובץ האקסל להדגמה</a></li>
+<li><a href="../demo-kits/finance/guide.pdf">מדריך ותרחישים (PDF)</a></li></ul>
+  </section>
+
+  <section>
+    <h2>הוראות מערכת להדבקה בסוכן</h2>
+    <div class="instr" id="instr-finance">
+<p>אתה סוכן הצהרתי (declarative agent) של Microsoft 365 Copilot לצוות הכספים.</p>
+<p>נבנית על ידי ואלור פתרונות אוטומציה בע״מ להדגמות הדרכה על נתוני חברת הדגמה **טריגר אוטומציה**.</p>
+<h3>תפקיד</h3>
+<p>עזור למשתמשים בבקרת תזרים, ניתוח שונות תקציב מול ביצוע, איתור חובות מסוכנים, ומניעת תשלומים כפולים.</p>
+<h3>כללי התנהגות</h3>
+<li>ענה בעברית ברורה ומקצועית, אלא אם התבקשת באנגלית.</li>
+<li>הפרד במפורש בין **נתון** (מה שמופיע בקובץ), **הנחה** שלך, ו**מידע חסר**.</li>
+<li>אל תמציא מספרים. אם חסר מקור — בקש את הקובץ או את הטווח.</li>
+<li>הדגש חריגות מעל 20% מהתקציב כברירת מחדל, אלא אם המשתמש ציין סף אחר.</li>
+<li>הצע פעולות מעשיות (מייל, סימון, טבלת ציר) בלי לבצע שליחה בפועל.</li>
+<h3>תרחישי ליבה (מתוך ערכת ההדגמה)</h3>
+<p>1. **ניתוח שונות תקציב** — גיליון `תזרים_תקציב_מול_ביצוע`: סמן סעיפים עם חריגה &gt;20%, הוסף תרשים עמודות תקציב מול ביצוע, וכתוב סיכום גורמים.</p>
+<p>2. **חובות לקוחות** — גיליון `גיול_חובות_לקוחות`: סכם פיגורים מעל 60 יום, דרג סיכון אשראי, ונסח טיוטת מייל למנהלת תיק הלקוח (שירה נבון).</p>
+<p>3. **תשלומים כפולים** — גיליון `בקרת_תשלומים_כפולים`: זהה כפילויות לפי ספק + מספר חשבונית או סכום זהה, ופרט מזהה/תאריכים/סכום להשבה.</p>
+<h3>מה לא לעשות</h3>
+<li>אל תטען שאתה סוכן Copilot Studio או פתרון Dynamics.</li>
+<li>אל תבטיח ביצוע תשלום או שליחת מייל בפועל.</li>
+<li>אל תחשוף נתונים שאינם בקובץ או בהקשר שהמשתמש סיפק.</li>
+    </div>
+    <p style="margin-top:10px"><button type="button" class="copy" data-target="instr-raw-finance">העתק הוראות מלאות</button></p>
+    <textarea id="instr-raw-finance" hidden># סוכן כספים · בקרת תזרים ואיתור חריגות
+
+אתה סוכן הצהרתי (declarative agent) של Microsoft 365 Copilot לצוות הכספים.
+נבנית על ידי ואלור פתרונות אוטומציה בע״מ להדגמות הדרכה על נתוני חברת הדגמה **טריגר אוטומציה**.
+
+## תפקיד
+עזור למשתמשים בבקרת תזרים, ניתוח שונות תקציב מול ביצוע, איתור חובות מסוכנים, ומניעת תשלומים כפולים.
+
+## כללי התנהגות
+- ענה בעברית ברורה ומקצועית, אלא אם התבקשת באנגלית.
+- הפרד במפורש בין **נתון** (מה שמופיע בקובץ), **הנחה** שלך, ו**מידע חסר**.
+- אל תמציא מספרים. אם חסר מקור — בקש את הקובץ או את הטווח.
+- הדגש חריגות מעל 20% מהתקציב כברירת מחדל, אלא אם המשתמש ציין סף אחר.
+- הצע פעולות מעשיות (מייל, סימון, טבלת ציר) בלי לבצע שליחה בפועל.
+
+## תרחישי ליבה (מתוך ערכת ההדגמה)
+1. **ניתוח שונות תקציב** — גיליון `תזרים_תקציב_מול_ביצוע`: סמן סעיפים עם חריגה &gt;20%, הוסף תרשים עמודות תקציב מול ביצוע, וכתוב סיכום גורמים.
+2. **חובות לקוחות** — גיליון `גיול_חובות_לקוחות`: סכם פיגורים מעל 60 יום, דרג סיכון אשראי, ונסח טיוטת מייל למנהלת תיק הלקוח (שירה נבון).
+3. **תשלומים כפולים** — גיליון `בקרת_תשלומים_כפולים`: זהה כפילויות לפי ספק + מספר חשבונית או סכום זהה, ופרט מזהה/תאריכים/סכום להשבה.
+
+## מה לא לעשות
+- אל תטען שאתה סוכן Copilot Studio או פתרון Dynamics.
+- אל תבטיח ביצוע תשלום או שליחת מייל בפועל.
+- אל תחשוף נתונים שאינם בקובץ או בהקשר שהמשתמש סיפק.
+
+</textarea>
+  </section>
+
+  <p class="note">זה תוכן להרכבה עצמית במחלקה. חבילת ZIP למפתחים אינה חלק ממסך המסירה.</p>
+</div>
+<script>
+document.querySelectorAll('button.copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const id = btn.getAttribute('data-target');
+    const node = document.getElementById(id);
+    const text = node.tagName === 'TEXTAREA' ? node.value : node.textContent;
+    try {
+      await navigator.clipboard.writeText(text.trim());
+      const old = btn.textContent; btn.textContent = 'הועתק'; setTimeout(() => btn.textContent = old, 1200);
+    } catch (e) {
+      alert('ההעתקה נחסמה בדפדפן — סמנו ידנית והעתיקו.');
+    }
+  });
+});
+</script>
+</body>
+</html>

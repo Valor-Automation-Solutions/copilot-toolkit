@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rtl-hebrew-repair · סקיל PowerPoint · ואלור</title>
+<style>
+  body{margin:0;background:#F2F6F6;color:#0E1B2A;font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif;line-height:1.65}
+  .wrap{max-width:820px;margin:0 auto;padding:36px 22px 72px}
+  .back{display:inline-block;margin-bottom:16px;color:#0F7A78;font-weight:700;text-decoration:none}
+  .pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0A5654;background:#E7EEEE;border-radius:999px;padding:3px 10px;margin-bottom:10px}
+  h1{font-size:clamp(24px,4vw,32px);margin:0 0 8px}
+  h2{font-size:18px;margin-top:1.4em;color:#0A5654}
+  h3{font-size:16px}
+  .role{color:#3E5058;margin:0 0 18px}
+  pre{background:#E7EEEE;padding:12px;border-radius:6px;overflow:auto;direction:ltr;text-align:left;font-size:13px}
+  .actions a{display:inline-block;margin:8px 8px 0 0;padding:10px 14px;background:#0F7A78;color:#fff;text-decoration:none;border-radius:6px;font-weight:700}
+  .actions a.secondary{background:#fff;color:#0F7A78;border:1px solid #CFDCDC}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← קטלוג הסקילים</a>
+  <div class="pill">PowerPoint</div>
+  <h1>rtl-hebrew-repair</h1>
+  <p class="role">יישור עברית ותיקון רווחים</p>
+  <div class="actions">
+    <a href="../office-skills.zip">הורדת כל הסקילים (ZIP)</a>
+    <a class="secondary" href="SKILL.md">מקור SKILL.md</a>
+  </div>
+  <article>
+<h2>מתי להפעיל אותי</h2><p>מצגת שהתוכן בה עברי אבל הטקסט צמוד לשמאל — טיפוסי אחרי המרה מ-HTML או PDF,</p><p>ייבוא מכלי חיצוני, או עריכה במחשב עם הגדרות שפה אחרות.</p><h2>מה אני עושה</h2><p>1. <strong>יישור וכיווניות</strong> — לכל פסקה שיש בה עברית: יישור <strong>לימין</strong>,</p><p>   וכיווניות פסקה <strong>מימין לשמאל</strong>.</p><p>2. <strong>רווחים בלועים</strong> — מקום שבו מספר ומילה עברית נדבקו בלי רווח</p><p>   (`567בפועל`, `125למשימה`) — החזר רווח יחיד.</p><p>3. עבור על <strong>כל</strong> השקפים, לא רק על הנוכחי.</p><h2>מה אסור לי לעשות</h2><ul><li><strong>אל תזיז תווי פיסוק.</strong> אני קורא את הסדר הלוגי, לא החזותי — טקסט עברי</li></ul><p>  <strong>תקין</strong> נראה לי כאילו הפיסוק בצד הלא נכון. הזזה תשחית טקסט תקין.</p><ul><li><strong>אל תיגע בתאריכים ובמספרים — גם אם הם נראים הפוכים.</strong></li></ul><p>  זה כולל את סדר הרכיבים בתאריך, סדר הספרות במספר, ומיקום `%`, `$` או `₪`.</p><p>  ‏`2026.9.1` ייראה לך שגוי, ואולי הוא באמת שגוי — **אבל אין לך דרך לדעת</p><p>  מה התכוונו.** ‏`3.4.2026` הוא רביעי במרץ או שלושה באפריל? ניחוש כאן</p><p>  משנה נתון עסקי בשקט, וזה נזק חמור בהרבה מיישור לא תקין.</p><p>  אם מספר או תאריך נראה חשוד — <strong>ציין אותו בדיווח ואל תשנה.</strong></p><ul><li><strong>אל תשנה ניסוח או מילים.</strong> זה תיקון פריסה בלבד.</li><li>אל תשנה גופן, גודל, צבע או מיקום תיבות.</li><li>אל תוסיף, תמחק או תסדר מחדש שקפים.</li><li>אל תיגע בתיבות טקסט שאין בהן עברית.</li></ul><p><strong>החריג היחיד לכלל המספרים:</strong> הוספת <strong>רווח</strong> בין מספר למילה עברית</p><p>(`567בפועל` ← `567 בפועל`). זה לא משנה את המספר, רק מפריד אותו מהמילה.</p><h2>כשחסר לי מידע</h2><p>אם בפסקה מסוימת לא ברור מה הכיוון הנכון — למשל שורה שרובה אנגלית</p><p>עם מילה עברית אחת — <strong>השאר אותה כפי שהיא</strong> וציין אותה בדיווח.</p><h2>מה אני מדווח בסוף</h2><p>ענה בדיוק בפורמט:</p><pre><code>עודכנו N פסקאות ב-M שקפים.
+יישור וכיווניות: A · רווחים שהוחזרו: B
+לא טופלו (כיוון לא ברור): C
+מספרים או תאריכים שנראים חשודים ולא נגעתי בהם: [שקף ומה נראה]</code></pre><p>ואחריו, השורה הקבועה הזו:</p><p>&gt; ⚠️ אם אחרי התיקון מילה באנגלית עדיין נראית דבוקה למילה עברית —</p><p>&gt; זה ארטיפקט תצוגה, לא חסר רווח. הרץ את `rtl_repair.py` שבערכה כדי לסגור אותו.</p><p>---</p><h2>מה הסקיל הזה **לא** יכול לסגור</h2><p><strong>נמדד ב-2.9.2026 — הסקיל הזה, בניסוח הזה, על מצגת עברית שבורה בת 5 שקפים:</strong></p><pre><code>rtl=&quot;1&quot;           0 → 20
+algn=&quot;r&quot;          0 → 20
+רווחים בלועים     2 →  0     ← איתר אותם בעצמו, בלי שנאמר לו איפה
+בלוקי טקסט       20 → 20     2 שינויים בלבד, שאר 18 ללא נגיעה</code></pre><p><strong>אבל זה לא מספיק לתצוגה נכונה.</strong> רווח בין מילה <strong>לטינית</strong> למילה עברית</p><p>ימשיך להיראות בלוע בהצגת המצגת — `CoPilot בתוך` יוצג `CoPilotבתוך` —</p><p>למרות שהרווח קיים בקובץ.</p><p>הסיבה: הרווח הוא תו ניטרלי בגבול כיוונים. הפתרון היחיד שנמדד כעובד הוא</p><p><strong>סימון שפה ברמת ה-run</strong> (`lang=&quot;he-IL&quot;` / `lang=&quot;en-US&quot;` לכל מקטע לפי הכתב).</p><p>רווח קשיח (`U+00A0`) פותר <strong>רק</strong> את הגבול מול ספרות, ולא מול אותיות.</p><p>לסגירה מלאה, הרץ אחרי הסקיל:</p><pre><code>python rtl_repair.py deck.pptx --in-place</code></pre><p>הכלי מבצע את שני המעברים, אידמפוטנטי, ואומת מול המרנדר של PowerPoint עצמו.</p>
+  </article>
+</div>
+</body>
+</html>

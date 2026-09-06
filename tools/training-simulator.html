@@ -374,6 +374,40 @@
             line-height: 1.4;
         }
 
+
+        .chat-input-area.locked { display: none; }
+        .welcome-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.75rem;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+        .welcome-panel.hidden { display: none; }
+        .welcome-panel h3 { color: var(--accent-cyan); font-size: 1.35rem; }
+        .welcome-panel .step {
+            background: var(--bg-chat);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: right;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+        .welcome-panel .step strong { color: var(--accent-teal); }
+        .hint-pick {
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            margin: 0.25rem 0 0.75rem;
+            font-weight: 700;
+        }
+
         @media print {
             body > *:not(#print-certificate) { display: none !important; }
             #print-certificate { display: block !important; }
@@ -407,7 +441,7 @@
     <div class="sidebar">
         <div class="branding">
             <h1>ואלור פתרונות אוטומציה בע"מ</h1>
-            <h2>סימולטור תרגול פרומפטים מקומי</h2>
+            <h2>תרגול פרומפטים · שלב־אחר־שלב</h2>
         </div>
 
         <div class="local-note">
@@ -415,6 +449,7 @@
             הציון מודד כמה ממילות המפתח של התרחיש הופיעו בפרומפט שלכם בכל אחד מארבעה ממדים: מטרה, הקשר, מגבלות, מקור.
         </div>
 
+        <p class="hint-pick" id="pick-hint">שלב 1: בחרו תרחיש מהרשימה</p>
         <div id="scenarios-container"></div>
 
         <div class="gamification">
@@ -440,19 +475,27 @@
 
     <div class="main-content">
         <div class="scenario-header">
-            <h2 id="scenario-title">בחר תרחיש להתחלה</h2>
-            <p id="scenario-desc">יש לבחור תרחיש מתוך התפריט בימין כדי להתחיל את האימון.</p>
+            <h2 id="scenario-title">עדיין לא נבחר תרחיש</h2>
+            <p id="scenario-desc">בחרו תרחיש מהרשימה בימין. תיבת ההקלדה תופיע רק אחרי הבחירה.</p>
             <div style="margin-top: 10px; display: inline-block; padding: 4px 8px; background: var(--bg-chat); border-radius: 4px; font-size: 0.8rem; color: var(--accent-cyan);" id="app-mode">
                 אפליקציה: -
             </div>
         </div>
 
         <div class="chat-container">
-            <div class="chat-history" id="chat-history"></div>
+            <div class="welcome-panel" id="welcome-panel">
+                <h3>בואו נתחיל נכון</h3>
+                <p>אין מה להקליד עדיין. קודם בוחרים תרחיש מימין.</p>
+                <div class="step"><strong>1.</strong> בחרו תרחיש מהרשימה בימין (רכש / כספים / לוגיסטיקה / HR / פרודוקטיביות)</div>
+                <div class="step"><strong>2.</strong> קראו את המשימה שתופיע למעלה</div>
+                <div class="step"><strong>3.</strong> רק אז תיפתח תיבת הפרומפט — כתבו מטרה, הקשר, מגבלות ומקור</div>
+                <div class="step"><strong>4.</strong> לחצו «בדוק» וקבלו ציון לפי מילות מפתח מקומיות (לא AI)</div>
+            </div>
+            <div class="chat-history" id="chat-history" style="display:none"></div>
 
-            <div class="chat-input-area">
-                <textarea class="prompt-input" id="prompt-input" placeholder="הקלד את הפרומפט שלך כאן... (זכור: מטרה, הקשר, מגבלות, מקור)" disabled></textarea>
-                <button class="btn-submit" id="btn-submit" type="button" disabled>בדוק מילות מפתח</button>
+            <div class="chat-input-area locked" id="chat-input-area">
+                <textarea class="prompt-input" id="prompt-input" placeholder="כתבו פרומפט עם מטרה · הקשר · מגבלות · מקור" disabled readonly></textarea>
+                <button class="btn-submit" id="btn-submit" type="button" disabled>בדוק</button>
             </div>
         </div>
     </div>
@@ -591,16 +634,50 @@
 
             const history = document.getElementById('chat-history');
             clearNode(history);
-            appendBotMessage(history, [
-                'שלום! זה סימולטור תרגול מקומי מבית ואלור.',
-                'בחרו תרחיש והקלידו פרומפט. הציון הוא בדיקת מילות מפתח בלבד — לא משוב AI ולא הערכת דיוק של Copilot.'
-            ]);
+            history.style.display = 'none';
+            document.getElementById('welcome-panel').classList.remove('hidden');
+            lockPrompt(true);
 
-            document.getElementById('feedback-text').textContent = 'המשוב (לפי רשימת מילות מפתח) יופיע כאן לאחר הבדיקה.';
+            document.getElementById('feedback-text').textContent = 'אחרי בחירת תרחיש ובדיקת פרומפט — הציון יופיע כאן.';
             document.getElementById('btn-submit').addEventListener('click', evaluatePrompt);
+            document.getElementById('prompt-input').addEventListener('keydown', (e) => {
+                if (document.getElementById('prompt-input').disabled && e.key !== 'Tab') {
+                    e.preventDefault();
+                }
+            });
+
             document.getElementById('cert-btn').addEventListener('click', openCertificateModal);
             document.getElementById('cert-cancel').addEventListener('click', closeCertificateModal);
             document.getElementById('cert-print').addEventListener('click', printCertificate);
+        }
+
+
+        function lockPrompt(locked) {
+            const area = document.getElementById('chat-input-area');
+            const input = document.getElementById('prompt-input');
+            const btn = document.getElementById('btn-submit');
+            const welcome = document.getElementById('welcome-panel');
+            const history = document.getElementById('chat-history');
+            const hint = document.getElementById('pick-hint');
+            if (locked) {
+                area.classList.add('locked');
+                input.disabled = true;
+                input.readOnly = true;
+                input.value = '';
+                btn.disabled = true;
+                welcome.classList.remove('hidden');
+                history.style.display = 'none';
+                if (hint) hint.textContent = 'שלב 1: בחרו תרחיש מהרשימה';
+            } else {
+                area.classList.remove('locked');
+                input.disabled = false;
+                input.readOnly = false;
+                btn.disabled = false;
+                welcome.classList.add('hidden');
+                history.style.display = 'flex';
+                if (hint) hint.textContent = 'שלב 2: כתבו פרומפט למטה';
+                input.focus();
+            }
         }
 
         function selectScenario(id) {
@@ -613,19 +690,20 @@
             document.getElementById('scenario-desc').textContent = currentScenario.desc;
             document.getElementById('app-mode').textContent = 'אפליקציה: ' + currentScenario.app;
 
-            document.getElementById('prompt-input').disabled = false;
-            document.getElementById('btn-submit').disabled = false;
-            document.getElementById('prompt-input').value = '';
             document.getElementById('feedback-panel').classList.remove('visible');
+            lockPrompt(false);
+            document.getElementById('prompt-input').value = '';
 
             const history = document.getElementById('chat-history');
             clearNode(history);
             const strong = el('strong', null, currentScenario.title);
             const msg = el('div', 'message bot');
-            msg.appendChild(document.createTextNode('תרחיש נבחר: '));
+            msg.appendChild(document.createTextNode('תרחיש: '));
             msg.appendChild(strong);
             msg.appendChild(document.createElement('br'));
-            msg.appendChild(document.createTextNode('הזינו פרומפט למטה. תקבלו ציון לפי רשימת מילות מפתח מקומית (לא משוב AI).'));
+            msg.appendChild(document.createTextNode(currentScenario.desc));
+            msg.appendChild(document.createElement('br'));
+            msg.appendChild(document.createTextNode('עכשיו כתבו פרומפט למטה (מטרה · הקשר · מגבלות · מקור) ולחצו בדוק.'));
             history.appendChild(msg);
         }
 

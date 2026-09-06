@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סוכנים מחלקתיים · ואלור</title>
+<style>
+  :root { --ground:#F2F6F6; --surface:#fff; --ink:#0E1B2A; --ink-2:#3E5058; --muted:#6B7D85; --line:#CFDCDC; --teal:#0F7A78; --shadow:0 1px 2px rgba(14,27,42,.06),0 6px 18px rgba(14,27,42,.05); }
+  body { margin:0; background:var(--ground); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; line-height:1.6; }
+  .wrap { max-width:960px; margin:0 auto; padding:36px 22px 72px; }
+  h1 { font-size:clamp(26px,4vw,36px); font-weight:900; margin:0 0 8px; }
+  .lede { color:var(--ink-2); max-width:70ch; }
+  .back { display:inline-block; margin-bottom:16px; color:var(--teal); font-weight:700; text-decoration:none; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:22px; }
+  a.card { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:18px; box-shadow:var(--shadow); }
+  a.card:hover { border-color:var(--teal); }
+  a.card h3 { margin:0 0 6px; }
+  a.card p { margin:0; color:var(--ink-2); font-size:14.5px; }
+  .open { display:inline-block; margin-top:10px; color:var(--teal); font-weight:700; font-size:13px; }
+  .note { margin-top:22px; background:#E7EEEE; border-radius:8px; padding:12px 14px; font-size:14px; color:var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← חזרה לערכת הכלים</a>
+  <h1>סוכנים מחלקתיים — פרומפטים והוראות</h1>
+  <p class="lede">במקום הורדת ZIP טכני: כל מחלקה מקבלת הוראות מערכת, פרומפטי פתיחה להעתקה, וקישורים לקבצי ההדגמה — כדי לבנות סוכן הצהרתי ב־Copilot בעצמה.</p>
+  <div class="grid">
+    <a class="card" href="finance.html">
+      <h3>כספים</h3>
+      <p>בקרת תזרים ואיתור חריגות</p>
+      <span class="open">פרומפטים והוראות ←</span>
+    </a>
+    <a class="card" href="procurement.html">
+      <h3>רכש</h3>
+      <p>הסכם מסגרת, הצעות מחיר, חשבונית עם חריגות</p>
+      <span class="open">פרומפטים והוראות ←</span>
+    </a>
+    <a class="card" href="logistics.html">
+      <h3>לוגיסטיקה</h3>
+      <p>מעקב משלוחים וחריגות SLA</p>
+      <span class="open">פרומפטים והוראות ←</span>
+    </a>
+    <a class="card" href="hr.html">
+      <h3>משאבי אנוש</h3>
+      <p>נוהל החזרי הוצאות ורווחה</p>
+      <span class="open">פרומפטים והוראות ←</span>
+    </a>
+  </div>
+  <p class="note">חבילות ה־ZIP נשארות בריפו למפתחים בלבד ואינן מוצגות כאן כמסלול המסירה.</p>
+</div>
+</body>
+</html>

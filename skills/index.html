@@ -8,9 +8,9 @@
   :root { --ground:#F2F6F6; --surface:#FFF; --ink:#0E1B2A; --ink-2:#3E5058; --muted:#6B7D85; --line:#CFDCDC; --teal:#0F7A78; --shadow:0 1px 2px rgba(14,27,42,.06),0 6px 18px rgba(14,27,42,.05); }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--ground); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; line-height:1.6; }
-  .wrap { max-width:880px; margin:0 auto; padding:36px 22px 72px; }
+  .wrap { max-width:920px; margin:0 auto; padding:36px 22px 72px; }
   h1 { font-size:clamp(26px,4vw,36px); font-weight:900; margin:0 0 8px; }
-  .lede { color:var(--ink-2); max-width:65ch; }
+  .lede { color:var(--ink-2); max-width:70ch; }
   .actions { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 28px; }
   .actions a { display:inline-block; text-decoration:none; font-weight:700; font-size:14px; padding:10px 14px; border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--teal); box-shadow:var(--shadow); }
   .actions a.primary { background:var(--teal); color:#fff; border-color:var(--teal); }
@@ -19,35 +19,41 @@
   th { background:#E7EEEE; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
   tr:last-child td { border-bottom:none; }
   td a { color:var(--teal); font-weight:700; text-decoration:none; }
-  td a:hover { text-decoration:underline; }
   .note { margin-top:18px; font-size:14px; color:var(--ink-2); background:#E7EEEE; border-radius:6px; padding:12px 14px; }
   .back { display:inline-block; margin-bottom:18px; color:var(--teal); font-weight:700; text-decoration:none; font-size:14px; }
+  .group { margin:8px 0 4px; font-size:13px; font-weight:800; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back" href="../index.html">← חזרה לערכת הכלים</a>
   <h1>שבעה סקילים ל-PowerPoint ול-Excel</h1>
-  <p class="lede">קטלוג לדפדפן עם קישורים לחיצים. להורדה והתקנה מומלץ ה־ZIP + <code>install.py</code>. קבצי <code>SKILL.md</code> הם מקור האמת להתקנה ב־Copilot.</p>
+  <p class="lede">כל סקיל פתוח כעמוד קריא בדפדפן. להתקנה ב־Copilot — הורידו את ה־ZIP והריצו <code>install.py</code> לפי המדריך.</p>
   <div class="actions">
     <a class="primary" href="office-skills.zip">הורדת כל הסקילים (ZIP)</a>
     <a href="../copilot-skills-practice.md">מדריך התקנה ותרגול</a>
-    <a href="README.md">README מלא (טקסט)</a>
     <a href="install.py">install.py</a>
   </div>
+  <p class="group">Excel (2)</p>
   <table>
     <thead><tr><th>סקיל</th><th>אפליקציה</th><th>תפקיד</th></tr></thead>
     <tbody>
-      <tr><td><a href="variance-analysis/SKILL.md">variance-analysis</a></td><td>Excel</td><td>ניתוח תקציב מול ביצוע וזיהוי חריגות</td></tr>
-      <tr><td><a href="exec-email/SKILL.md">exec-email</a></td><td>Excel</td><td>טיוטת מייל להנהלה מתוך ממצאים</td></tr>
-      <tr><td><a href="deck-review/SKILL.md">deck-review</a></td><td>PowerPoint</td><td>ביקורת מצגת — מדווח, לא נוגע</td></tr>
-      <tr><td><a href="slide-diet/SKILL.md">slide-diet</a></td><td>PowerPoint</td><td>דילול טקסט לצפיפות הקרנה</td></tr>
-      <tr><td><a href="rtl-hebrew-repair/SKILL.md">rtl-hebrew-repair</a></td><td>PowerPoint</td><td>יישור עברית ותיקון רווחים</td></tr>
-      <tr><td><a href="speaker-notes-he/SKILL.md">speaker-notes-he</a></td><td>PowerPoint</td><td>הערות דובר בעברית</td></tr>
-      <tr><td><a href="decision-slide/SKILL.md">decision-slide</a></td><td>PowerPoint</td><td>שקף «מה אני מבקש להחליט»</td></tr>
+      <tr><td><a href="variance-analysis/index.html"><strong>variance-analysis</strong></a></td><td>Excel</td><td>ניתוח תקציב מול ביצוע וזיהוי חריגות</td></tr>
+      <tr><td><a href="exec-email/index.html"><strong>exec-email</strong></a></td><td>Excel</td><td>טיוטת מייל להנהלה מתוך ממצאים</td></tr>
     </tbody>
   </table>
-  <p class="note">ב־GitHub Pages עם <code>.nojekyll</code>, קבצי <code>SKILL.md</code> מוגשים כטקסט גולמי (לא 404). להתקנה בפועל השתמשו ב־ZIP או ב־<code>python skills/install.py --apply</code>.</p>
+  <p class="group" style="margin-top:22px">PowerPoint (5)</p>
+  <table>
+    <thead><tr><th>סקיל</th><th>אפליקציה</th><th>תפקיד</th></tr></thead>
+    <tbody>
+      <tr><td><a href="deck-review/index.html"><strong>deck-review</strong></a></td><td>PowerPoint</td><td>ביקורת מצגת — מדווח, לא נוגע</td></tr>
+      <tr><td><a href="slide-diet/index.html"><strong>slide-diet</strong></a></td><td>PowerPoint</td><td>דילול טקסט לצפיפות הקרנה</td></tr>
+      <tr><td><a href="rtl-hebrew-repair/index.html"><strong>rtl-hebrew-repair</strong></a></td><td>PowerPoint</td><td>יישור עברית ותיקון רווחים</td></tr>
+      <tr><td><a href="speaker-notes-he/index.html"><strong>speaker-notes-he</strong></a></td><td>PowerPoint</td><td>הערות דובר בעברית</td></tr>
+      <tr><td><a href="decision-slide/index.html"><strong>decision-slide</strong></a></td><td>PowerPoint</td><td>שקף «מה אני מבקש להחליט»</td></tr>
+    </tbody>
+  </table>
+  <p class="note">ב־GitHub Pages עם <code>.nojekyll</code> הקבצים מוגשים כסטטיים. אחרי הורדת ה־ZIP: <code>python install.py --apply</code> ואז Refresh ב־Manage skills.</p>
 </div>
 </body>
 </html>

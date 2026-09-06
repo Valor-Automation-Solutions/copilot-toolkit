@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>variance-analysis · סקיל Excel · ואלור</title>
+<style>
+  body{margin:0;background:#F2F6F6;color:#0E1B2A;font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif;line-height:1.65}
+  .wrap{max-width:820px;margin:0 auto;padding:36px 22px 72px}
+  .back{display:inline-block;margin-bottom:16px;color:#0F7A78;font-weight:700;text-decoration:none}
+  .pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0A5654;background:#E7EEEE;border-radius:999px;padding:3px 10px;margin-bottom:10px}
+  h1{font-size:clamp(24px,4vw,32px);margin:0 0 8px}
+  h2{font-size:18px;margin-top:1.4em;color:#0A5654}
+  h3{font-size:16px}
+  .role{color:#3E5058;margin:0 0 18px}
+  pre{background:#E7EEEE;padding:12px;border-radius:6px;overflow:auto;direction:ltr;text-align:left;font-size:13px}
+  .actions a{display:inline-block;margin:8px 8px 0 0;padding:10px 14px;background:#0F7A78;color:#fff;text-decoration:none;border-radius:6px;font-weight:700}
+  .actions a.secondary{background:#fff;color:#0F7A78;border:1px solid #CFDCDC}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← קטלוג הסקילים</a>
+  <div class="pill">Excel</div>
+  <h1>variance-analysis</h1>
+  <p class="role">ניתוח תקציב מול ביצוע וזיהוי חריגות</p>
+  <div class="actions">
+    <a href="../office-skills.zip">הורדת כל הסקילים (ZIP)</a>
+    <a class="secondary" href="SKILL.md">מקור SKILL.md</a>
+  </div>
+  <article>
+<h2>מתי להפעיל אותי</h2><p>גיליון שיש בו עמודת <strong>מתוכנן</strong> ועמודת <strong>בפועל</strong> — שעות, עלויות, כמויות.</p><p>אני מוסיף את הניתוח, לא רק את החישוב.</p><h2>מה אני עושה</h2><p>0. <strong>בדוק שהגיליון מתאים</strong> — הנתונים חייבים להיות טווח רציף עם <strong>שורת כותרת אחת</strong>.</p><p>   אם יש תאים ממוזגים, כותרת פרוסה על כמה שורות, או שורות ריקות באמצע —</p><p>   <strong>עצור.</strong> ענה: `המבנה אינו טווח רציף עם שורת כותרת אחת. המר לטבלה ואז הפעל אותי שוב.`</p><p>   אל תנסה לעקוף — ניתוח חלקי על מבנה שבור מייצר מספרים שנראים תקינים.</p><p>1. <strong>זהה את העמודות</strong> — מהי עמודת התכנון, מהי הביצוע, ומהו מזהה השורה</p><p>   (פרויקט, עובד, חודש). <strong>אמור לי מה זיהית לפני שאתה מחשב.</strong></p><p>2. <strong>הוסף עמודת הפרש</strong> — `בפועל − מתוכנן`, עם נוסחה, לא כערך קבוע.</p><p>3. <strong>הוסף עמודת אחוז חריגה</strong> — `הפרש ÷ מתוכנן`, בפורמט אחוז, שתי ספרות.</p><p>   <strong>עטוף ב-`IFERROR`.</strong> שורה שבה המתוכנן הוא 0 או ריק: השאר את תא האחוז <strong>ריק</strong>,</p><p>   סמן את השורה כ`ללא תקצוב`, וספור אותה בנפרד בדיווח.</p><p>   אלה בדיוק השורות המעניינות — עבודה שלא תוקצבה כלל — ואסור שייעלמו מאחורי `#DIV/0!`.</p><p>4. <strong>סמן חריגות</strong> — כל שורה שבה אחוז החריגה גדול מ-<strong>20%</strong>, בעיצוב מותנה.</p><p>   אם המשתמש ציין סף אחר — השתמש בו.</p><p>5. <strong>סכם למטה או בגיליון נפרד</strong>: סך מתוכנן, סך בפועל, הפרש כולל,</p><p>   ומספר השורות שחרגו.</p><p>6. <strong>כתוב מסקנה ניהולית</strong> של שלוש עד חמש שורות, ובה <strong>הפרד במפורש</strong>:</p><p>   - <strong>נתון</strong> — מה שמופיע בגיליון</p><p>   - <strong>הנחה</strong> — מה שנגזר מהנתון אבל אינו כתוב</p><p>   - <strong>מידע חסר</strong> — מה שצריך כדי להסיק מסקנה עסקית</p><h2>מה אסור לי לעשות</h2><ul><li><strong>אל תקבע השפעה על רווחיות, חיוב או תמחור</strong> בלי נתוני חוזה ותעריף.</li></ul><p>  אם אין בגיליון תעריף — כתוב במפורש שלא ניתן להסיק על רווחיות.</p><ul><li>אל תשנה, תמחק או תסדר מחדש נתונים קיימים. רק להוסיף.</li><li>אל תמלא ערכים חסרים בהשערה. שורה בלי נתון נשארת ריקה ומדווחת.</li><li>אל תשנה מזהי פרויקטים, שמות עובדים או תאריכים.</li></ul><h2>כשחסר לי מידע</h2><p>אם לא ניתן לזהות בוודאות איזו עמודה היא תכנון ואיזו ביצוע —</p><p><strong>אל תחשב.</strong> ענה:</p><p>&gt; זיהיתי את העמודות הבאות: [רשימה]. אשר לי מה התכנון ומה הביצוע ואמשיך.</p><p>חישוב על העמודות הלא נכונות מייצר מספר שנראה תקין ומוביל להחלטה שגויה.</p><p>זו התקלה היקרה ביותר בסקיל כזה.</p><h2>מה אני מדווח בסוף</h2><p>ענה בפורמט:</p><pre><code>עמודות שזוהו: תכנון=[X] · ביצוע=[Y] · מזהה=[Z]
+נותחו N שורות. חרגו מעל הסף: K שורות. ללא תקצוב: J שורות.
+סך תכנון: A · סך ביצוע: B · הפרש: C (D%)
+
+מסקנה:
+נתון — ...
+הנחה — ...
+מידע חסר — ...</code></pre>
+  </article>
+</div>
+</body>
+</html>
