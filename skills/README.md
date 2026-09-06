@@ -1,6 +1,6 @@
 # ספריית סקילים ל-Copilot · ואלור Toolkit
 
-**קישורים מהירים:** [מדריך התקנה ותרגול](../copilot-skills-practice.md) · [הורדת כל הסקילים (ZIP)](office-skills.zip) · [README מלא למטה](#תחזוקה-שוטפת--התקנה-בפקודה-אחת)
+**קישורים מהירים:** [קטלוג לדפדפן](index.html) · [מדריך התקנה ותרגול](../copilot-skills-practice.md) · [הורדת כל הסקילים (ZIP)](office-skills.zip) · [README מלא למטה](#תחזוקה-שוטפת--התקנה-בפקודה-אחת)
 
 ספריית סקילים מותאמים ל-**Copilot ב-PowerPoint וב-Excel**, בנויה לארגונים ישראליים.
 כל סקיל כאן נכתב לפי הכללים שאומתו חי בטננט של ואלור ב-1.9.2026 — ראו
@@ -20,9 +20,9 @@
 ## תחזוקה שוטפת — התקנה בפקודה אחת
 
 ```bash
-python copilot-skills/install.py                  # מה ישתנה, בלי לגעת
-python copilot-skills/install.py --apply          # התקנה/עדכון
-python copilot-skills/install.py --apply --prune  # וגם מחיקת מה שכבר לא בריפו
+python skills/install.py                  # מה ישתנה, בלי לגעת
+python skills/install.py --apply          # התקנה/עדכון
+python skills/install.py --apply --prune  # וגם מחיקת מה שכבר לא בריפו
 ```
 
 מנתב כל סקיל לתיקייה של האפליקציה הנכונה, ממיר CRLF ל-LF (git הופך אותם
@@ -41,10 +41,10 @@ python copilot-skills/install.py --apply --prune  # וגם מחיקת מה שכ�
 ### מחזור התחזוקה המלא
 
 ```bash
-python copilot-skills/validate.py                          # יטען?
-python copilot-skills/install.py --apply --prune           # התקן
+python skills/validate.py                          # יטען?
+python skills/install.py --apply --prune           # התקן
 #   <- Refresh בכל אפליקציה, ואז הרץ את הסקיל על קובץ בדיקה
-python copilot-skills/tests/check_tests.py <dir> --verify  # כיבד את הכללים?
+python skills/tests/check_tests.py <dir> --verify  # כיבד את הכללים?
 ```
 
 ---
@@ -221,7 +221,7 @@ python rtl_repair.py deck.pptx --in-place                # תיקון RTL מלא
 ### שכבה 1 · האם הסקיל ייטען
 
 ```bash
-python copilot-skills/validate.py
+python skills/validate.py
 ```
 
 בודק את ארבעת הכללים — כולל רישיות שם הקובץ, שאותה Windows לא יראה לכם.
