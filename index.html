@@ -3,183 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ערכת Copilot · סדנת יסודות ומובילי AI · ואלור</title>
+<title>חבילת Copilot · רמה 1 Basic ומאיץ מחלקתי · ואלור</title>
 <style>
-  :root {
-    --ground:#F2F6F6; --surface:#FFFFFF; --sunk:#E7EEEE; --ink:#0E1B2A; --ink-2:#3E5058; --muted:#6B7D85;
-    --line:#CFDCDC; --line-soft:#E2EAEA; --teal:#0F7A78; --teal-deep:#0A5654; --navy:#0A192F;
-    --shadow:0 1px 2px rgba(14,27,42,.06),0 6px 18px rgba(14,27,42,.05);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --ground:#0C1417; --surface:#131F23; --sunk:#0F1A1E; --ink:#E8F0F0; --ink-2:#B3C4C6; --muted:#8399A0;
-      --line:#2A3B40; --line-soft:#1E2E33; --teal:#4FC5C0; --teal-deep:#7EDCD7; --navy:#A9C4D8;
-      --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); }
-  }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--ground); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; font-size:16px; line-height:1.6; }
-  .wrap { max-width:1040px; margin:0 auto; padding:40px 24px 80px; }
-  h1,h2,h3 { font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; text-wrap:balance; }
-  header { border-bottom:3px solid var(--teal); padding-bottom:16px; margin-bottom:32px; }
-  .eyebrow { font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--teal); margin:0 0 6px; text-transform:uppercase; }
-  h1 { font-size:clamp(28px,5vw,42px); font-weight:900; letter-spacing:-.02em; margin:0; line-height:1.1; }
-  header p { margin:10px 0 0; color:var(--ink-2); max-width:68ch; }
-  section { margin-top:40px; }
-  section > h2 { font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
-  section > .sec-lede { margin:0 0 16px; font-size:15px; color:var(--ink-2); max-width:70ch; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
-  a.card, .card.static { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:18px 20px; box-shadow:var(--shadow); transition:border-color .15s; }
-  a.card:hover, a.card:focus-visible { border-color:var(--teal); outline:none; }
-  a.card:focus-visible { box-shadow:0 0 0 3px rgba(15,122,120,.25); }
-  .card h3 { font-size:17px; font-weight:800; margin:0 0 6px; color:var(--ink); }
-  .card p { margin:0; font-size:14.5px; color:var(--ink-2); }
-  .card .open { display:inline-block; margin-top:10px; font-size:13px; font-weight:700; color:var(--teal); }
-  .card .wait { display:inline-block; margin-top:10px; font-size:13px; font-weight:700; color:var(--muted); }
-  .kits { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px; }
-  .kit { background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:16px 18px; box-shadow:var(--shadow); }
-  .kit h3 { font-size:16px; font-weight:800; margin:0 0 8px; }
-  .kit ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px; }
-  .kit a { color:var(--teal-deep); text-decoration:none; font-size:14px; font-weight:600; }
-  .kit a:hover { text-decoration:underline; }
-  .kit .sub { font-size:12.5px; color:var(--muted); margin:0 0 8px; }
-  .note { background:var(--sunk); border-radius:6px; padding:14px 18px; font-size:14px; color:var(--ink-2); margin-top:14px; }
-  .pill { display:inline-block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--teal-deep); background:var(--sunk); border-radius:999px; padding:3px 10px; margin-bottom:8px; }
-  footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); }
-  footer p { margin:0 0 8px; max-width:72ch; }
+ :root {
+ --ground:#F2F6F6; --surface:#FFFFFF; --sunk:#E7EEEE; --ink:#0E1B2A; --ink-2:#3E5058; --muted:#6B7D85;
+ --line:#CFDCDC; --line-soft:#E2EAEA; --teal:#0F7A78; --teal-deep:#0A5654; --navy:#0A192F;
+ --shadow:0 1px 2px rgba(14,27,42,.06),0 6px 18px rgba(14,27,42,.05);
+ }
+ @media (prefers-color-scheme: dark) {
+ :root { --ground:#0C1417; --surface:#131F23; --sunk:#0F1A1E; --ink:#E8F0F0; --ink-2:#B3C4C6; --muted:#8399A0;
+ --line:#2A3B40; --line-soft:#1E2E33; --teal:#4FC5C0; --teal-deep:#7EDCD7; --navy:#A9C4D8;
+ --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25); }
+ }
+ * { box-sizing:border-box; }
+ body { margin:0; background:var(--ground); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; font-size:16px; line-height:1.6; }
+ .wrap { max-width:1040px; margin:0 auto; padding:40px 24px 80px; }
+ h1,h2,h3 { font-family:system-ui,-apple-system,"Segoe UI","Segoe UI Hebrew",Arial,sans-serif; text-wrap:balance; }
+ header { border-bottom:3px solid var(--teal); padding-bottom:16px; margin-bottom:32px; }
+ .eyebrow { font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--teal); margin:0 0 6px; text-transform:uppercase; }
+ h1 { font-size:clamp(28px,5vw,42px); font-weight:900; letter-spacing:-.02em; margin:0; line-height:1.1; }
+ header p { margin:10px 0 0; color:var(--ink-2); max-width:68ch; }
+ section { margin-top:40px; }
+ section > h2 { font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+ section > .sec-lede { margin:0 0 16px; font-size:15px; color:var(--ink-2); max-width:70ch; }
+ .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+ a.card, .card.static { display:block; text-decoration:none; color:inherit; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:18px 20px; box-shadow:var(--shadow); transition:border-color .15s; }
+ a.card:hover, a.card:focus-visible { border-color:var(--teal); outline:none; }
+ a.card:focus-visible { box-shadow:0 0 0 3px rgba(15,122,120,.25); }
+ .card h3 { font-size:17px; font-weight:800; margin:0 0 6px; color:var(--ink); }
+ .card p { margin:0; font-size:14.5px; color:var(--ink-2); }
+ .card .open { display:inline-block; margin-top:10px; font-size:13px; font-weight:700; color:var(--teal); }
+ .card .wait { display:inline-block; margin-top:10px; font-size:13px; font-weight:700; color:var(--muted); }
+ .kits { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px; }
+ .kit { background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:16px 18px; box-shadow:var(--shadow); }
+ .kit h3 { font-size:16px; font-weight:800; margin:0 0 8px; }
+ .kit ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px; }
+ .kit a { color:var(--teal-deep); text-decoration:none; font-size:14px; font-weight:600; }
+ .kit a:hover { text-decoration:underline; }
+ .kit .sub { font-size:12.5px; color:var(--muted); margin:0 0 8px; }
+ .note { background:var(--sunk); border-radius:6px; padding:14px 18px; font-size:14px; color:var(--ink-2); margin-top:14px; }
+ .pill { display:inline-block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--teal-deep); background:var(--sunk); border-radius:999px; padding:3px 10px; margin-bottom:8px; }
+ footer { margin-top:48px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); }
+ footer p { margin:0 0 8px; max-width:72ch; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
-    <p class="eyebrow">ואלור פתרונות אוטומציה</p>
-    <h1>ערכת Copilot · סדנת יסודות ומובילי AI</h1>
-    <p>הכניסה הראשית למשתתפי <strong>סדנת היסודות (שעתיים)</strong>. למטה — אזור נפרד למובילי AI: רישוי, עלויות, סוכנים וכלי הטמעה.</p>
-  </header>
+ <header>
+ <p class="eyebrow">ואלור פתרונות אוטומציה</p>
+ <h1>חבילת Copilot · רמה 1 Basic ומאיץ מחלקתי</h1>
+ <p><strong>רמה 1 · Basic</strong> — סדנת יסודות ב-Word, Excel ו-PowerPoint. אחר כך <strong>רמה 2 · מאיץ מחלקתי</strong> — בחרו use case ונבנה איתכם יום מחלקתי מותאם (agent עם skill).</p>
+ </header>
 
-  <section id="foundations">
-    <h2>סדנת יסודות — שעתיים</h2>
-    <p class="sec-lede">מסלול למשתתפים: יכולות → מגבלות → דוגמה משותפת בכל כלי (Excel, Word, PowerPoint, Teams, Email + חיפוש ארגוני). תמחור והטמעה אינם כאן.</p>
-    <div class="grid">
-      <a class="card" href="foundations/index.html">
-        <span class="pill">חבילה</span>
-        <h3>חבילת הסדנה</h3>
-        <p>עמוד כניסה לחומרי המשתתפים: קבצי תרגול, מבנה מפגש וסימולטור.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
-      <a class="card" href="foundations/toolkit/">
-        <span class="pill">תרגול</span>
-        <h3>קבצי תרגול / toolkit</h3>
-        <p>קבצי דמה לחניך: חייבים, פרוטוקול ישיבה, שרשור מייל ומדריך הדגמות.</p>
-        <span class="open">לקטלוג ←</span>
-      </a>
-      <a class="card" href="tools/prompt-lab.html#session">
-        <span class="pill">בקשות</span>
-        <h3>ספריית בקשות / פרומפטים</h3>
-        <p>מעבדת ההנחיות עם מבנה מפגש היסודות (קישור ישיר למבנה הסדנה).</p>
-        <span class="open">למבנה המפגש ←</span>
-      </a>
-      <a class="card" href="tools/training-simulator.html">
-        <span class="pill">סימולטור</span>
-        <h3>סימולטור תרגול</h3>
-        <p>סביבת תרגול למשתתפי סדנת היסודות — לפני או אחרי המפגש.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
-    </div>
-  </section>
+ <section id="level-1">
+ <h2>רמה 1 · Basic — סדנת יסודות</h2>
+ <p class="sec-lede">למשתתפים: שימוש בסיסי ב-Copilot ב-Word, Excel ו-PowerPoint (וגם Teams ומייל לפי הצורך). תמחור ורישוי אינם כאן.</p>
+ <div class="grid">
+ <a class="card" href="foundations/index.html">
+ <span class="pill">חבילה</span>
+ <h3>חבילת הסדנה</h3>
+ <p>עמוד כניסה לחומרי המשתתפים: קבצי תרגול, מבנה מפגש וסימולטור.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ <a class="card" href="foundations/toolkit/">
+ <span class="pill">תרגול</span>
+ <h3>קבצי תרגול</h3>
+ <p>קבצי דמה לחניך: חייבים, פרוטוקול ישיבה, שרשור מייל ומדריך הדגמות.</p>
+ <span class="open">לקטלוג ←</span>
+ </a>
+ <a class="card" href="tools/training-simulator.html">
+ <span class="pill">סימולטור</span>
+ <h3>סימולטור תרגול</h3>
+ <p>סביבת תרגול למשתתפי סדנת היסודות — לפני או אחרי המפגש.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ </div>
+ </section>
 
-  <section id="ai-leaders">
-    <h2>למובילי AI</h2>
-    <p class="sec-lede">רישוי, עלויות, סוכנים, ערכות הדגמה מחלקתיות וכלי הטמעה — מסלול נפרד מקהל היסודות.</p>
-    <div class="grid">
-      <a class="card" href="tools/licensing-app.html">
-        <h3>פורטל הרישוי</h3>
-        <p>מפת החלטה, נווט לפי מחלקה, מדרגות רישוי, מטריצת יכולות, וצ'קליסט חשיפת יתר לפני הפעלה.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
-      <a class="card" href="tools/microsoft-licensing-report-2026-09-06.md">
-        <h3>דוח מפת הרישוי</h3>
-        <p>מפת הרישוי המלאה של Microsoft לפרודוקטיביות ו-AI, ישראל 2026. כולל מסלול המיגרציה ל-GitHub Copilot ו-Work IQ, ופרק Power Platform.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
+ <section id="level-2">
+ <h2>רמה 2 · מאיץ מחלקתי</h2>
+ <p class="sec-lede"><strong>בחרו use case ונבנה איתכם יום מחלקתי מותאם</strong> — מציאת תרחיש אמיתי עם מחלקה ובניית agent עם skill. כולל GitHub, Azure AI, Power Apps ו-Power Automate. למובילים ולצוות ההטמעה.</p>
+ <div class="grid">
+ <a class="card" href="agents/index.html">
+ <span class="pill">סוכנים</span>
+ <h3>סוכנים מחלקתיים</h3>
+ <p>פרומפטים והוראות להרכבת סוכן הצהרתי בכל מחלקה — בלי ZIP טכני.</p>
+ <span class="open">לפורטל הסוכנים ←</span>
+ </a>
+ <a class="card" href="skills/index.html">
+ <span class="pill">למובילים</span>
+ <h3>סקילים ל-Office</h3>
+ <p>ספריית סקילים ל-Excel ול-PowerPoint למובילי הסדנה, כולל מתקין בפקודה אחת.</p>
+ <span class="open">לקטלוג ←</span>
+ </a>
+ <a class="card" href="tools/skill-to-studio.html">
+ <span class="pill">סוכן</span>
+ <h3>מסקיל לסוכן Copilot Studio</h3>
+ <p>הפייפליין שמפצל SKILL.md לשלוש שכבות: התנהגות, מקורות ידע, ופעולות לחישוב ודאי.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ <a class="card" href="tools/prompt-lab.html#path">
+ <span class="pill">הטמעה</span>
+ <h3>מסלול הטמעה</h3>
+ <p>מסלול ההטמעה למובילים — נפרד ממבנה מפגש היסודות למשתתפים.</p>
+ <span class="open">למסלול ←</span>
+ </a>
+ </div>
+ </section>
 
-      <a class="card" href="tools/cost-calculator.html">
-        <h3>מחשבון עלויות הספקים</h3>
-        <p>השוואת עלות בין מודלים ובין Cowork ל-Copilot Studio, בשורות נפרדות ולא מסוכמות.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
-      <a class="card" href="tools/skill-to-studio.html">
-        <h3>מסקיל לסוכן Copilot Studio</h3>
-        <p>הפייפליין שמפצל SKILL.md לשלוש שכבות: התנהגות, מקורות ידע, ופעולות לחישוב ודאי.</p>
-        <span class="open">פתיחה ←</span>
-      </a>
-      <a class="card" href="tools/prompt-lab.html#path">
-        <h3>מסלול הטמעה (מעבדת הנחיות)</h3>
-        <p>מסלול ההטמעה למובילים — נפרד ממבנה מפגש היסודות למשתתפים.</p>
-        <span class="open">למסלול ←</span>
-      </a>
-      <a class="card" href="agents/index.html">
-        <h3>סוכנים מחלקתיים</h3>
-        <p>פרומפטים והוראות להרכבת סוכן הצהרתי בכל מחלקה — בלי ZIP טכני.</p>
-        <span class="open">לפורטל הסוכנים ←</span>
-      </a>
-      <a class="card" href="skills/index.html">
-        <h3>סקילים ל-Office</h3>
-        <p>שבעה סקילים ל-PowerPoint ול-Excel, כולל מתקין בפקודה אחת.</p>
-        <span class="open">לקטלוג ←</span>
-      </a>
-    </div>
-  </section>
+ <section id="demo-kits">
+ <h2>ערכות הדגמה מחלקתיות · רמה 2</h2>
+ <p class="sec-lede">קבצי תרגול + מדריכי PDF. הסוכנים מוגשים כפורטל פרומפטים והוראות להרכבה במחלקה — לא כ־ZIP טכני.</p>
+ <div class="kits">
+ <div class="kit">
+ <h3>כספים</h3>
+ <p class="sub">בקרת תזרים ואיתור חריגות</p>
+ <ul>
+ <li><a href="demo-kits/finance/cashflow-payments-2026.xlsx">קובץ האקסל להדגמה</a></li>
+ <li><a href="demo-kits/finance/guide.pdf">מדריך ותרחישים (PDF)</a></li>
+ <li><a href="agents/finance.html">סוכן כספים — פרומפטים והוראות</a></li>
+ </ul>
+ </div>
+ <div class="kit">
+ <h3>רכש</h3>
+ <p class="sub">הסכם מסגרת, הצעות מחיר, חשבונית עם חריגות</p>
+ <ul>
+ <li><a href="demo-kits/procurement/01-framework-agreement.pdf">הסכם מסגרת (PDF)</a></li>
+ <li><a href="demo-kits/procurement/02-supplier-quotes.pdf">השוואת הצעות מחיר (PDF)</a></li>
+ <li><a href="demo-kits/procurement/03-invoice-exceptions.pdf">חשבונית עם חריגות (PDF)</a></li>
+ <li><a href="demo-kits/procurement/guide.pdf">מדריך ותרחישים (PDF)</a></li>
+ <li><a href="agents/procurement.html">סוכן רכש — פרומפטים והוראות</a></li>
+ </ul>
+ </div>
+ <div class="kit">
+ <h3>לוגיסטיקה</h3>
+ <p class="sub">מעקב משלוחים וחריגות SLA</p>
+ <ul>
+ <li><a href="demo-kits/logistics/shipments-sla-2026.xlsx">קובץ האקסל להדגמה</a></li>
+ <li><a href="demo-kits/logistics/guide.pdf">מדריך ותרחישים (PDF)</a></li>
+ <li><a href="agents/logistics.html">סוכן לוגיסטיקה — פרומפטים והוראות</a></li>
+ </ul>
+ </div>
+ <div class="kit">
+ <h3>משאבי אנוש</h3>
+ <p class="sub">נוהל החזרי הוצאות ורווחה</p>
+ <ul>
+ <li><a href="demo-kits/hr/expense-policy-2026.pdf">נוהל החזרים (PDF)</a></li>
+ <li><a href="demo-kits/hr/guide.pdf">מדריך ותרחישים (PDF)</a></li>
+ <li><a href="agents/hr.html">סוכן HR — פרומפטים והוראות</a></li>
+ </ul>
+ </div>
+ </div>
+ <p class="note">כל הנתונים בערכות ההדגמה סינתטיים ונוצרו לצורך ההדרכה בלבד. <a href="agents/index.html" style="color:inherit;font-weight:700">לכל הסוכנים המחלקתיים ←</a></p>
+ </section>
 
-  <section>
-    <h2>ערכות הדגמה מחלקתיות · למובילי AI</h2>
-    <p class="sec-lede">קבצי תרגול + מדריכי PDF. הסוכנים מוגשים כפורטל פרומפטים והוראות להרכבה במחלקה — לא כ־ZIP טכני.</p>
-    <div class="kits">
-      <div class="kit">
-        <h3>כספים</h3>
-        <p class="sub">בקרת תזרים ואיתור חריגות</p>
-        <ul>
-          <li><a href="demo-kits/finance/cashflow-payments-2026.xlsx">קובץ האקסל להדגמה</a></li>
-          <li><a href="demo-kits/finance/guide.pdf">מדריך ותרחישים (PDF)</a></li>
-          <li><a href="agents/finance.html">סוכן כספים — פרומפטים והוראות</a></li>
-        </ul>
-      </div>
-      <div class="kit">
-        <h3>רכש</h3>
-        <p class="sub">הסכם מסגרת, הצעות מחיר, חשבונית עם חריגות</p>
-        <ul>
-          <li><a href="demo-kits/procurement/01-framework-agreement.pdf">הסכם מסגרת (PDF)</a></li>
-          <li><a href="demo-kits/procurement/02-supplier-quotes.pdf">השוואת הצעות מחיר (PDF)</a></li>
-          <li><a href="demo-kits/procurement/03-invoice-exceptions.pdf">חשבונית עם חריגות (PDF)</a></li>
-          <li><a href="demo-kits/procurement/guide.pdf">מדריך ותרחישים (PDF)</a></li>
-          <li><a href="agents/procurement.html">סוכן רכש — פרומפטים והוראות</a></li>
-        </ul>
-      </div>
-      <div class="kit">
-        <h3>לוגיסטיקה</h3>
-        <p class="sub">מעקב משלוחים וחריגות SLA</p>
-        <ul>
-          <li><a href="demo-kits/logistics/shipments-sla-2026.xlsx">קובץ האקסל להדגמה</a></li>
-          <li><a href="demo-kits/logistics/guide.pdf">מדריך ותרחישים (PDF)</a></li>
-          <li><a href="agents/logistics.html">סוכן לוגיסטיקה — פרומפטים והוראות</a></li>
-        </ul>
-      </div>
-      <div class="kit">
-        <h3>משאבי אנוש</h3>
-        <p class="sub">נוהל החזרי הוצאות ורווחה</p>
-        <ul>
-          <li><a href="demo-kits/hr/expense-policy-2026.pdf">נוהל החזרים (PDF)</a></li>
-          <li><a href="demo-kits/hr/guide.pdf">מדריך ותרחישים (PDF)</a></li>
-          <li><a href="agents/hr.html">סוכן HR — פרומפטים והוראות</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="note">כל הנתונים בערכות ההדגמה סינתטיים ונוצרו לצורך ההדרכה בלבד. <a href="agents/index.html" style="color:inherit;font-weight:700">לכל הסוכנים המחלקתיים ←</a></p>
-  </section>
+ <section id="licensing">
+ <h2>רישוי והטמעה · למובילי AI</h2>
+ <p class="sec-lede">מפת רישוי, עלויות והחלטות הפעלה — מסלול נפרד מקהל רמה 1.</p>
+ <div class="grid">
+ <a class="card" href="tools/licensing-app.html">
+ <h3>פורטל הרישוי</h3>
+ <p>מפת החלטה, נווט לפי מחלקה, מדרגות רישוי, מטריצת יכולות, וצ'קליסט חשיפת יתר לפני הפעלה.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ <a class="card" href="tools/microsoft-licensing-report-2026-09-06.md">
+ <h3>דוח מפת הרישוי</h3>
+ <p>מפת הרישוי המלאה של Microsoft לפרודוקטיביות ו-AI, ישראל 2026. כולל מסלול המיגרציה ל-GitHub Copilot ו-Work IQ, ופרק Power Platform.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ <a class="card" href="tools/cost-calculator.html">
+ <h3>מחשבון עלויות הספקים</h3>
+ <p>השוואת עלות בין מודלים ובין Cowork ל-Copilot Studio, בשורות נפרדות ולא מסוכמות.</p>
+ <span class="open">פתיחה ←</span>
+ </a>
+ </div>
+ </section>
 
-  <footer>
-    <p><strong>פרטיות:</strong> הקלטות בכלים האינטראקטיביים נשארות בדפדפן. חלק מפרטי טפסים נשמרים ב־localStorage במחשב שלכם בלבד. האתר משתמש בגופני מערכת (ללא Google Fonts).</p>
-    <p>ואלור פתרונות אוטומציה בע"מ · הערכה מתעדכנת מהריפו של החברה.</p>
-  </footer>
+ <footer>
+ <p><strong>פרטיות:</strong> הקלטות בכלים האינטראקטיביים נשארות בדפדפן. חלק מפרטי טפסים נשמרים ב־localStorage במחשב שלכם בלבד. האתר משתמש בגופני מערכת (ללא Google Fonts).</p>
+ <p>ואלור פתרונות אוטומציה בע"מ · החבילה מתעדכנת מהריפו של החברה ב-GitHub.</p>
+ </footer>
 </div>
 </body>
 </html>
