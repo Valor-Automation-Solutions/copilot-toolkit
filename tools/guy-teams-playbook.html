@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>המדריך האישי שלי · תבניות Teams ליישום</title>
+<style>
+:root{
+  --bg:#0b0f17; --card:#131a26; --card2:#0f1520; --line:#233047;
+  --tx:#e8edf6; --mut:#8fa3c0; --acc:#5eead4; --acc2:#818cf8; --warn:#fbbf24;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.65;padding:24px 14px 60px}
+.wrap{max-width:880px;margin:0 auto}
+header{text-align:center;margin-bottom:26px}
+h1{font-size:1.55rem;font-weight:700}
+header p{color:var(--mut);margin-top:6px;font-size:.95rem}
+.bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.8rem;color:var(--mut);background:var(--card2)}
+.chip b{color:var(--tx);font-weight:600}
+.sect{margin-top:34px}
+.sect>h2{font-size:1.12rem;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.sect>p.sub{color:var(--mut);font-size:.9rem;margin-bottom:14px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.cop .dot{background:var(--acc2)} .free .dot{background:var(--acc)} .demo .dot{background:var(--warn)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.card h3{font-size:1.02rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-size:.68rem;border-radius:999px;padding:2px 10px;flex:none;letter-spacing:.02em}
+.t-need{background:rgba(129,140,248,.15);color:#a5b4fc;border:1px solid rgba(129,140,248,.4)}
+.t-free{background:rgba(94,234,212,.12);color:var(--acc);border:1px solid rgba(94,234,212,.35)}
+.t-prem{background:rgba(251,191,36,.12);color:var(--warn);border:1px solid rgba(251,191,36,.35)}
+.why{color:var(--mut);font-size:.9rem;margin:8px 0 0}
+.steps{margin-top:12px;counter-reset:st}
+.steps li{list-style:none;position:relative;padding-right:34px;margin-bottom:8px;font-size:.93rem}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;right:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--acc)}
+.meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:.8rem;color:var(--mut)}
+.meta b{color:var(--tx);font-weight:600}
+label.chk{display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:12px;font-size:.85rem;color:var(--mut);user-select:none}
+label.chk input{accent-color:var(--acc);width:16px;height:16px}
+label.chk input:checked + span{color:var(--acc);text-decoration:line-through;text-decoration-color:rgba(94,234,212,.5)}
+.lic{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:.88rem;margin-top:10px}
+.lic b{color:var(--acc)}
+a{color:var(--acc);text-decoration:none}
+a:hover{text-decoration:underline}
+footer{text-align:center;color:var(--mut);font-size:.78rem;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>המדריך האישי שלי · תבניות Teams ליישום</h1>
+  <p>מה להפעיל, באיזה סדר, ואיך בדיוק. מבוסס על המחקר מ-20.9.2026 על 34 התבניות של Teams 365.</p>
+  <div class="bar">
+    <span class="chip"><b>רישיון M365 Copilot</b> נדרש ל-2 הראשונות</span>
+    <span class="chip"><b>חינם בזכויות M365</b> כל השאר</span>
+    <span class="chip">סימון בצ׳קבוקס נשמר בדפדפן</span>
+  </div>
+</header>
+
+<section class="sect cop">
+  <h2><span class="dot"></span> תבניות Copilot מתוזמנות · דורשות רישיון M365 Copilot</h2>
+  <p class="sub">פרומפט שרץ לבד מול ה-Graph בהרשאות שלך ומוסר בצ׳אט של Copilot. מגבלה: 10 פרומפטים פעילים למשתמש. לא זמין ב-Copilot Chat החינמי ולא ב-Copilot Pro.</p>
+
+  <div class="card">
+    <h3>1. עזור לי להתכונן ליום שלי <span class="tag t-need">M365 Copilot</span></h3>
+    <p class="why">התדריך שחוסך לך את פתיחת היומן, המייל וה-Teams בבוקר. הכי רלוונטי ליום עבודה עמוס בפגישות ולקוחות.</p>
+    <ol class="steps">
+      <li>פתח את Teams ואפליקציית Copilot.</li>
+      <li>עבור ללשונית Prompts ובחר את התבנית עזור לי להתכונן ליום שלי.</li>
+      <li>קבע ימי חול בשעה 08:00.</li>
+      <li>שמור. מחר בבוקר התדריך מגיע לבד לצ׳אט של Copilot.</li>
+    </ol>
+    <div class="meta"><span>תדירות: <b>יומי 08:00</b></span><span>מקורות: יומן, מייל, משימות, Teams</span></div>
+    <label class="chk"><input type="checkbox" data-id="c1"><span>הופעל</span></label>
+  </div>
+
+  <div class="card">
+    <h3>2. התכונן לפגישות שלי מחר <span class="tag t-need">M365 Copilot</span></h3>
+    <p class="why">תדרוך ערב לקראת כל פגישה של מחר עם קשר למיילים, למסמכים ולדיוני עבר. חוסך את הכנת הרקע לפני כל שיחת לקוח.</p>
+    <ol class="steps">
+      <li>Teams, אפליקציית Copilot, לשונית Prompts.</li>
+      <li>בחר את התבנית התכונן לפגישות שלי מחר.</li>
+      <li>קבע 20:30 בכל יום.</li>
+      <li>שמור.</li>
+    </ol>
+    <div class="meta"><span>תדירות: <b>יומי בערב</b></span><span>מקורות: יומן, מייל, SharePoint, Teams</span></div>
+    <label class="chk"><input type="checkbox" data-id="c2"><span>הופעל</span></label>
+  </div>
+
+  <div class="card">
+    <h3>3. שלח הנחיה מתוזמנת ל-Copilot <span class="tag t-need">M365 Copilot</span></h3>
+    <p class="why">התבנית הגמישה: כל פרומפט שתגדיר, בתזמון קבוע. דוגמאות שכדאי לך: סיכום שבועי של התקדמות מול יעדים, סיכום יום שישי לקראת שבוע חדש.</p>
+    <ol class="steps">
+      <li>Teams, אפליקציית Copilot.</li>
+      <li>לחץ על סמל השעון ליד תיבת ההנחיה.</li>
+      <li>הזן פרומפט חופשי, למשל: סכם לי את השבוע מול המשימות הפתוחות ואת מה שהתקדם מול לקוחות.</li>
+      <li>בחר תדירות, למשל יום חמישי 16:00, ושמור.</li>
+    </ol>
+    <div class="meta"><span>תדירות: <b>לפי הגדרתך</b></span><span>מגבלה: נספר במסגרת 10 הפרומפטים</span></div>
+    <label class="chk"><input type="checkbox" data-id="c3"><span>הופעל</span></label>
+  </div>
+
+  <div class="card">
+    <h3>4. תזמן סיכום של הצ׳אטים או הערוצים <span class="tag t-need">M365 Copilot</span></h3>
+    <p class="why">סיכום שבועי של ערוצים עמוסים שלא קראת, רק של מה שיש לך הרשאה לראות.</p>
+    <ol class="steps">
+      <li>Teams, אפליקציית Copilot, לשונית Prompts.</li>
+      <li>בחר תזמן סיכום של הצ׳אטים או הערוצים.</li>
+      <li>בחר את הערוצים וקבע יום ראשון בבוקר.</li>
+      <li>שמור.</li>
+    </ol>
+    <div class="meta"><span>תדירות: <b>שבועי</b></span></div>
+    <label class="chk"><input type="checkbox" data-id="c4"><span>הופעל</span></label>
+  </div>
+</section>
+
+<section class="sect free">
+  <h2><span class="dot"></span> אוטומציות בחינם · כלולות בזכויות M365 בלי רישיון Copilot</h2>
+  <p class="sub">רצות על Power Automate עם מחברי Standard. הפעלה דרך אפליקציית Workflows ב-Teams.</p>
+
+  <div class="card">
+    <h3>5. קבל הודעה כאשר מילת מפתח מוזכרת <span class="tag t-free">חינם</span></h3>
+    <p class="why">התראה פרטית כשמזכירים מילת מפתח בערוצים שבחרת, גם בערוצים עמוסים שלא מספיק לעקוב אחריהם.</p>
+    <ol class="steps">
+      <li>פתח את אפליקציית Workflows ב-Teams.</li>
+      <li>חפש את התבנית קבל הודעה כאשר מילה מפתח מוזכרת.</li>
+      <li>הזן מילת מפתח, בחר ערוצים ואופן ההתראה, ולחץ Create flow.</li>
+    </ol>
+    <div class="meta"><span>תנאי: אפליקציית Workflows מורשית בטננט</span></div>
+    <label class="chk"><input type="checkbox" data-id="c5"><span>הופעל</span></label>
+  </div>
+
+  <div class="card">
+    <h3>6. שלח לערוץ התראות webhook <span class="tag t-free">חינם</span></h3>
+    <p class="why">מחבר את GitHub וכלים חיצוניים לערוץ טכני שלך. המחליף הרשמי של Incoming Webhooks שיצאו משימוש. מי שמחזיק בכתובת יכול לפרסם, אז לשמור אותה בסוד.</p>
+    <ol class="steps">
+      <li>אפליקציית Workflows ב-Teams.</li>
+      <li>חפש שלח לערוץ התראות webhook, תן שם ובחר ערוץ.</li>
+      <li>לחץ Create flow והעתק את כתובת ה-HTTP POST שהופקה.</li>
+      <li>הדבק את הכתובת ב-GitHub או בכלי החיצוני.</li>
+    </ol>
+    <div class="meta"><span>מתאים ל: <b>GitHub, ניטור, סקריפטים</b></span></div>
+    <label class="chk"><input type="checkbox" data-id="c6"><span>הופעל</span></label>
+  </div>
+
+  <div class="card">
+    <h3>7. פרסם הודעת ערוץ כאשר פורסם RSS חדש <span class="tag t-free">חינם</span></h3>
+    <p class="why">זרימת עדכונים שוטפת מבלוגים של מיקרוסופט, חדשות AI וכל מקור עם פיד, ישר לערוץ עניין.</p>
+    <ol class="steps">
+      <li>אפליקציית Workflows ב-Teams.</li>
+      <li>חפש פרסם הודעת ערוץ כאשר פורסם RSS חדש.</li>
+      <li>הזן כתובת פיד RSS ובחר ערוץ יעד.</li>
+      <li>לחץ Create flow.</li>
+    </ol>
+    <div class="meta"><span>תנאי: הפיד נגיש בציבור</span></div>
+    <label class="chk"><input type="checkbox" data-id="c7"><span>הופעל</span></label>
+  </div>
+</section>
+
+<section class="sect demo">
+  <h2><span class="dot"></span> חומר הדגמה לסדנאות של ואלור</h2>
+  <p class="sub">תבניות שעובדות אצל כל לקוח בלי רישיון Copilot. מציגות ערך מיידי ומכניסות את הלקוח לעולם האוטומציה בזכויות שכבר יש לו.</p>
+
+  <div class="card">
+    <h3>8. הודע לערוץ כשמשימות Planner הושלמו <span class="tag t-free">חינם</span></h3>
+    <p class="why">הדגמה קלאסית: משימה מסומנת כהושלמה, הערוץ מקבל הודעה אוטומטית. מתאים לכל צוות שמנהל משימות.</p>
+    <ol class="steps">
+      <li>אפליקציית Workflows, חיפוש התבנית.</li>
+      <li>אישור חיבור ל-Planner ול-Teams.</li>
+      <li>בחירת Group ו-Plan, וערוץ היעד ב-Teams.</li>
+      <li>Create flow.</li>
+    </ol>
+    <div class="meta"><span>מחברים: <b>Planner + Teams, Standard</b></span></div>
+    <label class="chk"><input type="checkbox" data-id="c8"><span>הוכנס להדגמה</span></label>
+  </div>
+
+  <div class="card">
+    <h3>9. הודע לערוץ כאשר קובץ ב-SharePoint משתנה <span class="tag t-free">חינם</span></h3>
+    <p class="why">העלאת מסמך מעדכנת את הערוץ. פותח שיחה על ניהול מסמכים ושקיפות צוותית אצל הלקוח.</p>
+    <ol class="steps">
+      <li>אפליקציית Workflows, חיפוש התבנית.</li>
+      <li>חיבור ל-SharePoint ול-Teams.</li>
+      <li>בחירת Site, ספריה וערוץ.</li>
+      <li>Create flow.</li>
+    </ol>
+    <div class="meta"><span>מחברים: <b>SharePoint + Teams, Standard</b></span></div>
+    <label class="chk"><input type="checkbox" data-id="c9"><span>הוכנס להדגמה</span></label>
+  </div>
+</section>
+
+<section class="sect">
+  <h2 style="font-size:1.05rem">מה לא להפעיל בלי בדיקה</h2>
+  <div class="lic">
+    תבניות שמסתיימות בחדר מלחמה של PagerDuty ובסיכום קבצים עם GPT דורשות <b>Power Automate Premium</b>, 15 דולר למשתמש לחודש, או AI Builder. ברירת המחדל היא לא לגעת בהן עד שיהיה צורך עסקי ממשי. Agent Flows שמופעלים מהסוכן עצמו דווקא כלולים ברישיון M365 Copilot בלי קרדיטים נוספים.
+  </div>
+</section>
+
+<footer>
+  המחקר המלא: <a href="https://github.com/Valor-Automation-Solutions/copilot-toolkit/blob/main/tools/teams-workflows-report-2026-09-20.md">דוח 34 התבניות</a> · מטריצת הרישוי המלאה: <a href="https://valor-automation-solutions.github.io/copilot-toolkit/tools/licensing-app.html">פורטל הרישוי</a> · עודכן 20.9.2026
+</footer>
+</div>
+<script>
+document.querySelectorAll('input[type=checkbox]').forEach(function(cb){
+  var k='tplay-'+cb.dataset.id;
+  cb.checked=localStorage.getItem(k)==='1';
+  cb.addEventListener('change',function(){localStorage.setItem(k,cb.checked?'1':'0')});
+});
+</script>
+</body>
+</html>
