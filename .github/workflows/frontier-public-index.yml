@@ -1,0 +1,39 @@
+name: Refresh public Frontier index
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'beautifulsoup4==4.13.4'
+      - run: python tools/test-frontier-public.py
+      - run: python tools/build-frontier-index.py
+      - run: node tools/test-frontier-public.cjs
+      - name: Publish changed public index
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- tools/frontier-public-index.json; then
+            echo 'The public source has not changed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/frontier-public-index.json
+          git commit -m 'Refresh public Frontier conference index'
+          git push
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
