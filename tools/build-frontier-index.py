@@ -16,7 +16,7 @@ OUTPUT = Path(__file__).with_name("frontier-public-index.json")
 
 
 def clean(value):
-    return re.sub(r"\s+", " ", value).strip()
+    return re.sub(r"\s+([.,!?׃])", r"\1", re.sub(r"\s+", " ", value)).strip()
 
 
 def first_sentence(value, maximum=280):
@@ -25,6 +25,22 @@ def first_sentence(value, maximum=280):
     if match and match.end() <= maximum:
         return value[: match.end()]
     return value[:maximum].rsplit(" ", 1)[0].rstrip(" ,;:") + ("…" if len(value) > maximum else "")
+
+
+def evidence_sentences(container):
+    """Keep source sentences intact so a role can select a concrete action."""
+    result = []
+    for node in container.find_all(("p", "li")):
+        if node.name == "p" and node.find_parent("li"):
+            continue
+        if "srcs" in (node.get("class") or []):
+            continue
+        value = clean(node.get_text(" ", strip=True))
+        for sentence in re.split(r"(?<=[.!?׃])\s+", value):
+            sentence = clean(sentence)
+            if len(sentence) >= 30 and sentence not in result:
+                result.append(sentence[:320])
+    return result[:40]
 
 
 def build(html):
@@ -59,6 +75,7 @@ def build(html):
                         "what": first_sentence(answers[0]),
                         "detail": first_sentence(answers[1]) if len(answers) > 1 else "",
                         "text": clean(question.get_text(" ", strip=True))[:2400],
+                        "evidence": evidence_sentences(body),
                         "source": f"{PUBLIC_PAGE}#s{number}",
                     })
                 continue
@@ -75,6 +92,7 @@ def build(html):
                 "what": first_sentence(paragraphs[0]),
                 "detail": first_sentence(paragraphs[1]) if len(paragraphs) > 1 else "",
                 "text": text,
+                "evidence": evidence_sentences(section),
                 "source": f"{PUBLIC_PAGE}#s{number}",
             })
     if len(items) < 7:

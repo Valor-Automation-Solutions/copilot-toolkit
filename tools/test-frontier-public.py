@@ -30,6 +30,7 @@ class PublicIndexTest(unittest.TestCase):
         self.assertEqual(len(after["items"]), len(before["items"]) + 1)
         added = next(item for item in after["items"] if item["title"] == "טיפול בפניות שירות חדשות")
         self.assertEqual(added["source"], "https://guycoful.github.io/microsoft-frontier-2026/#s6")
+        self.assertIn("צוות השירות ממיין פניות חדשות.", added["evidence"])
 
     def test_question_is_a_separate_item_with_its_answer(self):
         html = "<html><head><meta charset='utf-8'></head><body>"
