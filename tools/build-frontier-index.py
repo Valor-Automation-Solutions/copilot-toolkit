@@ -38,6 +38,30 @@ def build(html):
         session = clean(tab.get_text(" ", strip=True))
         for section_number, heading in enumerate(pane.select("section > h2"), start=1):
             section = heading.parent
+            questions = section.select("details.qa")
+            if questions:
+                for question_number, question in enumerate(questions, start=1):
+                    summary = question.find("summary")
+                    body = question.select_one(".qa-body")
+                    if not summary or not body:
+                        continue
+                    answers = [clean(p.get_text(" ", strip=True)) for p in body.find_all("p", recursive=False)
+                               if "srcs" not in (p.get("class") or [])]
+                    if not answers:
+                        answers = [clean(p.get_text(" ", strip=True)) for p in body.find_all("p")]
+                    answers = [answer for answer in answers if answer]
+                    if not answers:
+                        continue
+                    items.append({
+                        "id": f"s{number}-q{section_number}-{question_number}",
+                        "session": session,
+                        "title": clean(summary.get_text(" ", strip=True)),
+                        "what": first_sentence(answers[0]),
+                        "detail": first_sentence(answers[1]) if len(answers) > 1 else "",
+                        "text": clean(question.get_text(" ", strip=True))[:2400],
+                        "source": f"{PUBLIC_PAGE}#s{number}",
+                    })
+                continue
             paragraphs = [clean(p.get_text(" ", strip=True)) for p in section.find_all("p", recursive=False)]
             paragraphs = [p for p in paragraphs if p]
             if not paragraphs:

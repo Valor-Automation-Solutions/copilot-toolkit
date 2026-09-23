@@ -31,6 +31,22 @@ class PublicIndexTest(unittest.TestCase):
         added = next(item for item in after["items"] if item["title"] == "טיפול בפניות שירות חדשות")
         self.assertEqual(added["source"], "https://guycoful.github.io/microsoft-frontier-2026/#s6")
 
+    def test_question_is_a_separate_item_with_its_answer(self):
+        html = "<html><head><meta charset='utf-8'></head><body>"
+        for number in range(1, 8):
+            html += f"<button id='t{number}'>מושב {number}</button>"
+            if number == 7:
+                html += "<div id='pane-s7'><section><h2>שאלות ותשובות</h2>"
+                html += "<details class='qa'><summary>מתי לבחור Power Automate?</summary><div class='qa-body'>"
+                html += "<p>לתהליך קבוע עדיף Power Automate.</p><p>ההרצה דטרמיניסטית.</p>"
+                html += "</div></details></section></div>"
+            else:
+                html += f"<div id='pane-s{number}'><section><h2>נושא {number}</h2><p>תוכן ציבורי {number}.</p></section></div>"
+        result = builder.build((html + "</body></html>").encode("utf-8"))
+        question = next(item for item in result["items"] if item["title"] == "מתי לבחור Power Automate?")
+        self.assertIn("לתהליך קבוע", question["what"])
+        self.assertIn("דטרמיניסטית", question["detail"])
+
 
 if __name__ == "__main__":
     unittest.main()
