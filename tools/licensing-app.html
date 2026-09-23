@@ -615,9 +615,9 @@ SCREENS.forEach(function(s,i){
       status.textContent=selected.length?selected.length+' פריטים נבחרו מתוך המקור הציבורי.':'לא נמצא מקור שמבסס המלצה לקהל הזה. נסו לציין תהליך או מוצר מסוים.';
       selected.forEach(function(item,index){
         if(!/^https:\/\/guycoful\.github\.io\/microsoft-frontier-2026\//.test(item.source))return;
-        var card=el('article');var heading=el('h3');heading.textContent=(index+1)+'. '+item.title;card.appendChild(heading);
-        row(card,'מה זה:',item.what);
-        row(card,'למה להציג לקהל הזה:',item.detail||'הנושא מתאים לחיפוש לפי הקהל או התחום שהזנתם; ראו את ההקשר המלא במקור.');
+        var card=el('article');var heading=el('h3');heading.textContent=(index+1)+'. '+(item.displayTitle||item.title);card.appendChild(heading);
+        row(card,item.useCase?'שימוש מעשי:':'מה זה:',item.what);
+        row(card,item.useCase?'למה זה שימושי:':'למה להציג לקהל הזה:',item.detail||'הנושא מתאים לחיפוש לפי הקהל או התחום שהזנתם; ראו את ההקשר המלא במקור.');
         var decision=window.FrontierPublic.decision(item,profile);
         var label=el('p','decision');label.textContent=decision.label+' — '+decision.reason;card.appendChild(label);
         var sources=el('p');var mark=el('b');mark.textContent='מקור: ';sources.appendChild(mark);
