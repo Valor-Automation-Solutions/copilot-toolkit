@@ -610,9 +610,9 @@ SCREENS.forEach(function(s,i){
       var response=await fetch('frontier-public-index.json',{cache:'no-store'});
       if(!response.ok)throw new Error('אינדקס הכנס אינו זמין כעת.');
       var data=await response.json();
-      var selected=window.FrontierPublic.rank(data.items||[],topicInput.value.trim());
       var profile={};Object.keys(selects).forEach(function(key){profile[key]=selects[key].value});
-      status.textContent=selected.length?selected.length+' פריטים נבחרו מתוך המקור הציבורי.':'לא נמצא פריט עם התאמה מבוססת מקור. נסו נושא אחר.';
+      var selected=window.FrontierPublic.rank(data.items||[],topicInput.value.trim(),profile);
+      status.textContent=selected.length?selected.length+' פריטים נבחרו מתוך המקור הציבורי.':'לא נמצא מקור שמבסס המלצה לקהל הזה. נסו לציין תהליך או מוצר מסוים.';
       selected.forEach(function(item,index){
         if(!/^https:\/\/guycoful\.github\.io\/microsoft-frontier-2026\//.test(item.source))return;
         var card=el('article');var heading=el('h3');heading.textContent=(index+1)+'. '+item.title;card.appendChild(heading);
