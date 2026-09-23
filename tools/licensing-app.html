@@ -292,6 +292,22 @@ ul.tight li{margin-bottom:5px;font-size:.93rem}
 .cta a{display:inline-block;margin-top:8px;background:var(--brand-wash);color:var(--brand);
   border:1px solid var(--brand);border-radius:8px;padding:7px 14px;font-weight:700;text-decoration:none}
 .cta a:hover{background:var(--brand);color:var(--brand-ink)}
+/* Frontier decisions are rendered as text nodes, never as source HTML. */
+.frontier-form{display:grid;gap:var(--s2);max-width:760px}
+.frontier-form label{font-weight:700;display:block;margin-bottom:4px}
+.frontier-form input{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.frontier-form button{justify-self:start;border:0;background:var(--brand);color:var(--brand-ink);padding:9px 18px;font-weight:700}
+.frontier-result{max-width:900px;margin-top:var(--s3)}
+.frontier-result article{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:var(--s2);margin-bottom:var(--s2)}
+.frontier-result h3{margin:0 0 6px;font-size:1.15rem}
+.frontier-result p{margin:5px 0}
+.frontier-result .decision{font-weight:700;color:var(--brand)}
+.frontier-result a{color:var(--brand);text-decoration:underline}
+.frontier-profile{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:10px;margin-top:8px}
+.frontier-profile label{font-size:.9rem;font-weight:600}
+.frontier-profile select{display:block;width:100%;margin-top:4px;padding:8px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.frontier-form details{border:1px solid var(--line);border-radius:8px;padding:10px}
+.frontier-form summary{cursor:pointer;font-weight:700}
 
 </style>
 
@@ -319,9 +335,11 @@ ul.tight li{margin-bottom:5px;font-size:.93rem}
     <section class="screen" id="s-pilot"></section>
     <section class="screen" id="s-value"></section>
     <section class="screen" id="s-lab"></section>
+    <section class="screen" id="s-frontier"></section>
   </main>
 </div>
 
+<script src="frontier-public.js"></script>
 <script>
 (function(){
 "use strict";
@@ -547,7 +565,7 @@ var PROFILES=[
   btns.forEach(function(b){b.addEventListener('click',function(){apply(b.getAttribute('data-ui-set'))})});
 })();
 
-var SCREENS=[['where','איפה אתם'],['need','מה אני צריך'],['tiers','שלושה צירים'],['matrix','מטריצת יכולות'],['cost','מחשבון עלות'],['ready','מוכנות'],['intake','טופס קליטה'],['oversharing','חשיפת יתר'],['pilot','תבנית פיילוט'],['value','ערך והוכחות'],['lab','מעבדת הנחיות']];
+var SCREENS=[['where','איפה אתם'],['need','מה אני צריך'],['tiers','שלושה צירים'],['matrix','מטריצת יכולות'],['cost','מחשבון עלות'],['ready','מוכנות'],['intake','טופס קליטה'],['oversharing','חשיפת יתר'],['pilot','תבנית פיילוט'],['value','ערך והוכחות'],['lab','מעבדת הנחיות'],['frontier','הכרעות Frontier']];
 
 var tabs=$('#tabs');
 SCREENS.forEach(function(s,i){
@@ -559,6 +577,57 @@ SCREENS.forEach(function(s,i){
   };
   tabs.appendChild(b);
 });
+
+/* This screen reads a static index built solely from the published conference page.
+   The visitor's capability choices remain in browser memory and are never sent. */
+(function(){
+  var root=$('#s-frontier');
+  root.appendChild(el('h2','sh','מה מחומר Frontier כדאי להציג?'));
+  root.appendChild(el('p','sub','הזינו תפקיד, צוות או נושא — גם ללא תפקיד ניהולי. הבחירה נעשית מתוך חומר הכנס שכבר פורסם לציבור ומציגה עד 5 פריטים עם קישור למקור. האתר אינו ניגש לכספת.'));
+  var form=el('form','card frontier-form');
+  var topic=el('div');
+  var topicLabel=el('label',null,'קהל או נושא');topicLabel.htmlFor='frontier-topic';
+  var topicInput=document.createElement('input');topicInput.id='frontier-topic';topicInput.type='text';topicInput.maxLength=160;topicInput.required=true;topicInput.placeholder='למשל: חשבת שכר, נציגת שירות או צוות הדרכה';
+  topic.appendChild(topicLabel);topic.appendChild(topicInput);
+  var profileBox=document.createElement('details');var profileTitle=document.createElement('summary');profileTitle.textContent='התאמת רישוי מקומית (רשות)';profileBox.appendChild(profileTitle);
+  var privacy=el('p','note','הבחירות שלכם נשארות בדפדפן בלבד. אם לא תמלאו אותן, מצב הרישוי יסומן כטעון בדיקה.');profileBox.appendChild(privacy);
+  var profileGrid=el('div','frontier-profile');var selects={};
+  window.FrontierPublic.capabilities.forEach(function(cap){
+    var label=document.createElement('label');label.textContent=cap[1];
+    var select=document.createElement('select');
+    [['unknown','לא ידוע'],['yes','יש'],['no','אין — נדרש תקציב'],['excluded','לא בתכנון']].forEach(function(choice){var option=document.createElement('option');option.value=choice[0];option.textContent=choice[1];select.appendChild(option)});
+    label.appendChild(select);profileGrid.appendChild(label);selects[cap[0]]=select;
+  });
+  profileBox.appendChild(profileGrid);
+  var button=el('button',null,'בחרו עד 5 פריטים');button.type='submit';
+  form.appendChild(topic);form.appendChild(profileBox);form.appendChild(button);root.appendChild(form);
+  var status=el('p','note');status.setAttribute('role','status');status.setAttribute('aria-live','polite');root.appendChild(status);
+  var results=el('div','frontier-result');root.appendChild(results);
+  function row(parent,label,value){var p=el('p');var b=el('b');b.textContent=label+' ';p.appendChild(b);p.appendChild(document.createTextNode(value));parent.appendChild(p)}
+  form.addEventListener('submit',async function(event){
+    event.preventDefault();results.replaceChildren();status.textContent='בוחר פריטים מתוך המקור הציבורי…';button.disabled=true;
+    try{
+      var response=await fetch('frontier-public-index.json',{cache:'no-store'});
+      if(!response.ok)throw new Error('אינדקס הכנס אינו זמין כעת.');
+      var data=await response.json();
+      var selected=window.FrontierPublic.rank(data.items||[],topicInput.value.trim());
+      var profile={};Object.keys(selects).forEach(function(key){profile[key]=selects[key].value});
+      status.textContent=selected.length?selected.length+' פריטים נבחרו מתוך המקור הציבורי.':'לא נמצא פריט עם התאמה מבוססת מקור. נסו נושא אחר.';
+      selected.forEach(function(item,index){
+        if(!/^https:\/\/guycoful\.github\.io\/microsoft-frontier-2026\//.test(item.source))return;
+        var card=el('article');var heading=el('h3');heading.textContent=(index+1)+'. '+item.title;card.appendChild(heading);
+        row(card,'מה זה:',item.what);
+        row(card,'למה להציג לקהל הזה:',item.detail||'הנושא מתאים לחיפוש לפי הקהל או התחום שהזנתם; ראו את ההקשר המלא במקור.');
+        var decision=window.FrontierPublic.decision(item,profile);
+        var label=el('p','decision');label.textContent=decision.label+' — '+decision.reason;card.appendChild(label);
+        var sources=el('p');var mark=el('b');mark.textContent='מקור: ';sources.appendChild(mark);
+        var a=document.createElement('a');a.href=item.source;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.session;sources.appendChild(a);
+        card.appendChild(sources);results.appendChild(card);
+      });
+    }catch(error){status.textContent=error.message||'לא ניתן לקרוא את חומר הכנס כעת.'}
+    finally{button.disabled=false}
+  });
+})();
 
 function tierCard(t,lbl){
   var res=el('div','res');res.style.setProperty('--tc',t.c);
