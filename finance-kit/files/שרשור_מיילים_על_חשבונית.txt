@@ -1,0 +1,85 @@
+שרשור מיילים (נתוני דמה, לא אמיתיים). חברות ואנשים בדויים.
+
+--- מייל 1 ---
+מאת: Dana Ross (Alpha Raw Materials Ltd)
+אל: ap@client-demo.example
+תאריך: 25.8.2026
+נושא: Invoice INV-20453, PO-77120
+Hello, I am following up on invoice INV-20453 for ILS 2,487.54, issued 20 August 2026 against PO-77120. Our payment terms are net 60 days from invoice receipt. Please confirm you received it. Thank you, Dana
+
+--- מייל 2 ---
+מאת: נועה (הנהלת חשבונות ספקים)
+אל: אורי (רכש)
+תאריך: 28.8.2026
+נושא: חשבונית INV-20453 של אלפא
+אורי, הספק שואל על חשבונית INV-20453. אני לא מוצאת אותה ב-SAP. אפשר לוודא שהזמנה PO-77120 פתוחה ושהסחורה התקבלה?
+
+--- מייל 3 ---
+מאת: אורי (רכש)
+אל: נועה
+תאריך: 29.8.2026
+נושא: RE: חשבונית INV-20453 של אלפא
+ההזמנה PO-77120 פתוחה. הסחורה התקבלה במחסן ב-12.8.
+
+--- מייל 4 ---
+מאת: Dana Ross (Alpha Raw Materials Ltd)
+אל: ap@client-demo.example
+תאריך: 2.9.2026
+נושא: Reminder: INV-20453 unpaid
+Hello again. The invoice was sent on 20 August to ap@client-demo.example. It is still unpaid in our ledger. Attached is our statement. Our agreed terms are net 45 days. Please advise when payment will be made. Regards, Dana
+
+--- מייל 5 ---
+מאת: נועה
+אל: מנהל מערכות מידע
+תאריך: 3.9.2026
+נושא: מייל שלא הגיע לתיבת ספקים
+אנחנו מחפשים חשבונית ממייל של הספק מ-20.8 לתיבה ap@client-demo.example. לא נמצאה בתיבה הרגילה. אפשר לבדוק גם תיבות ישנות?
+
+--- מייל 6 ---
+מאת: מנהל מערכות מידע
+אל: נועה
+תאריך: 4.9.2026
+נושא: RE: מייל שלא הגיע לתיבת ספקים
+מצאתי את המייל בתיבה משותפת ישנה (ap-old). אני מעביר אותו אלייך בימים הקרובים. התיבה הזו לא נבדקת באופן שוטף.
+
+--- מייל 7 ---
+מאת: נועה
+אל: אורי
+תאריך: 8.9.2026
+נושא: חשבונית INV-20453 התקבלה
+קיבלתי את החשבונית היום (8.9). כדי לרשום אותה אני צריכה אישור קבלת סחורה. במערכת רשום GRN-5521 מתאריך 14.8.
+
+--- מייל 8 ---
+מאת: אורי
+אל: נועה
+תאריך: 9.9.2026
+נושא: RE: חשבונית INV-20453 התקבלה
+תיקון: הסחורה התקבלה ב-14.8 ולא ב-12.8, לפי תעודת המשלוח החתומה במחסן. הטעות במייל הקודם שלי.
+
+--- מייל 9 ---
+מאת: מירב (בקרית כספים)
+אל: נועה
+תאריך: 10.9.2026
+נושא: סטטוס חשבונית אלפא
+נועה, מה הסטטוס של INV-20453? מה הסכום, מתי תאריך הפירעון לפי ההסכם, ויש סיכון לעצירת אשראי מצד הספק?
+
+--- מייל 10 ---
+מאת: Dana Ross (Alpha Raw Materials Ltd)
+אל: ap@client-demo.example
+תאריך: 14.9.2026
+נושא: Escalation: account on hold from 30 September
+Hello. Invoice INV-20453 remains unpaid. Unless we receive payment or a firm payment date, we will place your account on credit hold from 30 September. Also note that we issued credit note CN-3307 for ILS 2,100.00 on 3 September. Please confirm you received it. Dana
+
+--- מייל 11 ---
+מאת: נועה
+אל: מירב
+תאריך: 15.9.2026
+נושא: RE: סטטוס חשבונית אלפא
+החשבונית נמצאה בתיבה ישנה והתקבלה אצלנו ב-8.9. עדיין לא נרשמה ב-SAP. הספק מאיים בעצירת אשראי מ-30.9. הוא כתב גם על זיכוי, ואני לא מוצאת אותו.
+
+--- מייל 12 ---
+מאת: מירב (בקרית כספים)
+אל: נועה
+תאריך: 16.9.2026
+נושא: RE: סטטוס חשבונית אלפא
+נועה, תכיני תשובה לספק באנגלית. בלי להתחייב למועד תשלום לפני שהחשבונית נרשמת, ובלי להודות בעצירת אשראי. תציינו את הזיכוי.
