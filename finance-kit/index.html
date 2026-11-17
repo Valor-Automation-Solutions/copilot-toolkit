@@ -51,7 +51,7 @@ h2 { margin:1.4rem 0 .5rem; font-size:1.9rem; line-height:1.25; font-weight:800;
 .hl { background:linear-gradient(transparent 62%, var(--hl) 62% 92%, transparent 92%); padding-inline:.1em; margin-inline:-.1em; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
 p, li { max-inline-size:70ch; text-wrap:pretty; }
 .sec > .wrap > p { margin:.4rem 0 .8rem; }
-.g1{--gc:var(--c1)} .g2{--gc:var(--c2)} .g3{--gc:var(--c3)} .g4{--gc:var(--c4)} .g5{--gc:var(--c5)} .g6{--gc:var(--c6)} .g7{--gc:var(--c7)}
+.g1{--gc:var(--c1)} .g2{--gc:var(--c2)} .g3{--gc:var(--c3)} .g4{--gc:var(--c4)} .g5{--gc:var(--c5)} .g6{--gc:var(--c6)} .g7{--gc:var(--c7)} .g8{--gc:var(--c2)}
 .grp { margin-block:.9rem; border-radius:10px; overflow:hidden; background:color-mix(in srgb, var(--gc) 13%, var(--card)); box-shadow:0 8px 20px -12px rgba(18,49,90,.5); }
 .grp > h3 { margin:0; padding:.65rem 1.1rem; font-size:1.2rem; font-weight:800; background:var(--gc); color:var(--gt); }
 .gbody { padding:.35rem 1.1rem .9rem; }
@@ -187,6 +187,15 @@ footer { background:var(--deep); color:var(--on-deep-soft); padding-block:1.2rem
 <p>יש לכם גם את הדוח של הספק או הלקוח? משתמשים בבקשה מסעיף 1. יש רק כרטסת אחת? מדביקים את זו:</p>
 <div class="prompt"><p id="p14">מצורפת כרטסת אחת מ-SAP, של ספק או של לקוח. הכן טבלה של מה שדורש בדיקה: רישומים כפולים (אותו מספר חשבונית, או אותו סכום ואותו תאריך), חשבוניות פתוחות לפי גיל (עד 30 יום, 31 עד 60, מעל 60), זיכויים שלא קוזזו, ומספרי מסמך חריגים. בסוף כתוב את היתרה הסופית, ובדוק שהיא שווה לסכום כל השורות. השתמש רק בקובץ. אל תמציא נתונים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p14" aria-label="העתקת בקשה 14"><svg class="ico ico-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="ico ico-tick" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7"/></svg><span class="label">העתקה</span></button><span class="tip" role="status"></span></span></div>
 <p>בודקים בסכום: SUM על עמודת הסכום ב-Excel, מול היתרה ש-Copilot כתב.</p>
+</div></div>
+<div class="grp g8"><h3>8. בונוס: פרומפט קואוץ׳ מנסח בשבילכם</h3><div class="gbody">
+<ol>
+<li>מחפשים את Prompt Coach בתפריט הסוכנים ב-Copilot Chat.</li>
+<li>כותבים לו בעברית רגילה מה אתם רוצים, ועונים על השאלה שלו.</li>
+</ol>
+<p>לפני שמריצים את הפרומפט שהוא כתב, מוסיפים לו את השורה הזו:</p>
+<div class="prompt"><p id="p15">בסוף בדוק שסכום ההפרשים שווה להפרש בין שני הסכומים הכוללים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p15" aria-label="העתקת בקשה 15"><svg class="ico ico-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="ico ico-tick" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7"/></svg><span class="label">העתקה</span></button><span class="tip" role="status"></span></span></div>
+<p>אחרי הריצה בודקים את הסכום בעצמכם. הפרומפט שהוא כותב לא בודק סכומים בעצמו.</p>
 </div></div>
 </div></section>
 
