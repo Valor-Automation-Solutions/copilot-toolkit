@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ערכת Copilot לאנשי כספים</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg:#f3f6fc; --card:#ffffff; --ink:#18212e; --muted:#485467; --line:#d3dbe9; --ok:#13703c; --ok-on:#fff; --bad:#b3261e; --bad-on:#fff;
+  --blue:#1d5fb0; --teal:#0b6b64; --violet:#6232b8;
+  --c1:#1d5fb0; --c2:#a84f08; --c3:#0b6f87; --c4:#6d33d1; --c5:#b4175c; --c6:#17703a; --c7:#b8430c;
+  --on1:#fff; --on2:#fff; --on3:#fff; --on4:#fff; --on5:#fff; --on6:#fff; --on7:#fff;
+  --hero:linear-gradient(135deg,#153e7c 0%,#3d2a9c 55%,#0b6b64 100%);
+  --th-bg:#47278f; --th-ink:#fff;
+  --shadow:0 1px 2px rgba(20,30,60,.06),0 6px 18px rgba(20,30,60,.07);
+  --shadow-hover:0 2px 4px rgba(20,30,60,.08),0 12px 26px rgba(20,30,60,.14);
+  --sec:var(--blue);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#0e131b; --card:#172030; --ink:#e9eef6; --muted:#aab6c9; --line:#2b3a50; --ok:#5fd68f; --ok-on:#07140c; --bad:#ff9a92; --bad-on:#2a0906;
+    --blue:#82b8f4; --teal:#5fd7c6; --violet:#c3a9ff;
+    --c1:#82b8f4; --c2:#f4b363; --c3:#62d4ea; --c4:#bda2ff; --c5:#f58bb8; --c6:#68d996; --c7:#f79f72;
+    --on1:#08131f; --on2:#1c1002; --on3:#041a20; --on4:#150a30; --on5:#2a0716; --on6:#06180d; --on7:#2a1004;
+    --hero:linear-gradient(135deg,#0d2a54 0%,#241a5e 55%,#08403c 100%);
+    --th-bg:#34266b; --th-ink:#f3ecff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.3);
+    --shadow-hover:0 2px 4px rgba(0,0,0,.5),0 12px 26px rgba(0,0,0,.45);
+  }
+}
+* { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:"Segoe UI",Assistant,system-ui,sans-serif; line-height:1.7; overflow-wrap:break-word; }
+svg use { pointer-events:none; }
+.hero svg, .hi svg, .pi svg, .fi svg, .zip-btn svg, .pi { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* hero */
+.hero { position:relative; overflow:hidden; color:#fff; background:
+  radial-gradient(rgba(255,255,255,.16) 1.2px, transparent 1.6px) 0 0/22px 22px,
+  var(--hero);
+  padding:2.25rem 1rem 3.25rem; border-radius:0 0 2rem 2rem; box-shadow:var(--shadow); }
+.hero-inner { max-inline-size:60rem; margin-inline:auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,19rem); gap:1.5rem; align-items:center; }
+.hero h1 { font-size:clamp(2.1rem,7.5vw,3.5rem); line-height:1.15; margin:0 0 .75rem; font-weight:800; letter-spacing:-.01em; text-wrap:balance; }
+.hero .lead { margin:0; color:rgba(255,255,255,.94); font-size:clamp(1.05rem,3.6vw,1.2rem); max-inline-size:34rem; text-wrap:pretty; }
+.art { inline-size:100%; block-size:auto; overflow:visible; filter:drop-shadow(0 10px 22px rgba(0,0,0,.25)); }
+.art .tick { stroke-dasharray:1; stroke-dashoffset:0; }
+@media (max-width:44rem) {
+  .hero-inner { grid-template-columns:minmax(0,1fr); }
+  .art { inline-size:min(100%,15rem); justify-self:center; }
+  .hero { padding-block-end:2.5rem; border-radius:0 0 1.5rem 1.5rem; }
+}
+
+main { max-inline-size:60rem; margin-inline:auto; padding:.5rem 1rem 4rem; }
+.sec { margin-block-start:2.5rem; }
+.sec-prompts { --sec:var(--blue); }
+.sec-files { --sec:var(--teal); }
+.sec-skills { --sec:var(--violet); }
+
+h2 { display:flex; align-items:center; gap:.8rem; font-size:clamp(1.35rem,4.6vw,1.8rem); line-height:1.3; margin:0 0 1rem; padding-block-end:.7rem;
+  background:linear-gradient(to left,var(--sec),transparent) bottom/100% 3px no-repeat; scroll-margin-block-start:1rem; }
+.hi { flex:none; display:grid; place-items:center; inline-size:2.75rem; block-size:2.75rem; border-radius:.9rem; color:#fff; box-shadow:var(--shadow);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 80%,#fff),color-mix(in srgb,var(--sec) 80%,#000)); }
+@media (prefers-color-scheme: dark) { .hi { color:#06101a; background:var(--sec); } }
+.hi svg { inline-size:1.5rem; block-size:1.5rem; }
+h3 { font-size:1.2rem; margin-block:2.2rem .5rem; display:flex; align-items:center; gap:.55rem; line-height:1.4; }
+h3::before { content:""; flex:none; inline-size:.4rem; block-size:1.3em; border-radius:.2rem; background:var(--sec); }
+h4 { font-size:1rem; margin-block:1.5rem .35rem; color:var(--sec); font-weight:700; }
+p, li { max-inline-size:70ch; text-wrap:pretty; }
+.lead { color:var(--muted); }
+
+/* lists and notes */
+.sec ol { background:color-mix(in srgb,var(--sec) 7%,var(--card)); border:1px solid color-mix(in srgb,var(--sec) 24%,var(--line)); border-radius:1rem; padding:.9rem 1rem .9rem 1rem; padding-inline-start:2.6rem; max-inline-size:44rem; }
+.sec ol li { margin-block:.35rem; padding-inline-start:.2rem; }
+.sec ol li::marker { color:var(--sec); font-weight:800; }
+.note { background:color-mix(in srgb,var(--sec) 10%,var(--card)); border:1px solid color-mix(in srgb,var(--sec) 24%,var(--line)); border-inline-start:6px solid var(--sec); padding:.8rem 1rem; border-radius:.9rem; }
+code { font-family:Consolas,monospace; background:color-mix(in srgb,var(--sec) 12%,var(--card)); padding:.05rem .4rem; border-radius:.35rem; font-size:.95em; }
+a { color:var(--sec); text-underline-offset:.2em; }
+a:focus-visible, .table-wrap:focus-visible, .copy-button:focus-visible { outline:3px solid var(--sec); outline-offset:3px; }
+
+/* prompt cards */
+.prompt { position:relative; display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:.9rem 1rem; align-items:start; margin-block:.8rem;
+  background:color-mix(in srgb,var(--c) 5%,var(--card)); border:1px solid color-mix(in srgb,var(--c) 28%,var(--line)); border-inline-start:6px solid var(--c);
+  border-radius:1rem; padding:.95rem 1rem; box-shadow:var(--shadow); transition:box-shadow .2s, transform .2s; }
+.prompt p { margin:0; max-inline-size:none; text-wrap:pretty; }
+.prompt p[dir="ltr"] { text-align:left; }
+.pmeta { position:relative; display:grid; place-items:center; inline-size:2.75rem; block-size:2.75rem; border-radius:.85rem; color:var(--c);
+  background:color-mix(in srgb,var(--c) 15%,var(--card)); margin-block-start:.1rem; }
+.pi { inline-size:1.5rem; block-size:1.5rem; }
+.badge { position:absolute; inset-block-start:-.5rem; inset-inline-start:-.5rem; min-inline-size:1.4rem; block-size:1.4rem; padding-inline:.3rem; border-radius:1rem; display:grid; place-items:center;
+  background:var(--c); color:var(--on); font-size:.75rem; font-weight:800; line-height:1; box-shadow:0 0 0 2px var(--card); font-variant-numeric:tabular-nums; }
+.copy { position:relative; flex:none; }
+.copy-button { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; min-inline-size:6rem; min-block-size:2.75rem; padding:.4rem 1.1rem; border:0; border-radius:.75rem;
+  background:var(--c); color:var(--on); font:inherit; font-weight:700; cursor:pointer; touch-action:manipulation; transition:background-color .2s, color .2s, transform .12s, box-shadow .2s; box-shadow:0 2px 0 color-mix(in srgb,var(--c) 60%,#000); }
+.copy-button[data-copied] { background:var(--ok); color:var(--ok-on); box-shadow:0 2px 0 color-mix(in srgb,var(--ok) 60%,#000); }
+.copy-button[data-failed] { background:var(--bad); color:var(--bad-on); box-shadow:none; }
+.ck { display:none; inline-size:1.15em; block-size:1.15em; fill:none; stroke:currentColor; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+.ck path { stroke-dasharray:1; stroke-dashoffset:0; }
+.copy-button[data-copied] .ck { display:inline-block; }
+.tip { position:absolute; z-index:3; inset-block-start:100%; inset-inline-end:0; margin-block-start:.3rem; padding:.2rem .6rem; border-radius:.4rem; background:var(--ink); color:var(--bg); font-size:.85rem; white-space:nowrap; opacity:0; transition:opacity .15s; pointer-events:none; }
+.tip:not(:empty) { opacity:1; }
+@media (max-width:40rem) {
+  .prompt { grid-template-columns:auto minmax(0,1fr); }
+  .copy { grid-column:1 / -1; }
+  .copy-button { inline-size:100%; }
+  .tip { inset-inline-end:auto; inset-inline-start:50%; translate:50% 0; }
+}
+[dir="rtl"] .tip { }
+
+/* worksheet card */
+.fill { margin-block-start:2rem; padding:.2rem 1.1rem 1rem; border:2px dashed color-mix(in srgb,var(--sec) 45%,var(--line)); border-radius:1.1rem; background:color-mix(in srgb,var(--sec) 5%,var(--card)); }
+.fill h3 { margin-block-start:1.1rem; }
+.fill p { margin-block:.5rem; }
+
+/* file chips */
+.files { list-style:none; margin:1rem 0 0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr)); gap:.75rem; }
+.files li { max-inline-size:none; }
+.files a { --fc:var(--sec); display:flex; align-items:center; gap:.8rem; min-block-size:3.5rem; padding:.55rem .9rem .55rem .8rem; border-radius:1rem; text-decoration:none; color:var(--ink);
+  background:color-mix(in srgb,var(--fc) 8%,var(--card)); border:1px solid color-mix(in srgb,var(--fc) 35%,var(--line)); box-shadow:var(--shadow); transition:transform .2s, box-shadow .2s, background-color .2s; }
+.files a[href$=".xlsx"] { --fc:var(--c6); }
+.files a[href$=".txt"] { --fc:var(--c2); }
+.fi { flex:none; display:grid; place-items:center; inline-size:2.5rem; block-size:2.5rem; border-radius:.75rem; background:var(--fc); color:var(--on1); transition:transform .2s; }
+.files a[href$=".xlsx"] .fi { color:var(--on6); }
+.files a[href$=".txt"] .fi { color:var(--on2); }
+.fi svg { inline-size:1.3rem; block-size:1.3rem; }
+.fname { min-inline-size:0; overflow-wrap:anywhere; font-weight:600; line-height:1.35; }
+.zip { margin-block:1rem; }
+.zip-btn { display:inline-flex; align-items:center; gap:.65rem; min-block-size:3.25rem; padding:.6rem 1.4rem; border-radius:1rem; color:#fff; font-weight:700; text-decoration:none;
+  background:linear-gradient(135deg,#6a38c4,#3a1f8a); box-shadow:var(--shadow); transition:transform .2s, box-shadow .2s, filter .2s; }
+@media (prefers-color-scheme: dark) { .zip-btn { background:linear-gradient(135deg,#c3a9ff,#9a7bf0); color:#150a30; } }
+.zip-btn svg { inline-size:1.4rem; block-size:1.4rem; flex:none; }
+
+/* table */
+.table-wrap { overflow-x:auto; border:1px solid color-mix(in srgb,var(--violet) 30%,var(--line)); border-radius:1rem; background:var(--card); box-shadow:var(--shadow); max-inline-size:100%; }
+table { border-collapse:separate; border-spacing:0; inline-size:100%; min-inline-size:38rem; }
+th, td { padding:.75rem .9rem; text-align:start; vertical-align:top; border-block-end:1px solid var(--line); }
+thead th { background:var(--th-bg); color:var(--th-ink); font-weight:700; border-block-end:0; white-space:nowrap; }
+tbody tr { transition:background-color .15s; }
+tbody tr:nth-child(even) { background:color-mix(in srgb,var(--violet) 5%,var(--card)); }
+tbody tr:hover { background:color-mix(in srgb,var(--violet) 14%,var(--card)); }
+tbody tr:last-child > * { border-block-end:0; }
+tbody th { font-weight:400; white-space:nowrap; }
+tbody td strong { color:var(--violet); }
+
+/* PowerPoint list */
+.ppt { list-style:none; margin:1rem 0 0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr)); gap:.75rem; }
+.ppt li { max-inline-size:none; position:relative; padding:.8rem 1rem; padding-inline-start:1.25rem; border-radius:1rem; background:color-mix(in srgb,var(--violet) 7%,var(--card));
+  border:1px solid color-mix(in srgb,var(--violet) 28%,var(--line)); border-inline-start:6px solid var(--violet); box-shadow:var(--shadow); transition:transform .2s, box-shadow .2s; }
+.ppt strong { display:block; color:var(--violet); }
+
+@media (hover:hover) {
+  .prompt:hover { box-shadow:var(--shadow-hover); }
+  .copy-button:hover { filter:brightness(1.08); }
+  .files a:hover { box-shadow:var(--shadow-hover); background:color-mix(in srgb,var(--fc) 16%,var(--card)); }
+  .zip-btn:hover, .ppt li:hover { box-shadow:var(--shadow-hover); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover:hover) {
+    .prompt:hover { transform:translateY(-2px); }
+    .files a:hover, .ppt li:hover, .zip-btn:hover { transform:translateY(-3px); }
+    .files a:hover .fi { transform:translateY(2px) rotate(-4deg); }
+  }
+  .copy-button:active { transform:scale(.95); }
+  .files a:active, .zip-btn:active { transform:scale(.98); }
+  .copy-button[data-copied] { animation:pop .45s cubic-bezier(.3,1.6,.5,1); }
+  .copy-button[data-copied] .ck path { animation:draw .4s .08s ease-out backwards; }
+  .copy-button[data-failed] { animation:shake .35s; }
+  .tip { transition:opacity .15s, translate .2s; }
+  .hero .blob { animation:drift 9s ease-in-out infinite alternate; }
+  .hero .b2 { animation-duration:12s; animation-delay:-3s; }
+  .hero .b3 { animation-duration:7s; animation-delay:-2s; }
+  .hero .float { animation:bob 5s ease-in-out infinite alternate; }
+  .hero .spark { transform-box:fill-box; transform-origin:center; animation:twinkle 3.2s ease-in-out infinite; }
+  .hero .tick { animation:draw 1s .4s ease-out backwards; }
+  .hero h1, .hero .lead { animation:enter .7s ease-out backwards; }
+  .hero .lead { animation-delay:.12s; }
+  .hero .art { animation:enter .8s .2s ease-out backwards; }
+  @keyframes pop { 0% { scale:.92; } 100% { scale:1; } }
+  @keyframes draw { from { stroke-dashoffset:1; } }
+  @keyframes shake { 20%,60% { translate:-4px 0; } 40%,80% { translate:4px 0; } }
+  @keyframes drift { to { transform:translate(10px,-14px); } }
+  @keyframes bob { to { transform:translateY(-8px); } }
+  @keyframes twinkle { 50% { scale:1.25; rotate:20deg; } }
+  @keyframes enter { from { opacity:0; translate:0 1rem; } }
+}
+
+/* scroll reveal: native scroll-driven animation, IntersectionObserver fallback */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes rise { from { opacity:0; translate:0 1.75rem; scale:.985; } }
+    .reveal { animation:rise auto linear backwards; animation-timeline:view(); animation-range:entry 0% entry 40%; }
+  }
+  @supports not ((animation-timeline: view()) and (animation-range: entry)) {
+    .io .reveal { opacity:0; translate:0 1.5rem; transition:opacity .5s ease-out, translate .5s ease-out, box-shadow .2s, transform .2s, background-color .2s; transition-delay:calc(var(--d,0) * 70ms), calc(var(--d,0) * 70ms), 0s, 0s, 0s; }
+    .io .reveal.in { opacity:1; translate:none; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tip { transition:none; }
+  .prompt, .files a, .zip-btn, .ppt li, .fi { transition:box-shadow .2s, background-color .2s; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="i-recon" viewBox="0 0 24 24"><path d="M7 7h13M16 3l4 4-4 4M17 17H4M8 13l-4 4 4 4"/></symbol>
+<symbol id="i-thread" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14.5h4"/></symbol>
+<symbol id="i-world" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.2 3.6 3.2 14.4 0 18M12 3c-3.2 3.6-3.2 14.4 0 18"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M21.5 2.5L10.5 13.5M21.5 2.5l-6.5 19-4.5-8-8-4.5z"/></symbol>
+<symbol id="i-tasks" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l2.7 2.7L16 9.5"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+<symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8.5h8M8 12h5"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M9 9.5V20"/></symbol>
+</defs>
+</svg>
+<header class="hero"><div class="hero-inner"><div><h1>ערכת Copilot לאנשי כספים</h1>
+<p class="lead">בקשות מוכנות להעתקה, קבצי תרגול על נתוני דמה, והסבר על סקילי הכספים של Excel. כל מה שצריך כדי להתחיל מחר בבוקר.</p></div>
+<svg class="art" viewBox="0 0 360 260" aria-hidden="true" focusable="false">
+<g class="blob b1"><circle cx="318" cy="46" r="34" fill="#fff" fill-opacity=".14"/></g>
+<g class="blob b2"><circle cx="34" cy="222" r="24" fill="#fff" fill-opacity=".12"/></g>
+<g class="blob b3"><circle cx="330" cy="150" r="10" fill="#fde68a" fill-opacity=".9"/></g>
+<rect x="28" y="34" width="214" height="156" rx="16" fill="#fff" fill-opacity=".96"/>
+<path d="M28 50a16 16 0 0 1 16-16h182a16 16 0 0 1 16 16v14H28z" fill="#6232b8"/>
+<circle cx="48" cy="49" r="4" fill="#fff" fill-opacity=".85"/><circle cx="62" cy="49" r="4" fill="#fff" fill-opacity=".55"/><circle cx="76" cy="49" r="4" fill="#fff" fill-opacity=".35"/>
+<path d="M28 94h214M28 124h214M28 154h214M100 64v126M172 64v126" stroke="#d5dcea" stroke-width="1.5" fill="none"/>
+<rect x="46" y="136" width="36" height="42" rx="5" fill="#1d5fb0"/>
+<rect x="118" y="106" width="36" height="72" rx="5" fill="#0b8f84"/>
+<rect x="190" y="76" width="36" height="102" rx="5" fill="#d97706"/>
+<g class="float"><path d="M196 168h112a14 14 0 0 1 14 14v34a14 14 0 0 1-14 14h-70l-26 20v-20h-16a14 14 0 0 1-14-14v-34a14 14 0 0 1 14-14z" fill="#fff"/>
+<path d="M214 192h74M214 208h46" stroke="#6232b8" stroke-width="5" stroke-linecap="round" fill="none"/></g>
+<circle cx="296" cy="74" r="26" fill="#22c55e"/>
+<path class="tick" d="M284 75l8 8 16-17" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" pathLength="1"/>
+<path class="spark" d="M262 22l4.5 11 11 4.5-11 4.5-4.5 11-4.5-11-11-4.5 11-4.5z" fill="#fde68a"/>
+</svg></div></header>
+<main>
+<section class="sec sec-prompts" aria-labelledby="prompts">
+<h2 id="prompts"><span class="hi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-chat"/></svg></span><span>בקשות מוכנות להעתקה</span></h2>
+<p>הדף הזה שלכם, גם היום וגם מחר בבוקר. כל בקשה במסגרת מוכנה להעתקה והדבקה, כמו שהיא, בלי לשנות מילה. הקבצים כאן הם נתוני דמה, אז אין מה לשבור. רוצים לעבוד על מידע אמיתי? שואלים את האחראי על מדיניות המידע אצלכם מה מותר.</p><h3>איך משתמשים בדף, שלושה צעדים</h3><ol><li>פותחים Copilot Chat בדפדפן, בחשבון העבודה (רואים סמל מגן).</li><li>מצרפים את הקבצים בלחיצה על האטב או על הפלוס, ליד תיבת הכתיבה.</li><li>מעתיקים את הבקשה מהמסגרת, מדביקים ולוחצים Enter.</li></ol><p>וכלל אחד לזכור: Copilot מציע, ואתם בודקים ומחליטים.</p><h3>1. התאמה מול SAP: ספקים או לקוחות</h3><p>משתמשים בזה כשצריך להבין למה הכרטסת לא מסתדרת מול הדוח של הספק או הלקוח.</p><p>קבצים: ספקים: 1_SAP_כרטסת_ספק_דמה ו-2_דוח_ספק_דמה. לקוחות: 6_SAP_כרטסת_לקוח_דמה ו-7_פירוט_יתרה_מהלקוח_דמה. אם ה-Excel לא עולה, מצרפים את קובצי ה-CSV.</p><div class="prompt reveal" style="--c:var(--c1);--on:var(--on1)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-recon"/></svg><span class="badge">1</span></div><p id="p1">אני בהנהלת חשבונות. התאם בין הכרטסת ב-SAP (הקובץ הראשון) לדוח של הספק או הלקוח (הקובץ השני), אותה תקופה ואותו מטבע. הכן טבלה: מספר חשבונית, סוג הפער, סכום ב-SAP, סכום בדוח השני, הפרש. סוגי פער: חסר בצד אחד, הבדל בסכום, רישום כפול, מספר שגוי, זיכוי. בסוף בדוק שסכום ההפרשים שווה להפרש בין שני הסכומים הכוללים. השתמש רק בשני הקבצים. אל תמציא נתונים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p1" aria-label="העתקת בקשה 1"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><p>בקשה לנוסחת בדיקה ב-Excel (מעתיקים את הנוסחה ל-Excel ובודקים בעצמכם):</p><div class="prompt reveal" style="--c:var(--c1);--on:var(--on1)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-recon"/></svg><span class="badge">2</span></div><p id="p2">כתוב נוסחת COUNTIF שבודקת לכל מספר חשבונית בעמודה A בגיליון SAP אם הוא מופיע בעמודה A בגיליון השני, ונוסחת XLOOKUP שמביאה את הסכום מהגיליון השני לצד הסכום ב-SAP.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p2" aria-label="העתקת בקשה 2"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h4>ארבע בדיקות לכל טבלה</h4><ol><li>סכום: SUM על עמודת ההפרש שווה להפרש בין שני הסכומים הכוללים.</li><li>ספירה: סופרים שורות בכל קובץ ובטבלה. כל שורה הוסברה?</li><li>שלוש שורות מול המקור: פותחים שלוש חשבוניות ובודקים סכום ותאריך.</li><li>חיפוש ידני: מחפשים מספר חשבונית אחד בשני הקבצים (Ctrl+F).</li></ol><h3>2. סיכום שרשור מיילים: חשבונית שהלכה לאיבוד</h3><p>משתמשים בזה כשיש שרשור ארוך, ורוצים לדעת מה קרה ומה חסר כדי לסגור.</p><p>ב-Basic: מעתיקים את השרשור מ-Outlook ומדביקים, או מצרפים אותו כקובץ.</p><div class="prompt reveal" style="--c:var(--c2);--on:var(--on2)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-thread"/></svg><span class="badge">3</span></div><p id="p3">מצורף שרשור מיילים על חשבונית. כתוב: 1. מה קרה לפי סדר זמנים, עד 5 שורות. 2. סתירות בין המיילים (תאריכים, תנאי תשלום), עם מספר המייל. 3. מה חסר כדי לסגור את החשבונית. 4. הצעד הבא. אל תוסיף מידע שאינו בשרשור.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p3" aria-label="העתקת בקשה 3"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h3>3. מייל באנגלית לספק או ללקוח</h3><p>משתמשים בזה כשצריך מייל באנגלית שאפשר לשלוח בלי לתקן.</p><p>מצרפים את תיבת העובדות: ספקים: קובץ 5. לקוחות: קובץ 9 (מייל גבייה).</p><div class="prompt reveal" style="--c:var(--c3);--on:var(--on3)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-world"/></svg><span class="badge">4</span></div><p id="p4">כתוב טיוטת מייל באנגלית לספק או ללקוח, עד 120 מילים, בטון מקצועי וקצר. השתמש רק בעובדות מתיבת העובדות המצורפת. אל תבטיח מועד או הנחה, ואל תוסיף נתונים שאינם בתיבה. כלול את כל מה שהתיבה מבקשת, למשל עותק או אסמכתה. סיים בבקשה לאישור קבלה ולתשובה.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p4" aria-label="העתקת בקשה 4"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><p>אותה בקשה באנגלית, למי שמעדיף:</p><div class="prompt reveal" style="--c:var(--c3);--on:var(--on3)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-world"/></svg><span class="badge">5</span></div><p id="p5" dir="ltr" lang="en">Write a draft email in English to the supplier or customer, up to 120 words, professional and short. Use only the facts in the attached facts box. Do not promise a payment date or a discount, and do not add any figure or date that is not in the facts box. Include everything the facts box asks for, such as a copy of a document. End by asking them to confirm receipt and reply.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p5" aria-label="העתקת בקשה 5"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h4>ארבע בדיקות למייל לפני שליחה</h4><ol><li>כל מספר ותאריך מופיע בתיבת העובדות, אחד לאחד.</li><li>בלי התחייבות ובלי איום: לא מועד תשלום, לא הנחה, לא עצירת אספקה.</li><li>שום פרט חשוב לא נעלם, למשל הזיכוי.</li><li>הטון מקצועי וקצר, בלי הצדקות מיותרות.</li></ol><h3>4. בקשת המשך: מתקנים בלי להתחיל מחדש</h3><p>כשהתשובה כמעט טובה, לא כותבים הכול מחדש. כותבים משפט אחד: מה לתקן, ומה להשאיר.</p><div class="prompt reveal" style="--c:var(--c4);--on:var(--on4)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-edit"/></svg><span class="badge">6</span></div><p id="p6">תקן רק את עמודת ההפרש, ואל תשנה שום דבר אחר בטבלה.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p6" aria-label="העתקת בקשה 6"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><div class="prompt reveal" style="--c:var(--c4);--on:var(--on4)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-edit"/></svg><span class="badge">7</span></div><p id="p7">סכום ההפרשים לא שווה להפרש הכולל. בדוק שוב שורה אחרי שורה ומצא מה חסר.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p7" aria-label="העתקת בקשה 7"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><div class="prompt reveal" style="--c:var(--c4);--on:var(--on4)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-edit"/></svg><span class="badge">8</span></div><p id="p8">הסר את המשפט על מועד התשלום. השאר את כל השאר כמו שהוא.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p8" aria-label="העתקת בקשה 8"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><div class="prompt reveal" style="--c:var(--c4);--on:var(--on4)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-edit"/></svg><span class="badge">9</span></div><p id="p9">קצר ל-80 מילים ושמור את כל המספרים והתאריכים בדיוק כמו שהם.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p9" aria-label="העתקת בקשה 9"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h3>5. תדריך העברה: כשנגמרת המכסה</h3><p>נתקעתם במכסה באמצע עבודה? מדביקים את הבקשה, ושולחים את התדריך לעמית שיש לו מכסה פנויה, בצ&#x27;אט של Teams או במייל. הוא מדביק אותו, מצרף את אותם קבצים, וממשיך מאותה נקודה.</p><div class="prompt reveal" style="--c:var(--c5);--on:var(--on5)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-send"/></svg><span class="badge">10</span></div><p id="p10">אני מעביר את העבודה הזו לעמית שימשיך מכאן. כתוב תדריך העברה קצר בעברית, בכותרות האלה: 1. המטרה. 2. הקבצים והנתונים שהשתמשנו בהם. 3. מה כבר נעשה ומה יצא. 4. שאלות פתוחות ומה עוד לא נבדק. 5. הצעד הבא. 6. הבקשה המדויקת שהעמית ידביק כדי להמשיך מאותה נקודה. אל תוסיף מידע שלא הופיע בשיחה.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p10" aria-label="העתקת בקשה 10"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h3>6. עוד שלוש בקשות לעבודה היומיומית</h3><h4>סיכום הסכם לרואי החשבון</h4><div class="prompt reveal" style="--c:var(--c6);--on:var(--on6)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-tasks"/></svg><span class="badge">11</span></div><p id="p11">מצורף הסכם. סכם אותו לרואה חשבון בטבלה: כל התחייבות כספית, סכום, מועד, הצמדה, קנסות, חידוש וסיום, עם מספר הסעיף בכל שורה. בלי פרשנות משפטית. אם משהו לא כתוב בהסכם, כתוב &quot;לא מופיע&quot;.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p11" aria-label="העתקת בקשה 11"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h4>טקסט לשקף PowerPoint</h4><p>אפשר להדביק ב-Copilot Chat, או לסמן את הטקסט בשקף ולהפעיל Copilot אם הוא זמין אצלכם בתוך PowerPoint.</p><div class="prompt reveal" style="--c:var(--c6);--on:var(--on6)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-tasks"/></svg><span class="badge">12</span></div><p id="p12">שכתב את הטקסט הזה לשקף להנהלה: כותרת אחת ועד ארבע שורות קצרות, משפט מלא בכל שורה. אל תוסיף נתונים שלא מופיעים בטקסט.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p12" aria-label="העתקת בקשה 12"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h4>מיילים על חשבוניות שלא שולמו</h4><p>אם Copilot ב-Outlook זמין לכם, הוא יכול לחפש בתיבה בעצמו. אחרת: מעתיקים את המיילים ומדביקים, ומבקשים את אותה טבלה.</p><div class="prompt reveal" style="--c:var(--c6);--on:var(--on6)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-tasks"/></svg><span class="badge">13</span></div><p id="p13">מצא את המיילים מ-30 הימים האחרונים שעוסקים בחשבוניות שלא שולמו או בתזכורות תשלום. סכם בטבלה: ספק או לקוח, מספר חשבונית, סכום, מה ביקשו, ומי צריך לענות. אל תוסיף מידע שלא מופיע במיילים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p13" aria-label="העתקת בקשה 13"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><h3>7. הקובץ שלכם: התאמה אמיתית אחת</h3><p>בוחרים כרטסת אחת: שלכם, לפי מדיניות המידע אצלכם, או קובץ הדמה 1 (ספקים) או 6 (לקוחות). שניהם עובדים מעולה.</p><p>יש לכם גם את הדוח של הספק או הלקוח? משתמשים בבקשה מסעיף 1. יש רק כרטסת אחת? מדביקים את זו:</p><div class="prompt reveal" style="--c:var(--c7);--on:var(--on7)"><div class="pmeta" aria-hidden="true"><svg class="pi" viewBox="0 0 24 24" focusable="false"><use href="#i-file"/></svg><span class="badge">14</span></div><p id="p14">מצורפת כרטסת אחת מ-SAP, של ספק או של לקוח. הכן טבלה של מה שדורש בדיקה: רישומים כפולים (אותו מספר חשבונית, או אותו סכום ואותו תאריך), חשבוניות פתוחות לפי גיל (עד 30 יום, 31 עד 60, מעל 60), זיכויים שלא קוזזו, ומספרי מסמך חריגים. בסוף כתוב את היתרה הסופית, ובדוק שהיא שווה לסכום כל השורות. השתמש רק בקובץ. אל תמציא נתונים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p14" aria-label="העתקת בקשה 14"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg>העתקה</button><span class="tip" role="status"></span></span></div><p>בודקים בסכום: SUM על עמודת הסכום ב-Excel, מול היתרה ש-Copilot כתב.</p><div class="fill reveal"><h3>המספרים שלי והמשימה שלי למחר</h3><p>בדרך כלל זה לוקח לי: ________ דקות. היום זה לקח: ________ דקות.</p><p>המשימה הראשונה שלי מחר: ____________________</p><p>אני אבדוק אותה כך: ____________________</p>
+
+</div>
+</section>
+
+<section class="sec sec-files" aria-labelledby="files">
+<h2 id="files"><span class="hi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-folder"/></svg></span><span>קבצי תרגול (נתוני דמה)</span></h2>
+<p>ספקים: 1, 2, 4, 5. לקוחות: 6, 7, 9. כל הנתונים בדויים.</p>
+<ul class="files"><li class="reveal"><a href="files/1_SAP_כרטסת_ספק_דמה.xlsx" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">1_SAP_כרטסת_ספק_דמה.xlsx</span></a></li><li class="reveal"><a href="files/2_דוח_ספק_דמה.xlsx" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">2_דוח_ספק_דמה.xlsx</span></a></li><li class="reveal"><a href="files/4_שרשור_מיילים_דמה.txt" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">4_שרשור_מיילים_דמה.txt</span></a></li><li class="reveal"><a href="files/5_תיבת_עובדות_לתרגיל_המיילים.txt" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">5_תיבת_עובדות_לתרגיל_המיילים.txt</span></a></li><li class="reveal"><a href="files/6_SAP_כרטסת_לקוח_דמה.xlsx" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">6_SAP_כרטסת_לקוח_דמה.xlsx</span></a></li><li class="reveal"><a href="files/7_פירוט_יתרה_מהלקוח_דמה.xlsx" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">7_פירוט_יתרה_מהלקוח_דמה.xlsx</span></a></li><li class="reveal"><a href="files/9_תיבת_עובדות_למייל_גבייה.txt" download><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-dl"/></svg></span><span class="fname">9_תיבת_עובדות_למייל_גבייה.txt</span></a></li></ul>
+
+
+</section>
+
+<section class="sec sec-skills" aria-labelledby="skills">
+<h2 id="skills"><span class="hi" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#i-grid"/></svg></span><span>סקילי כספים ל-Excel</span></h2>
+<p>סקיל הוא קובץ הוראות שמלמד את Copilot לבצע משימה באותה דרך בכל פעם. החבילה כוללת הסבר מלא ואת קובצי הסקיל.</p>
+<p class="zip"><a class="zip-btn" href="files/finance-skills-kit.zip" download><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-dl"/></svg><span>הורדת חבילת הסקילים (ZIP)</span></a></p>
+<h3>איך מפעילים</h3>
+<ol>
+<li>פותחים את Copilot בתוך Excel.</li>
+<li>מקלידים @ ואחריו שם הסקיל, למשל <code dir="ltr">@model-update</code>, ובוחרים אותו מהרשימה.</li>
+<li>כותבים מה רוצים לעשות בגיליון, ושולחים.</li>
+</ol>
+<p class="note reveal">הזמינות תלויה ברישוי ובהגדרות של הארגון. סקיל כבוי עדיין עובד כשמזכירים אותו עם @.</p>
+<h3 id="skills-table-title">הסקילים בחבילה</h3>
+<div class="table-wrap reveal" tabindex="0" role="region" aria-labelledby="skills-table-title"><table>
+<thead><tr><th scope="col">סקיל</th><th scope="col">מה הוא עושה</th><th scope="col">מתי משתמשים</th></tr></thead>
+<tbody><tr><th scope='row' dir='ltr'><code>model-update</code></th><td><strong>עדכון מודל פיננסי</strong><br>מעדכן מודל קיים בנתונים חדשים (דוחות רבעוניים, תחזית ההנהלה, הנחות שהשתנו), מחשב מחדש ומסמן שינויים מהותיים.</td><td>יש לכם מודל או גיליון תחזית שמתעדכן כל תקופה.</td></tr><tr><th scope='row' dir='ltr'><code>portfolio-monitoring</code></th><td><strong>מעקב ביצועים מול תוכנית</strong><br>קורא חבילות דוחות חודשיות או רבעוניות, מחלץ מדדים, מסמן סטיות מהתקציב ומכין לוח סיכום. מנוסח לחברות בתיק השקעות, ואפשר להתאים.</td><td>בדיקת ביצוע מול תקציב בכל חודש.</td></tr><tr><th scope='row' dir='ltr'><code>datapack-builder</code></th><td><strong>חוברת נתונים אחידה</strong><br>אוסף נתונים ממקורות שונים (מסמכים, דוחות, קבצים) לחוברת Excel אחת עם מבנה קבוע והנחות מתועדות. נכתב לעסקאות, ולכן דורש התאמה.</td><td>איחוד נתונים מכמה קבצים לגיליון אחד.</td></tr><tr><th scope='row' dir='ltr'><code>3-statement-model</code></th><td><strong>דוחות מקושרים</strong><br>ממלא תבנית של שלושת הדוחות (רווח והפסד, מאזן, תזרים) ומקשר ביניהם.</td><td>יש לכם תבנית דוחות מקושרת שחלקה ריק.</td></tr><tr><th scope='row' dir='ltr'><code>deal-tracker</code></th><td><strong>מעקב פריטים פתוחים</strong><br>עוקב אחרי כמה עסקאות פתוחות: אבני דרך, מועדים, פריטי פעולה, ומה מתעכב. אפשר להתאים לחשבוניות פתוחות.</td><td>רשימת פריטים עם מועדים שצריך לעקוב אחריהם.</td></tr></tbody></table></div>
+<h3>סקילים מובנים ב-PowerPoint</h3>
+<p>אין קבצים להורדה. בחלונית Copilot ב-PowerPoint לוחצים על + ובוחרים Choose plugins and skills.</p>
+<ul class="ppt">
+<li class="reveal"><strong>Review this presentation</strong>: סקירה של המצגת</li>
+<li class="reveal"><strong>Visualize this slide</strong>: הפיכת שקף לויזואלי</li>
+<li class="reveal"><strong>Prepare for Questions</strong>: הכנה לשאלות שיעלו</li>
+<li class="reveal"><strong>Create interactive slide</strong>: שקף אינטראקטיבי</li>
+</ul>
+</section>
+</main>
+<script>
+// Copy buttons: Invoker Commands where supported, a click listener otherwise (same copy() path).
+const timers = new WeakMap();
+let lastMessage = '';
+function report(button, ok) {
+  const tip = button.nextElementSibling;
+  clearTimeout(timers.get(button));
+  button.removeAttribute('data-copied'); button.removeAttribute('data-failed');
+  let message = ok ? 'הועתק' : 'ההעתקה נכשלה';
+  if (message === lastMessage) message += '\u00A0';
+  lastMessage = message;
+  tip.textContent = '';
+  void button.offsetWidth;
+  button.setAttribute(ok ? 'data-copied' : 'data-failed', '');
+  requestAnimationFrame(() => (tip.textContent = message));
+  timers.set(button, setTimeout(() => {
+    button.removeAttribute('data-copied'); button.removeAttribute('data-failed'); tip.textContent = '';
+  }, 2000));
+}
+function legacyCopy(text) {
+  const field = Object.assign(document.createElement('textarea'), { value: text });
+  field.setAttribute('readonly', '');
+  field.style.cssText = 'position:fixed;inset-block-start:0;opacity:0';
+  document.body.append(field); field.select();
+  try { return document.execCommand('copy'); } finally { field.remove(); }
+}
+async function copy(button, target) {
+  const text = target.innerText.trim();
+  if (!text) return;
+  try {
+    try { await navigator.clipboard.writeText(text); }
+    catch { if (!legacyCopy(text)) throw new Error('copy failed'); }
+    report(button, true);
+  } catch { report(button, false); }
+}
+if ('CommandEvent' in window) {
+  document.addEventListener('command', (event) => {
+    if (event.command === '--copy') copy(event.source, event.target);
+  }, true);
+} else {
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('button[command="--copy"]');
+    if (!button) return;
+    const target = document.getElementById(button.getAttribute('commandfor'));
+    if (target) copy(button, target);
+  });
+}
+
+// Scroll reveal fallback: only for browsers without scroll-driven animations, and only without a reduced-motion preference.
+(() => {
+  const native = CSS.supports('(animation-timeline: view()) and (animation-range: entry)');
+  if (native || !('IntersectionObserver' in window) || !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+  document.documentElement.classList.add('io');
+  const io = new IntersectionObserver((entries) => {
+    let n = 0;
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.style.setProperty('--d', n++);
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+})();
+</script>
+</body>
+</html>
