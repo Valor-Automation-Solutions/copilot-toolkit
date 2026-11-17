@@ -10,69 +10,89 @@
 @font-face { font-family:"Assistant"; src:url("fonts/assistant-subset.woff") format("woff"); font-weight:200 800; font-display:swap; }
 :root {
   color-scheme: light dark;
-  --paper:#f7f5ef; --wash:#efece2; --ink:#16191d; --muted:#566170; --rule:#d9d4c6; --rule-strong:#16191d;
-  --blue:#2b5688; --blue-ink:#ffffff; --brand:#85a5ca; --tint:#e3ebf4; --tick:#1b7a45; --fail:#a8261d;
+  --paper:#f7f5ef; --card:#ffffff; --sand:#f3e8c9; --sky:#dfeaf7; --wash:#eeeadd;
+  --ink:#16191d; --muted:#4f5b69; --rule:#d9d4c6;
+  --deep:#16375f; --on-deep:#ffffff; --on-deep-soft:#cfdcf0;
+  --blue:#1f4f86; --on-blue:#ffffff; --blue-hover:#16375f;
+  --mark:#ffe46b; --hl:#ffe46b; --mark-ink:#16191d; --tick:#14733c; --fail:#a8261d;
   --font:"Assistant","Segoe UI",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --paper:#12171c; --wash:#1a2128; --ink:#e8ebef; --muted:#a2adba; --rule:#2c3640; --rule-strong:#e8ebef;
-          --blue:#85a5ca; --blue-ink:#0f151b; --tint:#1d2a38; --tick:#6fd49a; --fail:#ff8a80; }
+  :root { --paper:#12171c; --card:#1a2128; --sand:#241f14; --sky:#152233; --wash:#1b222a;
+          --ink:#e8ebef; --muted:#a8b3c0; --rule:#2c3640;
+          --deep:#0d2036; --on-deep:#ffffff; --on-deep-soft:#b9cbe4;
+          --blue:#85a5ca; --on-blue:#0f151b; --blue-hover:#a6c0df;
+          --mark:#d9b93c; --hl:#54471a; --mark-ink:#14171a; --tick:#6fd49a; --fail:#ff8a80; }
 }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--paper); color:var(--ink); font:400 1.0625rem/1.7 var(--font); -webkit-text-size-adjust:100%; }
-::selection { background:var(--brand); color:#0b1218; }
+::selection { background:var(--mark); color:var(--mark-ink); }
 :focus-visible { outline:3px solid var(--blue); outline-offset:3px; border-radius:2px; }
 a { color:var(--blue); text-underline-offset:.2em; text-decoration-thickness:1px; }
 a:hover { text-decoration-thickness:2px; }
 .wrap { max-inline-size:62rem; margin-inline:auto; padding-inline:1.25rem; }
-.masthead { padding-block:3rem 1.75rem; background:var(--tint); border-block-end:5px double var(--rule-strong); }
-.masthead h1 { margin:0; font-size:clamp(2.1rem,6vw,3.4rem); line-height:1.08; font-weight:800; letter-spacing:-.015em; text-wrap:balance; }
-.lead { margin:.9rem 0 0; max-inline-size:58ch; font-size:1.2rem; color:var(--muted); text-wrap:pretty; }
-.jump { display:flex; flex-wrap:wrap; gap:.5rem 1.75rem; margin-block:1.6rem 0; padding:0; list-style:none; font-weight:700; }
-.jump a { display:inline-block; min-block-size:2.75rem; line-height:2.75rem; }
-main { padding-block:.5rem 4rem; }
-h2 { margin:3.2rem 0 .6rem; font-size:1.75rem; line-height:1.2; font-weight:800; text-wrap:balance; }
-h3 { margin:2.4rem 0 .35rem; font-size:1.2rem; font-weight:800; }
-h4 { margin:1.4rem 0 .3rem; font-size:1rem; font-weight:700; color:var(--muted); }
+.masthead { background:var(--deep); color:var(--on-deep); padding-block:3.2rem 2rem; border-block-end:6px double var(--mark); }
+.masthead h1 { margin:0; font-size:clamp(2.2rem,6.4vw,3.7rem); line-height:1.1; font-weight:800; letter-spacing:-.015em; text-wrap:balance; }
+.swipe { background:var(--mark); color:var(--mark-ink); background-repeat:no-repeat; background-position:right; background-size:100% 100%; padding-inline:.22em; margin-inline:-.1em; border-radius:6px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+.masthead .swipe { color:var(--mark-ink); }
+.lead { margin:1rem 0 0; max-inline-size:58ch; font-size:1.22rem; color:var(--on-deep-soft); text-wrap:pretty; }
+.jump { display:flex; flex-wrap:wrap; gap:.4rem 1.6rem; margin:1.7rem 0 0; padding:0; list-style:none; font-weight:700; }
+.jump a { display:inline-block; min-block-size:2.75rem; line-height:2.75rem; color:var(--on-deep); text-decoration-color:var(--mark); text-decoration-thickness:2px; }
+.jump a:hover { background:var(--mark); color:var(--mark-ink); text-decoration:none; }
+.sec { padding-block:1.2rem 3.2rem; }
+.band-sand { background:var(--sand); }
+.band-sky { background:var(--sky); }
+h2 { margin:2.2rem 0 .7rem; font-size:1.9rem; line-height:1.25; font-weight:800; text-wrap:balance; }
+.hl { background:linear-gradient(transparent 62%, var(--hl) 62% 92%, transparent 92%); padding-inline:.1em; margin-inline:-.1em; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+h3 { margin:2.4rem 0 .5rem; font-size:1.2rem; font-weight:800; display:block; inline-size:fit-content; padding:.2rem .85rem; border-radius:6px; background:var(--sky); color:var(--ink); }
+.band-sky h3 { background:var(--card); }
+.band-sand h3 { background:var(--card); }
+h4 { margin:1.4rem 0 .3rem; font-size:1rem; font-weight:800; color:var(--blue); }
 p, li { max-inline-size:68ch; text-wrap:pretty; }
-.prompt { display:grid; grid-template-columns:1fr auto; gap:1rem 1.25rem; align-items:start; padding:1.05rem .75rem; margin-inline:-.75rem; border-block-end:1px solid var(--rule); transition:background-color .15s; }
+.prompt { display:grid; grid-template-columns:1fr auto; gap:1rem 1.25rem; align-items:start; padding:1.05rem .9rem; margin-inline:-.9rem; border-block-end:1px solid var(--rule); transition:background-color .15s; }
 .prompt:first-of-type { border-block-start:1px solid var(--rule); }
-.prompt:hover { background:var(--wash); }
+.prompt:hover { background:var(--card); }
 .prompt p { margin:0; max-inline-size:66ch; }
 .copy { position:relative; }
-.copy-button { display:inline-flex; align-items:center; gap:.5rem; min-block-size:2.75rem; padding:.4rem 1rem; border:1.5px solid var(--blue); border-radius:8px; background:transparent; color:var(--blue); font:700 .95rem var(--font); cursor:pointer; transition:background-color .15s,color .15s,transform .1s; }
-.copy-button:hover { background:var(--blue); color:var(--blue-ink); }
+.copy-button { display:inline-flex; align-items:center; gap:.5rem; min-block-size:2.75rem; padding:.4rem 1.05rem; border:2px solid var(--blue); border-radius:8px; background:var(--blue); color:var(--on-blue); font:800 .95rem var(--font); cursor:pointer; transition:background-color .15s,border-color .15s,transform .1s; }
+.copy-button:hover { background:var(--blue-hover); border-color:var(--blue-hover); }
 .copy-button:active { transform:translateY(1px); }
-.ico { inline-size:1.15rem; block-size:1.15rem; fill:none; stroke:currentColor; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+.ico { inline-size:1.15rem; block-size:1.15rem; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; flex:none; }
 .ico-tick { display:none; }
-.copy-button[data-copied] { border-color:var(--tick); color:var(--tick); background:transparent; }
+.copy-button[data-copied] { background:var(--tick); border-color:var(--tick); color:#fff; }
 .copy-button[data-copied] .ico-copy { display:none; }
 .copy-button[data-copied] .ico-tick { display:block; stroke-dasharray:1; stroke-dashoffset:1; animation:tick .38s cubic-bezier(.22,1,.36,1) forwards; }
-.copy-button[data-failed] { border-color:var(--fail); color:var(--fail); }
-.tip { position:absolute; inset-block-start:100%; inset-inline-end:0; margin-block-start:.3rem; font-size:.85rem; font-weight:700; white-space:nowrap; opacity:0; transition:opacity .15s; pointer-events:none; }
+.copy-button[data-failed] { background:var(--fail); border-color:var(--fail); color:#fff; }
+.tip { position:absolute; inset-block-start:100%; inset-inline-end:0; margin-block-start:.3rem; font-size:.85rem; font-weight:800; white-space:nowrap; opacity:0; transition:opacity .15s; pointer-events:none; }
 .tip:not(:empty) { opacity:1; }
 ol { padding-inline-start:1.4rem; }
 ol li { padding-inline-start:.25rem; margin-block:.2rem; }
-.rule { margin-block:1.1rem 0; font-weight:700; }
+.rule { display:block; inline-size:fit-content; margin-block:1.1rem 0; padding:.1rem .6rem; background:var(--mark); color:var(--mark-ink); font-weight:800; border-radius:4px; }
 .files { margin:.3rem 0 0; padding:0; list-style:none; max-inline-size:44rem; }
-.files li { display:flex; justify-content:space-between; align-items:center; gap:1rem; border-block-end:1px solid var(--rule); max-inline-size:none; }
-.files a { display:flex; align-items:center; gap:.6rem; min-block-size:2.75rem; padding-block:.25rem; flex:1; }
+.files li { display:flex; justify-content:space-between; align-items:center; gap:1rem; border-block-end:1px solid color-mix(in srgb, var(--ink) 18%, transparent); max-inline-size:none; }
+.files a { display:flex; align-items:center; gap:.6rem; min-block-size:2.75rem; padding-block:.25rem; flex:1; color:var(--ink); font-weight:700; text-decoration-color:var(--blue); }
+.files a:hover { color:var(--blue); }
+.files .ico { color:var(--blue); }
 .files .fname { overflow-wrap:anywhere; }
-.ext { font-size:.8rem; font-weight:700; letter-spacing:.06em; color:var(--muted); font-variant-numeric:tabular-nums; }
-.btn { display:inline-flex; align-items:center; gap:.6rem; min-block-size:3rem; padding:.55rem 1.3rem; border-radius:8px; background:var(--blue); color:var(--blue-ink); font-weight:800; text-decoration:none; }
-.btn:hover { filter:brightness(1.08); }
-.table-wrap { overflow-x:auto; margin-block:1rem 0; border:1px solid var(--rule); border-radius:8px; scrollbar-color:var(--brand) transparent; }
+.ext { font-size:.8rem; font-weight:800; letter-spacing:.06em; color:var(--muted); font-variant-numeric:tabular-nums; }
+.btn { display:inline-flex; align-items:center; gap:.6rem; min-block-size:3.1rem; padding:.55rem 1.4rem; border-radius:8px; background:var(--blue); color:var(--on-blue); font-weight:800; text-decoration:none; transition:background-color .15s; }
+.btn:hover { background:var(--blue-hover); }
+.table-wrap { overflow-x:auto; margin-block:1rem 0; border:1px solid var(--rule); border-radius:8px; background:var(--card); scrollbar-color:var(--blue) transparent; }
 table { border-collapse:collapse; inline-size:100%; min-inline-size:36rem; font-variant-numeric:tabular-nums; }
-th, td { padding:.7rem .9rem; text-align:start; vertical-align:top; border-block-end:1px solid var(--rule); }
-thead th { background:var(--tint); font-weight:800; }
+th, td { padding:.75rem .95rem; text-align:start; vertical-align:top; border-block-end:1px solid var(--rule); }
+thead th { background:var(--deep); color:var(--on-deep); font-weight:800; border-block-end:0; }
 tbody tr:last-child > * { border-block-end:0; }
 tbody tr:hover { background:var(--wash); }
 code { font-family:Consolas,"Cascadia Mono",monospace; font-size:.92em; }
 .ppt { margin-block:.4rem 0; padding-inline-start:1.3rem; }
 .ppt li { margin-block:.25rem; }
-footer { padding-block:1.4rem 3rem; border-block-start:1px solid var(--rule); color:var(--muted); font-size:.95rem; }
+footer { background:var(--deep); color:var(--on-deep-soft); padding-block:1.5rem 2.2rem; font-size:.95rem; }
 @keyframes tick { to { stroke-dashoffset:0; } }
+@keyframes swipe { from { background-size:0 100%; } to { background-size:100% 100%; } }
+@media (prefers-reduced-motion: no-preference) {
+  .masthead .swipe { animation:swipe .8s .3s cubic-bezier(.22,1,.36,1) backwards; }
+}
 @media (max-width:40rem) {
   .prompt { grid-template-columns:1fr; }
   .copy-button { inline-size:100%; justify-content:center; }
@@ -82,12 +102,13 @@ footer { padding-block:1.4rem 3rem; border-block-start:1px solid var(--rule); co
 </head>
 <body>
 <header class="masthead"><div class="wrap">
-<h1>ערכת Copilot לאנשי כספים</h1>
+<h1>ערכת <mark class="swipe">Copilot</mark> לאנשי כספים</h1>
 <p class="lead">בקשות להעתקה, קבצי תרגול על נתוני דמה וסקילי כספים ל-Excel.</p>
 <ul class="jump"><li><a href="#prompts">בקשות להעתקה</a></li><li><a href="#files">קבצי תרגול</a></li><li><a href="#skills">סקילים ל-Excel</a></li></ul>
 </div></header>
-<main class="wrap">
-<h2 id="prompts">בקשות להעתקה</h2>
+<main>
+<section class="sec"><div class="wrap">
+<h2 id="prompts"><span class="hl">בקשות להעתקה</span></h2>
 <p>כל בקשה כאן אפשר להעתיק כמו שהיא. הקבצים הם נתוני דמה, אז אפשר להתנסות בלי לשבור כלום. לפני שמעלים מידע אמיתי, בודקים מה מדיניות המידע אצלכם מתירה.</p>
 <h3>איך משתמשים</h3>
 <ol>
@@ -150,11 +171,15 @@ footer { padding-block:1.4rem 3rem; border-block-start:1px solid var(--rule); co
 <div class="prompt"><p id="p14">מצורפת כרטסת אחת מ-SAP, של ספק או של לקוח. הכן טבלה של מה שדורש בדיקה: רישומים כפולים (אותו מספר חשבונית, או אותו סכום ואותו תאריך), חשבוניות פתוחות לפי גיל (עד 30 יום, 31 עד 60, מעל 60), זיכויים שלא קוזזו, ומספרי מסמך חריגים. בסוף כתוב את היתרה הסופית, ובדוק שהיא שווה לסכום כל השורות. השתמש רק בקובץ. אל תמציא נתונים.</p><span class="copy"><button type="button" class="copy-button" command="--copy" commandfor="p14" aria-label="העתקת בקשה 14"><svg class="ico ico-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="ico ico-tick" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7"/></svg><span class="label">העתקה</span></button><span class="tip" role="status"></span></span></div>
 <p>בודקים בסכום: SUM על עמודת הסכום ב-Excel, מול היתרה ש-Copilot כתב.</p>
 
-<h2 id="files">קבצי תרגול</h2>
+</div></section>
+<section class="sec band-sand"><div class="wrap">
+<h2 id="files"><span class="hl">קבצי תרגול</span></h2>
 <p>נתוני דמה בלבד. המספרים בשמות הקבצים הם אלה שהבקשות מפנות אליהם.</p>
 <h3>ספקים</h3><ul class="files"><li><a href="files/1_SAP_כרטסת_ספק_דמה.xlsx" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">כרטסת ספק מ-SAP</span></a><span class="ext" dir="ltr">1 · XLSX</span></li><li><a href="files/2_דוח_ספק_דמה.xlsx" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">דוח ספק</span></a><span class="ext" dir="ltr">2 · XLSX</span></li><li><a href="files/4_שרשור_מיילים_דמה.txt" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">שרשור מיילים על חשבונית</span></a><span class="ext" dir="ltr">4 · TXT</span></li><li><a href="files/5_תיבת_עובדות_לתרגיל_המיילים.txt" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">תיבת עובדות למייל לספק</span></a><span class="ext" dir="ltr">5 · TXT</span></li><li><a href="files/1_SAP_כרטסת_ספק_דמה.csv" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">כרטסת ספק מ-SAP</span></a><span class="ext" dir="ltr">1 · CSV</span></li><li><a href="files/2_דוח_ספק_דמה.csv" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">דוח ספק</span></a><span class="ext" dir="ltr">2 · CSV</span></li></ul><h3>לקוחות</h3><ul class="files"><li><a href="files/6_SAP_כרטסת_לקוח_דמה.xlsx" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">כרטסת לקוח מ-SAP</span></a><span class="ext" dir="ltr">6 · XLSX</span></li><li><a href="files/7_פירוט_יתרה_מהלקוח_דמה.xlsx" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">פירוט יתרה מהלקוח</span></a><span class="ext" dir="ltr">7 · XLSX</span></li><li><a href="files/9_תיבת_עובדות_למייל_גבייה.txt" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">תיבת עובדות למייל גבייה</span></a><span class="ext" dir="ltr">9 · TXT</span></li><li><a href="files/6_SAP_כרטסת_לקוח_דמה.csv" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">כרטסת לקוח מ-SAP</span></a><span class="ext" dir="ltr">6 · CSV</span></li><li><a href="files/7_פירוט_יתרה_מהלקוח_דמה.csv" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span class="fname">פירוט יתרה מהלקוח</span></a><span class="ext" dir="ltr">7 · CSV</span></li></ul>
 
-<h2 id="skills">סקילים ל-Excel</h2>
+</div></section>
+<section class="sec band-sky"><div class="wrap">
+<h2 id="skills"><span class="hl">סקילים ל-Excel</span></h2>
 <p>סקיל הוא קובץ הוראות שמלמד את Copilot לבצע משימה באותה דרך בכל פעם. הקבצים והסבר על כל אחד מהם נמצאים בחבילה אחת.</p>
 <p><a class="btn" href="files/finance-skills-kit.zip" download><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/></svg><span>הורדת חבילת הסקילים</span></a></p>
 <h3>איך מפעילים</h3>
@@ -176,6 +201,7 @@ footer { padding-block:1.4rem 3rem; border-block-start:1px solid var(--rule); co
 <li><strong dir="ltr">Prepare for Questions</strong>: הכנה לשאלות שיעלו</li>
 <li><strong dir="ltr">Create interactive slide</strong>: שקף אינטראקטיבי</li>
 </ul>
+</div></section>
 </main>
 <footer><div class="wrap">ואלור פתרונות אוטומציה. הקבצים כוללים נתוני דמה בלבד.</div></footer>
 <script>
